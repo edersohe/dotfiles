@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+export GOPATH=$HOME/.go
+export GO111MODULE="on"
+export PATH=$GOPATH/bin:$HOME/.npm/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.emacs.d/bin:$PATH
+export ANSIBLE_HOST_KEY_CHECKING=False
+
+eval "$(starship init bash)"
+
+alias ls="exa -G --color always --icons -s type"
+alias ll="exa -l --color always --icons -s type -g -h"
+alias cat="bat -pp"
+
