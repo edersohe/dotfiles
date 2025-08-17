@@ -1,5 +1,19 @@
-[init]
-	defaultBranch = main
 [user]
 	name = Eder Sosa
 	email = eder.sohe@gmail.com
+[diff]
+	algorithm = histogram
+[merge]
+	conflictstyle = zdiff3
+[gpg]
+	program = gpg
+[init]
+	defaultBranch = main
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[tag]
+	sort = version:refname
+[alias]
+	l = log --oneline --graph --all
