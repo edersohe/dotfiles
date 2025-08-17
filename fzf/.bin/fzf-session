@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+LOCK="swaymsg exec 'swaylock -f -c 000000'"
+LOGOUT="swaymsg exit"
+SHUTDOWN="sudo poweroff"
+REBOOT="sudo reboot"
+SUSPEND="sudo zzz"
+
+MENU_OPTS=' Shutdown\n Reboot\n Suspend\n Lock\n Exit'
+
+RESULT="$(echo "$MENU_OPTS" | sort | fzf)"
+
+if [ "$RESULT" = " Shutdown" ]; then
+   eval "$SHUTDOWN"
+elif [ "$RESULT" = " Reboot" ]; then
+   eval "$REBOOT"
+elif [ "$RESULT" = " Suspend" ]; then
+   eval "$SUSPEND"
+elif [ "$RESULT" = " Lock" ]; then
+   eval "$LOCK"
+elif [ "$RESULT" = " Exit" ]; then
+   eval "$LOGOUT"
+fi

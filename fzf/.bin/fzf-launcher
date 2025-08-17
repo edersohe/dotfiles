@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+j4-dmenu-desktop --display-binary --no-generic --dmenu=fzf -I --term="$TERMINAL"

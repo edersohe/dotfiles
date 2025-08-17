@@ -11,4 +11,11 @@ alias la='ll -a'
 alias lt='ls -lart'
 alias emacs='emacs -nw'
 
+export XKB_DEFAULT_LAYOUT=us
+export XKB_DEFAULT_VARIANT=altgr-intl
+export LC_ALL=en_US.UTF-8
+export PATH=$HOME/.bin:$PATH
+export TERMINAL=footclient
+
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
+

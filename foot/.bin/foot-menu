@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+app=$1
+width=$2
+height=$3
+
+if [ -n "$width" ] && [ -n "$height" ]; then
+    footclient -a "$app" -W ${width}x${height} $app
+else
+    footclient -a "$app" -W 70x15 $app
+fi
+

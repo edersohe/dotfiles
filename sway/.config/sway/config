@@ -14,20 +14,41 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term foot
+set $term footclient
 # Your preferred application launcher
-set $menu wmenu-run
+set $menu foot-menu
+
+gaps outer 4
+gaps inner 2
+smart_borders on
+smart_gaps on
+default_border pixel 2
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg ~/.wallpaper fill
 #
 # Example configuration:
 #
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
+
+
+output DP-1 resolution 1920x1080 position 0 0
+output HDMI-A-1 resolution 1920x1080 position 1920 0
+
+workspace 1 output DP-1
+workspace 2 output HDMI-A-1
+workspace 3 output DP-1
+workspace 4 output HDMI-A-1
+workspace 5 output DP-1
+workspace 6 output HDMI-A-1
+workspace 7 output DP-1
+workspace 8 output HDMI-A-1
+workspace 9 output DP-1
+workspace 10 output HDMI-A-1
 
 ### Idle configuration
 #
@@ -41,6 +62,11 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -f -c 000000'
 
 ### Input configuration
 #
@@ -68,10 +94,10 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+Return exec $term
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+c kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+d exec $menu fzf-launcher 40 15
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -84,7 +110,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    #bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
@@ -142,25 +168,25 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    #bindsym $mod+h splith
+    #bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+    #bindsym $mod+s layout stacking
+    #bindsym $mod+w layout tabbed
+    bindsym $mod+t layout toggle split
 
     # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
+    bindsym $mod+z fullscreen
 
     # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
+    bindsym $mod+f floating toggle
 
     # Swap focus between the tiling area and the floating area
     bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
-    bindsym $mod+a focus parent
+    # bindsym $mod+a focus parent
 #
 # Scratchpad:
 #
@@ -209,7 +235,17 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
-    bindsym Print exec grim
+    bindsym Print exec bash -c 'GRIM_IMG_PATH="$HOME/pictures/screenshots/$(date +%Y%m%d%H%M%S)_grim.png" ; grim -g "$(slurp)" $GRIM_IMG_PATH && cat $GRIM_IMG_PATH | wl-copy --type image/png'
+
+    bindsym $mod+w exec qutebrowser --no-err-windows --target tab google.com
+    bindsym $mod+p exec qutebrowser --no-err-windows --target private-window google.com
+    bindsym $mod+Shift+w exec google-chrome-stable --ozone-platform-hint=auto google.com
+    bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito google.com
+    bindsym $mod+x exec $menu fzf-session 20 8
+
+for_window [app_id=fzf-launcher] floating enable
+for_window [app_id=fzf-session] floating enable
+for_window [app_id=pavucontrol] floating enable
 
 #
 # Status Bar:
@@ -217,16 +253,26 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     position top
+    mode hide
+    font Hasklug 11
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
 
     colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
+        statusline #ECEFF4
+        background #2E3440
+        focused_workspace #B48EAD #B48EAD #ECEFF4
+        active_workspace #5E81AC #5E81AC #ECEFF4
+        inactive_workspace #4C566A #4C566A #D8DEE9
     }
 }
+
+exec --no-startup-id dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec --no-startup-id pipewire
+exec --no-startup-id foot --server
+exec --no-startup-id autotiling -l 2 -sw "0.9"
+exec --no-startup-id emacs --daemon
 
 include /etc/sway/config.d/*
