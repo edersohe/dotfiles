@@ -241,7 +241,8 @@ bindsym $mod+r mode "resize"
     bindsym $mod+p exec qutebrowser --no-err-windows --target private-window google.com
     bindsym $mod+Shift+w exec google-chrome-stable --ozone-platform-hint=auto google.com
     bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito google.com
-    bindsym $mod+x exec $menu fzf-session 20 8
+    bindsym $mod+s exec $menu fzf-session 20 8
+    bindsym $mod+x exec swaylock -f -c 000000
     bindsym $mod+b exec $menu fzf-bookmarks
 
 for_window [app_id=fzf-launcher] floating enable
