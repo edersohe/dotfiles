@@ -242,9 +242,11 @@ bindsym $mod+r mode "resize"
     bindsym $mod+Shift+w exec google-chrome-stable --ozone-platform-hint=auto google.com
     bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito google.com
     bindsym $mod+x exec $menu fzf-session 20 8
+    bindsym $mod+b exec $menu fzf-bookmarks
 
 for_window [app_id=fzf-launcher] floating enable
 for_window [app_id=fzf-session] floating enable
+for_window [app_id=fzf-bookmarks] floating enable
 for_window [app_id=pavucontrol] floating enable
 
 #

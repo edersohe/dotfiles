@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-RESULT=$(cat $HOME/.config/qutebrowser/bookmarks | sort | fzf | cut -d " " -f 2)
+RESULT=$(cat $HOME/.config/qutebrowser/bookmarks/urls | sort | fzf | cut -d " " -f 1)
 
 [ "$RESULT" = "" ] || swaymsg exec xdg-open $RESULT

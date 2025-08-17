@@ -14,8 +14,10 @@ alias emacs='emacs -nw'
 export XKB_DEFAULT_LAYOUT=us
 export XKB_DEFAULT_VARIANT=altgr-intl
 export LC_ALL=en_US.UTF-8
-export PATH=$HOME/.bin:$PATH
-export TERMINAL=footclient
 
+[ -f $HOME/.ezarc ] && . $HOME/.ezarc
+[ -f $HOME/.footrc ] && . $HOME/.footrc
+[ -f $HOME/.starshiprc ] && . $HOME/.starshiprc
+[ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
 
