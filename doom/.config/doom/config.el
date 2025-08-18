@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'catppuccin)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -83,10 +83,12 @@
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (use-package! copilot
-  ;;:hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
-
+  :hook (prog-mode . copilot-mode)
+  :custom
+  (copilot-indent-offset-warning-disable t)
+  :bind
+  (:map copilot-completion-map
+        ("<tab>" . 'copilot-accept-completion)
+        ("TAB" . 'copilot-accept-completion)
+        ("C-TAB" . 'copilot-accept-completion-by-word)
+        ("C-<tab>" . 'copilot-accept-completion-by-word)))
