@@ -25,6 +25,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(hl-line-mode 1)
 
 (electric-pair-mode t)
 (save-place-mode t)
@@ -96,7 +97,8 @@
   :ensure
   t
   :config
-  (load-theme 'catppuccin :no-confirm))
+  (load-theme 'catppuccin :no-confirm)
+  (add-to-list 'default-frame-alist '(alpha-background . 98)))
 
 (use-package doom-modeline
   :ensure
