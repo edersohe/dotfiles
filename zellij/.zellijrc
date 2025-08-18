@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if [ -t 0 ] && [ -z $TMUX ] && [ -z $ZELLIJ ] && [ "$TERM_MUX" == "zellij" ]; then
+    zellij a || zellij
+    exit
+fi

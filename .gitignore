@@ -5,3 +5,4 @@ node_modules
 .elixir_ls
 _build
 
+vim/.vim/.netrwhist

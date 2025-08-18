@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  echo "Cloning TPM into $HOME/.tmux/plugins/tpm"
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
+if [ -t 0 ] && [ -z $TMUX ] && [ -z $ZELLIJ ] && [ "$TERM_MUX" == "tmux" ]; then
+    tmux a || tmux
+    exit
+fi
