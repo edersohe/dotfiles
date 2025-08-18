@@ -5,6 +5,8 @@
 
 PS1='[\u@\h \W]\$ '
 
+bind '"\ez": "fg\n"'
+
 alias ls='ls --color=auto -h'
 alias ll='ls -l --group-directories-first'
 alias la='ll -a'
