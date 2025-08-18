@@ -238,9 +238,9 @@ bindsym $mod+r mode "resize"
     bindsym Print exec bash -c 'GRIM_IMG_PATH="$HOME/pictures/screenshots/$(date +%Y%m%d%H%M%S)_grim.png" ; grim -g "$(slurp)" $GRIM_IMG_PATH && cat $GRIM_IMG_PATH | wl-copy --type image/png'
 
     bindsym $mod+w exec qutebrowser --no-err-windows --target tab google.com
-    bindsym $mod+p exec qutebrowser --no-err-windows --target private-window google.com
+    bindsym $mod+p exec qutebrowser --no-err-windows --target private-window search.brave.com -C ~/.config/qutebrowser/incognito.py
     bindsym $mod+Shift+w exec google-chrome-stable --ozone-platform-hint=auto google.com
-    bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito google.com
+    bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito search.brave.com
     bindsym $mod+s exec $menu fzf-session 20 8
     bindsym $mod+x exec swaylock -f -c 000000
     bindsym $mod+b exec $menu fzf-bookmarks
