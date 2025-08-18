@@ -17,7 +17,7 @@ c.url.start_pages = 'https://duckduckgo.com/'
 font = 'Hasklug Nerd Font'
 
 c.fonts.default_family = font
-c.fonts.default_size = "12pt"
+c.fonts.default_size = "11pt"
 
 #c.zoom.default = 125
 

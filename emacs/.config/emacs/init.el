@@ -46,9 +46,9 @@
 (setq display-time-format "%H:%M:%S")
 
 (set-face-attribute 'default nil :font "Hasklug Nerd Font"
-		    :weight 'light  :height 120)
+		    :height 110)
 (set-face-attribute 'fixed-pitch nil :font "Hasklug Nerd Font"
-		    :height 130)
+		    :height 120)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 
