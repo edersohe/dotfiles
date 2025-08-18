@@ -40,7 +40,7 @@
 (add-hook 'prog-mode-hook #'flymake-mode)
 
 (set-face-attribute 'default nil :font "Hasklug Nerd Font"
-		    :height 110)
+		    :weight 'light :height 110)
 (set-face-attribute 'fixed-pitch nil :font "Hasklug Nerd Font"
 		    :height 120)
 
@@ -178,7 +178,7 @@
   (:map copilot-completion-map
   ("C-n" . copilot-next-completion)
   ("C-p" . copilot-previous-completion)
-  ("<tab>" . copilot-accept-completion-by-line)))
+  ("<tab>" . copilot-accept-completione)))
 
 (use-package gptel
   :ensure
@@ -282,6 +282,13 @@
   :config
   (meow-setup)
   (meow-global-mode 1))
+
+(use-package meow-tree-sitter
+  :ensure
+  t
+  :after (meow treesit-auto)
+  :config
+  (meow-tree-sitter-register-defaults))
 
 (provide 'init)
 ;;; init.el ends here
