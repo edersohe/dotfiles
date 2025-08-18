@@ -22,5 +22,6 @@ export LC_ALL=en_US.UTF-8
 [ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
 [ -f $HOME/.helixrc ] && . $HOME/.helixrc
+[ -f $HOME/.emacsrc ] && . $HOME/.emacsrc
 [ -f $HOME/.tmuxrc ] && . $HOME/.tmuxrc
 [ -f $HOME/.zellijrc ] && . $HOME/.zellijrc
