@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "catppuccin",
+  "model": "github-copilot/claude-sonnet-4",
+  "autoupdate": true,
+  "layout": "stretch",
+  "share": "disabled",
+  "agent": {
+    "commit-message-generator": {
+      "mode": "primary",
+      "model": "github-copilot/gpt-4.1",
+      "temperature": 0.1,
+      "prompt": "Write commit message for the diff changes with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters.",
+      "tools": {
+        "bash": false,
+        "edit": false,
+        "write": false,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "patch": false,
+        "todowrite": false,
+        "todoread": true,
+        "webfetch": false,
+      },
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "webfetch": "deny"
+      }
+    }
+  }
+}
