@@ -244,6 +244,7 @@ bindsym $mod+r mode "resize"
     bindsym $mod+s exec $menu fzf-session 20 8
     bindsym $mod+x exec swaylock -f -c 000000
     bindsym $mod+b exec $menu fzf-bookmarks
+    bindsym $mod+e exec emacsclient
 
 for_window [app_id=fzf-launcher] floating enable
 for_window [app_id=fzf-session] floating enable
