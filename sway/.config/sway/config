@@ -264,11 +264,11 @@ bar {
     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
 
     colors {
-        statusline #ECEFF4
-        background #2E3440
-        focused_workspace #88C0D0 #88C0D0 #2E3440
-        active_workspace #5E81AC #5E81AC #2E3440
-        inactive_workspace #4C566A #4C566A #D8DEE9
+        statusline #cdd6f4
+        background #1e1e2e
+        focused_workspace #74c7ec #74c7ec #1e1e2e
+        active_workspace #b4befe #b4befe #1e1e2e
+        inactive_workspace #313244 #313244 #bac2de
     }
 }
 

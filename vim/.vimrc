@@ -87,7 +87,7 @@ xnoremap <leader>r :s///gc
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-colorscheme sorbet
+colorscheme catppuccin_mocha
 hi Normal guibg=NONE ctermbg=NONE
 hi NonText guibg=NONE ctermbg=NONE
 hi Comment cterm=NONE gui=NONE

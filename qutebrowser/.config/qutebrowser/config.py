@@ -21,6 +21,12 @@ c.fonts.default_size = "12pt"
 
 #c.zoom.default = 125
 
-config.source('nord-theme.py')
-config.set("colors.webpage.darkmode.enabled", True)
+import os
+from urllib.request import urlopen
+
+# load your autoconfig, use this, if the rest of your config is empty!
+config.load_autoconfig()
+
+import catppuccin
+catppuccin.setup(c, 'mocha', True)
 

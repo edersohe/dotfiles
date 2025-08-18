@@ -1,0 +1,31 @@
+[tools]
+bun = "latest"
+node = "lts"
+uv = "latest"
+ruff = "latest"
+
+lua-language-server = "latest"
+taplo = "latest"
+
+"npm:npm" = "latest"
+"npm:yarn" = "latest"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:yaml-language-server" = "latest"
+"npm:@github/copilot-language-server" = "latest"
+"npm:marked" = "latest"
+"npm:opencode-ai" = "latest"
+
+"ubi:iwe-org/iwe" = { version = "latest", extract_all = true }
+"ubi:git-town/git-town" = "latest"
+
+"pipx:basedpyright" = "latest"
+"pipx:pyinfra" = "latest"
+
+
+[settings]
+idiomatic_version_file_enable_tools = []
+
+[settings.pipx]
+uvx = true

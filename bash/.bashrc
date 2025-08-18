@@ -15,9 +15,12 @@ export XKB_DEFAULT_LAYOUT=us
 export XKB_DEFAULT_VARIANT=altgr-intl
 export LC_ALL=en_US.UTF-8
 
+[ -f $HOME/.secrets ] && . $HOME/.secrets
+[ -f $HOME/.miserc ] && . $HOME/.miserc
 [ -f $HOME/.ezarc ] && . $HOME/.ezarc
 [ -f $HOME/.footrc ] && . $HOME/.footrc
 [ -f $HOME/.starshiprc ] && . $HOME/.starshiprc
 [ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
+[ -f $HOME/.helixrc ] && . $HOME/.helixrc
 

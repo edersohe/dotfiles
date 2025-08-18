@@ -1,0 +1,2 @@
+HANDLER=copilot
+LOG_FILE=$HOME/.cache/helix/helix-gpt.log
