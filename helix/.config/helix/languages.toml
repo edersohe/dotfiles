@@ -140,6 +140,7 @@ language-servers = [
 
 # JSON, TOML and YAML
 [[language]]
+name= "json"
 language-servers = [
   { name = "vscode-json-language-server", except-features = [
     "format",
