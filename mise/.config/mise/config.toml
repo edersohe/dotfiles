@@ -16,6 +16,7 @@ taplo = "latest"
 "npm:@github/copilot-language-server" = "latest"
 "npm:marked" = "latest"
 "npm:opencode-ai" = "latest"
+"npm:@biomejs/biome" = "latest"
 
 "ubi:iwe-org/iwe" = { version = "latest", extract_all = true }
 "ubi:git-town/git-town" = "latest"

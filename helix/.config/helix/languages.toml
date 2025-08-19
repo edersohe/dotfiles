@@ -69,34 +69,84 @@ name = "ruby"
 language-servers = ["ruby-lsp", "gpt"]
 
 # HTML, CCS, JavaScript, TypeScript, JSX, and TSX
+[language-server]
+biome = { command = "biome", args = ["lsp-proxy"] }
+
 [[language]]
 name = "javascript"
-language-servers = ["typescript-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 [[language]]
 name = "typescript"
-language-servers = ["typescript-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 [[language]]
 name = "jsx"
-language-servers = ["typescript-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 [[language]]
 name = "tsx"
-language-servers = ["typescript-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 [[language]]
 name = "html"
-language-servers = ["vscode-html-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "vscode-html-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 [[language]]
 name = "css"
-language-servers = ["vscode-css-language-server", "tailwindcss-ls", "gpt"]
+language-servers = [
+  { name = "vscode-css-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "tailwindcss-ls",
+  "gpt",
+]
 
 # JSON, TOML and YAML
 [[language]]
-name = "json"
-language-servers = ["vscode-json-language-server", "gpt"]
+language-servers = [
+  { name = "vscode-json-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+  "gpt",
+]
 
 [[language]]
 name = "toml"
