@@ -5,4 +5,4 @@ DIFF=$(git diff --cached)
 STATUS=$(git status | sed -r 's/(.*)/# \1/g' | sed -r 's/(# 	)/#	/g')
 MESSAGE=$(opencode run "\'$DIFF\'" --agent $AGENT  | sed -zr 's/(^```gitcommit\n|```$)//g')
 
-echo -e "$MESSAGE" | wl-copy --primary
+echo -e "$MESSAGE" | wl-copy

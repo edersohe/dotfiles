@@ -39,10 +39,10 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 
-(set-face-attribute 'default nil :font "Hasklug Nerd Font"
-		    :weight 'light :height 110)
-(set-face-attribute 'fixed-pitch nil :font "Hasklug Nerd Font"
-		    :height 120)
+(set-face-attribute 'default nil :font "D2CodingLigature Nerd Font"
+		    :weight 'light ':height 120)
+(set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font"
+		    :height 130)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 

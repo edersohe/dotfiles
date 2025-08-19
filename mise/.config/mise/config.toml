@@ -22,6 +22,7 @@ taplo = "latest"
 
 "pipx:basedpyright" = "latest"
 "pipx:pyinfra" = "latest"
+"ubi:thomasschafer/scooter" = "latest"
 
 
 [settings]
