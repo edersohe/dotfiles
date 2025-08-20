@@ -6,7 +6,7 @@ c.tabs.position = 'top'
 
 font = 'D2CodingLigature Nerd Font'
 c.fonts.default_family = font
-c.fonts.default_size = "12pt"
+c.fonts.default_size = "14pt"
 
 import catppuccin
 catppuccin.setup(c, 'mocha', True)

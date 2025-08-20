@@ -22,6 +22,18 @@
       frame-resize-pixelwise t
       load-prefer-newer t)
 
+(setq completion-styles '(basic flex)
+      completion-category-defaults nil
+      completion-category-overrides '((file (styles partial-completion)))
+      completion-auto-select 'second-tab
+      completion-auto-help 'always
+      completions-format 'one-column
+      completions-sort 'historical
+      completions-max-height 10
+      completion-ignore-case t
+      completions-detailed t
+      tab-always-indent 'complete)
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -39,10 +51,16 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 
+;; (add-to-list 'initial-frame-alist '(fullscreen . fullboth))
+;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
+(display-time-mode 1)
+(setq display-time-format "%H:%M:%S")
+
 (set-face-attribute 'default nil :font "D2CodingLigature Nerd Font"
-		    :weight 'light ':height 120)
+		    :weight 'light ':height 130)
 (set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font"
-		    :height 130)
+		    :height 150)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 
@@ -86,54 +104,6 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package catppuccin-theme
-  :ensure
-  t
-  :config
-  (load-theme 'catppuccin :no-confirm)
-  (add-to-list 'default-frame-alist '(alpha-background . 98)))
-
-(use-package doom-modeline
-  :ensure
-  t
-  :init
-  (doom-modeline-mode 1))
-
-(use-package orderless
-  :ensure
-  t
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides
-   '((file (styles basic partial-completion)))))
-
-(use-package vertico
-  :ensure
-  t
-  :after
-  orderless
-  :custom
-  (vertico-cycle t)
-  :config
-  (vertico-mode))
-
-(use-package marginalia
-  :ensure
-  t
-  :after
-  vertico
-  :config
-  (marginalia-mode))
-
-(use-package corfu
-  :ensure
-  t
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)
-  :init
-  (global-corfu-mode))
-
 (use-package treesit-auto
   :ensure
   t
@@ -160,6 +130,7 @@
 (defun smart-ai-complete ()
   "Execute copilot-complete if no region is selected, otherwise execute gptel-send."
   (interactive)
+  (minibuffer-hide-completions)
   (if (use-region-p)
       (gptel-send)
     (copilot-complete)))
