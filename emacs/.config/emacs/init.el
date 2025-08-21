@@ -29,9 +29,10 @@
       completion-auto-help 'always
       completions-format 'one-column
       completions-sort 'historical
-      completions-max-height 10
+      completions-max-height 15
       completion-ignore-case t
       completions-detailed t
+      completion-cycle-threshold 3
       tab-always-indent 'complete)
 
 (menu-bar-mode -1)
@@ -51,6 +52,7 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 
+;; Enable this when use a traditional Desktop Environment instead Tiling Window Manager
 ;; (add-to-list 'initial-frame-alist '(fullscreen . fullboth))
 ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
@@ -59,7 +61,8 @@
 
 (set-face-attribute 'default nil :font "D2CodingLigature Nerd Font"
 		    :weight 'light ':height 130)
-(set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font"
+(set-face-attribute 'fixed-pitch nil :font
+		    "D2CodingLigature Nerd Font"
 		    :height 150)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
@@ -161,8 +164,8 @@
 (use-package gptel-magit
   :ensure
   t
-  :after (gptel magit)
-  :hook (magit-mode . gptel-magit-install))
+  :hook
+  (magit-mode . gptel-magit-install))
 
 (use-package eat
   :ensure
