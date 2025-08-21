@@ -131,7 +131,7 @@
   (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (defun smart-ai-complete ()
-  "Execute copilot-complete if no region is selected, otherwise execute gptel-send."
+  "Execute 'copilot-complete' if no region is selected, otherwise execute 'gptel-send'."
   (interactive)
   (minibuffer-hide-completions)
   (if (use-region-p)
