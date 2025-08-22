@@ -71,7 +71,7 @@ vim.opt.winblend = 0
 vim.opt.virtualedit = "block"
 vim.opt.fillchars = { eob = " " }
 vim.opt.splitkeep = "screen"
-vim.opt.grepprg = 'rg'
+vim.opt.grepprg = 'rg --vimgrep -.'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
@@ -366,15 +366,6 @@ vim.keymap.set('n', '<leader>gf', '<cmd>Git log --decorate --graph --all --oneli
 vim.keymap.set("n", '<leader>go', '<cmd>lua MiniDiff.toggle_overlay()<CR>', { desc = 'Overlay Hunks' })
 vim.keymap.set("n", '<leader>gi', '<cmd>lua MiniGit.show_at_cursor()<CR>', { desc = 'Inspect' })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "git", "diff" },
-  callback = function()
-    vim.opt_local.foldmethod = "expr"
-    vim.opt_local.foldexpr = "v:lua.MiniGit.diff_foldexpr()"
-    vim.opt_local.foldlevel = 2
-  end,
-})
-
 add({
   source = "nvim-treesitter/nvim-treesitter",
   checkout = "main",
@@ -396,8 +387,6 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = tree_sitters,
   callback = function()
     vim.treesitter.start()
-    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end
 })
 
@@ -474,6 +463,9 @@ miniclue.setup({
     -- Leader triggers
     { mode = 'n', keys = '<Leader>' },
     { mode = 'x', keys = '<Leader>' },
+     -- `[` and `]` keys
+    { mode = 'n', keys = '[' },
+    { mode = 'n', keys = ']' },
     -- Built-in completion
     { mode = 'i', keys = '<C-x>' },
     -- `g` key
@@ -504,6 +496,7 @@ miniclue.setup({
     { mode = 'x', keys = ']' },
   },
   clues = {
+    miniclue.gen_clues.square_brackets(),
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),
@@ -623,7 +616,7 @@ vim.cmd [[command! -nargs=1 Find lua Find(<q-args>)]]
 -- Grep command
 ---@diagnostic disable-next-line: duplicate-set-field
 _G.Grep = function(filename)
-  local cmd = string.format('rg %s', filename)
+  local cmd = string.format('rg --vimgrep -. %s', filename)
   local result = vim.fn.systemlist(cmd)
   vim.fn.setqflist({}, 'r', { title = 'Grep Results', lines = result })
   vim.cmd('copen')
