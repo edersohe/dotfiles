@@ -1,2 +1,2 @@
-alias ls="eza --icons=auto --color=auto --time=changed -g --time-style=long-iso -o -@ --total-size --show-symlinks --git-repos-no-status"
+alias ls="eza --icons=auto --color=auto --time=changed -g --time-style=long-iso -o -@ --show-symlinks --git-repos-no-status"
 alias lt="la --sort changed"

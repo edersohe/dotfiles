@@ -585,8 +585,8 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.diagnostic.config({
   float = false,
   severity_sort = true,
-  virtual_lines = {
-    current_line = true,
+  virtual_text = {
+     current_line = true,
   },
   signs = {
     text = {
