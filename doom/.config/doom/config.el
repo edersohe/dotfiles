@@ -21,8 +21,8 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "D2CodingLigature Nerd Font" :size 14 :weight 'semi-light)
-     doom-variable-pitch-font (font-spec :family "D2CodingLigature Nerd Font" :size 16))
+(setq doom-font (font-spec :family "D2CodingLigature Nerd Font" :size 18 :weight 'semi-light)
+     doom-variable-pitch-font (font-spec :family "D2CodingLigature Nerd Font" :size 20))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -75,20 +75,25 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; (add-to-list 'initial-frame-alist '(fullscreen . fullboth))
+;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
+(set-frame-parameter nil 'alpha-background 98)
+(add-to-list 'default-frame-alist '(alpha-background . 98))
+
 (gptel-make-gh-copilot "Copilot")
 (setq gptel-model 'claude-sonnet-4
       gptel-backend (gptel-make-gh-copilot "Copilot"))
-
-(add-to-list 'initial-frame-alist '(fullscreen . fullboth))
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
+  (copilot-idle-delay nil)
   :bind
   (:map copilot-completion-map
-        ("<tab>" . 'copilot-accept-completion)
-        ("TAB" . 'copilot-accept-completion)
-        ("C-TAB" . 'copilot-accept-completion-by-word)
-        ("C-<tab>" . 'copilot-accept-completion-by-word)))
+        ("C-n" . copilot-next-completion)
+        ("C-p" . copilot-previous-completion)
+        ("<tab>" . copilot-accept-completione)))
+
+(global-set-key (kbd "C-<return>") 'copilot-complete)
