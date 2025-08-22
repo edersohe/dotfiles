@@ -392,6 +392,15 @@ require 'nvim-treesitter'.setup {
 
 require 'nvim-treesitter'.install(tree_sitters)
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = tree_sitters,
+  callback = function()
+    vim.treesitter.start()
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end
+})
+
 add({ source = "neovim/nvim-lspconfig" })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -586,7 +595,7 @@ vim.diagnostic.config({
   float = false,
   severity_sort = true,
   virtual_text = {
-     current_line = true,
+    current_line = true,
   },
   signs = {
     text = {
