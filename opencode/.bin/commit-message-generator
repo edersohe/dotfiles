@@ -3,6 +3,11 @@
 AGENT=commit-message-generator
 DIFF=$(git diff --cached)
 STATUS=$(git status | sed -r 's/(.*)/# \1/g' | sed -r 's/(# 	)/#	/g')
+
+if [ -z "$DIFF" ]; then
+  exit 1
+fi
+
 MESSAGE=$(opencode run "\'$DIFF\'" --agent $AGENT  | sed -zr 's/(^```gitcommit\n|```$)//g')
 
 echo -e "$MESSAGE" | wl-copy

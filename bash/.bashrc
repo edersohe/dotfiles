@@ -11,6 +11,7 @@ alias ls='ls --color=auto -h'
 alias ll='ls -l --group-directories-first'
 alias la='ll -a'
 alias lt='ls -lart'
+alias ssh="TERM=xterm-256color ssh"
 
 export XKB_DEFAULT_LAYOUT=us
 export XKB_DEFAULT_VARIANT=altgr-intl
@@ -27,3 +28,5 @@ export LC_ALL=en_US.UTF-8
 [ -f $HOME/.emacsrc ] && . $HOME/.emacsrc
 [ -f $HOME/.tmuxrc ] && . $HOME/.tmuxrc
 [ -f $HOME/.zellijrc ] && . $HOME/.zellijrc
+[ -f $HOME/.lazygitrc ] && . $HOME/.lazygitrc
+[ -f $HOME/.opencoderc ] && . $HOME/.opencoderc
