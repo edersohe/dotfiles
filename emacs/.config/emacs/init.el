@@ -152,6 +152,7 @@
 
 (use-package gptel-magit
   :ensure t
+  :init (setq gptel-magit-model 'gpt-4.1)
   :hook (magit-mode . gptel-magit-install))
 
 (use-package eat
