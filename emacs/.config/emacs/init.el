@@ -45,7 +45,7 @@
 (recentf-mode t)
 (global-auto-revert-mode t)
 (fido-vertical-mode t)
-(global-completion-preview-mode)
+(global-completion-preview-mode 1)
 
 (require 'uniquify)
 
@@ -125,12 +125,13 @@
 (use-package diff-hl
   :ensure
   t
-  :after magit
-  :config
-  (global-diff-hl-mode)
-  (diff-hl-flydiff-mode t)
+  :after
+  magit
   :hook
-  (magit-post-refresh . diff-hl-magit-post-refresh))
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh)
+  (after-init . global-diff-hl-mode)
+  (after-init . diff-hl-flydiff-mode))
 
 (defun smart-ai-complete ()
   "Execute 'copilot-complete' if no region is selected, otherwise execute 'gptel-send'."
