@@ -45,6 +45,7 @@
 (recentf-mode t)
 (global-auto-revert-mode t)
 (fido-vertical-mode t)
+(global-completion-preview-mode)
 
 (require 'uniquify)
 
@@ -53,7 +54,6 @@
 (add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
-(add-hook 'prog-mode-hook #'completion-preview-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
 (display-time-mode 1)
@@ -65,7 +65,6 @@
 (load-theme 'modus-vivendi-tinted)
 (add-to-list 'default-frame-alist '(alpha-background . 98))
 ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting for its name."
