@@ -3,6 +3,7 @@ bun = "latest"
 node = "lts"
 uv = "latest"
 ruff = "latest"
+ruby = "latest"
 
 lua-language-server = "latest"
 taplo = "latest"
@@ -20,14 +21,16 @@ taplo = "latest"
 
 "ubi:iwe-org/iwe" = { version = "latest", extract_all = true }
 "ubi:git-town/git-town" = "latest"
+"ubi:thomasschafer/scooter" = "latest"
 
 "pipx:basedpyright" = "latest"
 "pipx:pyinfra" = "latest"
-"ubi:thomasschafer/scooter" = "latest"
 
+"gem:rails" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
+experimental = true
 
 [settings.pipx]
 uvx = true
