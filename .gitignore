@@ -6,3 +6,13 @@ node_modules
 _build
 
 vim/.vim/.netrwhist
+/emacs/.config/emacs/transient/
+/emacs/.config/emacs/recentf
+/emacs/.config/emacs/projects
+/emacs/.config/emacs/places
+/emacs/.config/emacs/history
+/emacs/.config/emacs/elpa/
+/emacs/.config/emacs/eln-cache/
+/emacs/.config/emacs/custom.el
+/emacs/.config/emacs/auto-save-list/
+/emacs/.config/emacs/.cache/
