@@ -79,14 +79,11 @@
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package which-key
-  :custom
-  (which-key-idle-delay 0.3)
-  :config
-  (which-key-mode))
+  :custom (which-key-idle-delay 0.3)
+  :config (which-key-mode))
 
 (use-package eglot
-  :hook
-  (prog-mode . eglot-ensure)
+  :hook (prog-mode . eglot-ensure)
   :config
   (setq eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
@@ -102,33 +99,24 @@
 (package-initialize)
 
 (use-package exec-path-from-shell
-  :ensure
-  t
-  :if
-  (memq window-system '(mac ns x))
-  :config
-  (exec-path-from-shell-initialize))
+  :ensure t
+  :if (memq window-system '(mac ns x))
+  :config (exec-path-from-shell-initialize))
 
 (use-package treesit-auto
-  :ensure
-  t
-  :custom
-  (treesit-auto-install 'prompt)
+  :ensure t
+  :custom (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
 (use-package magit
-  :ensure
-  t)
+  :ensure t)
 
 (use-package diff-hl
-  :ensure
-  t
-  :after
-  magit
-  :custom
-  (diff-hl-disable-on-remote t)
+  :ensure t
+  :after magit
+  :custom (diff-hl-disable-on-remote t)
   :hook
   (magit-post-refresh . diff-hl-magit-post-refresh)
   (after-init . global-diff-hl-mode)
@@ -146,37 +134,30 @@
 (global-set-key (kbd "M-RET") 'smart-ai-complete)
 
 (use-package copilot
-  :ensure
-  t
-  :hook
-  (prog-mode . copilot-mode)
+  :ensure t
+  :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
   (copilot-idle-delay nil)
   :bind
   (:map copilot-completion-map
-  ("C-n" . copilot-next-completion)
-  ("C-p" . copilot-previous-completion)
-  ("TAB" . copilot-accept-completion)))
+	("C-n" . copilot-next-completion)
+	("C-p" . copilot-previous-completion)
+	("TAB" . copilot-accept-completion)))
 
 (use-package gptel
-  :ensure
-  t
+  :ensure t
   :init
   (setq gptel-backend (gptel-make-gh-copilot "Copilot"))
   (setq gptel-model 'claude-sonnet-4))
 
 (use-package gptel-magit
-  :ensure
-  t
-  :hook
-  (magit-mode . gptel-magit-install))
+  :ensure t
+  :hook (magit-mode . gptel-magit-install))
 
 (use-package eat
-  :ensure
-  t
-  :hook
-  (eshell-load . eat-eshell-mode))
+  :ensure t
+  :hook (eshell-load . eat-eshell-mode))
 
 (provide 'init)
 ;;; init.el ends here
