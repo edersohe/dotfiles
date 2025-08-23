@@ -56,6 +56,9 @@
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
+(define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
+(define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
+
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
 
