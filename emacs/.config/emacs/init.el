@@ -127,11 +127,13 @@
   t
   :after
   magit
+  :custom
+  (diff-hl-disable-on-remote t)
   :hook
-  (magit-pre-refresh . diff-hl-magit-pre-refresh)
   (magit-post-refresh . diff-hl-magit-post-refresh)
   (after-init . global-diff-hl-mode)
-  (after-init . diff-hl-flydiff-mode))
+  (after-init . diff-hl-flydiff-mode)
+  (after-init . diff-hl-margin-mode))
 
 (defun smart-ai-complete ()
   "Execute 'copilot-complete' if no region is selected, otherwise execute 'gptel-send'."
