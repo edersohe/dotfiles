@@ -139,11 +139,10 @@
   :custom
   (copilot-indent-offset-warning-disable t)
   (copilot-idle-delay nil)
-  :bind
-  (:map copilot-completion-map
-	("C-n" . copilot-next-completion)
-	("C-p" . copilot-previous-completion)
-	("TAB" . copilot-accept-completion)))
+  :bind (:map copilot-completion-map
+	      ("C-n" . copilot-next-completion)
+	      ("C-p" . copilot-previous-completion)
+	      ("TAB" . copilot-accept-completion)))
 
 (use-package gptel
   :ensure t
