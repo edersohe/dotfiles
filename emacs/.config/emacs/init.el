@@ -124,9 +124,9 @@
 
 (use-package gptel
   :ensure t
-  :init (setq gptel-backend (gptel-make-gh-copilot "Copilot")
-	      gptel-model 'claude-sonnet-4
-	      gptel-default-mode 'org-mode)
+  :init (setq gptel-model 'claude-sonnet-4
+	      gptel-default-mode 'org-mode
+	      gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
          ("C-c DEL" . gptel-rewrite)
 	 ("C-x C-g" . gptel)))

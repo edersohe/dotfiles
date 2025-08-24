@@ -90,12 +90,8 @@ C-k = "move_line_up"
 C-l = "move_char_right"
 
 [keys.normal.-]
-c = ":cd %sh{echo $CONFIG}"
 d = ":cd %sh{echo $DOTFILES}"
 h = ":cd %sh{echo $HOME}"
-m = ":cd %sh{echo $MYLINUX}"
-o = ":cd %sh{echo $OLDPROJECTS}"
-p = ":cd %sh{echo $PROJECTS}"
 - = ":cd %sh{echo $OLDPWD}"
 
 [editor.whitespace.render]
@@ -113,6 +109,3 @@ tabpad = "·"
 [editor.file-picker]
 hidden = false
 
-[editor.inline-diagnostics]
-cursor-line = "hint"
-other-lines = "error"

@@ -25,6 +25,7 @@ taplo = "latest"
 
 "pipx:basedpyright" = "latest"
 "pipx:pyinfra" = "latest"
+"pipx:aider-chat" = "latest"
 
 "gem:rails" = "latest"
 
