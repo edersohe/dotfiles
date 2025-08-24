@@ -122,6 +122,18 @@
   (after-init . diff-hl-flydiff-mode)
   (after-init . diff-hl-margin-mode))
 
+(use-package copilot
+  :ensure t
+  :hook (prog-mode . copilot-mode)
+  :custom
+  (copilot-indent-offset-warning-disable t)
+  (copilot-idle-delay nil)
+  :bind (("C-<return>" . copilot-complete)
+	 :map copilot-completion-map
+	      ("C-n" . copilot-next-completion)
+	      ("C-p" . copilot-previous-completion)
+	      ("TAB" . copilot-accept-completion)))
+
 (use-package gptel
   :ensure t
   :init (setq gptel-model 'claude-sonnet-4
