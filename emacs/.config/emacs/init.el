@@ -20,9 +20,8 @@
       uniquify-buffer-name-style 'forward
       window-resize-pixelwise t
       frame-resize-pixelwise t
-      load-prefer-newer t)
-
-(setq completion-styles '(basic flex)
+      load-prefer-newer t
+      completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
@@ -62,7 +61,7 @@
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
 
-(set-face-attribute 'default nil :font "D2CodingLigature Nerd Font" :weight 'semi-light ':height 135)
+(set-face-attribute 'default nil :font "D2CodingLigature Nerd Font" :weight 'light ':height 135)
 (set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font" :height 150)
 
 (load-theme 'modus-vivendi-tinted)
@@ -123,35 +122,18 @@
   (after-init . diff-hl-flydiff-mode)
   (after-init . diff-hl-margin-mode))
 
-(defun smart-ai-complete ()
-  "Execute 'copilot-complete' if no region is selected, otherwise execute 'gptel-send'."
-  (interactive)
-  (minibuffer-hide-completions)
-  (if (use-region-p)
-      (gptel-send)
-    (copilot-complete)))
-
-(global-set-key (kbd "M-RET") 'smart-ai-complete)
-
-(use-package copilot
-  :ensure t
-  :hook (prog-mode . copilot-mode)
-  :custom
-  (copilot-indent-offset-warning-disable t)
-  (copilot-idle-delay nil)
-  :bind (:map copilot-completion-map
-	      ("C-n" . copilot-next-completion)
-	      ("C-p" . copilot-previous-completion)
-	      ("TAB" . copilot-accept-completion)))
-
 (use-package gptel
   :ensure t
-  :init
-  (setq gptel-backend (gptel-make-gh-copilot "Copilot"))
-  (setq gptel-model 'claude-sonnet-4))
+  :init (setq gptel-backend (gptel-make-gh-copilot "Copilot")
+	      gptel-model 'claude-sonnet-4
+	      gptel-default-mode 'org-mode)
+  :bind (("C-c RET" . gptel-send)
+         ("C-c DEL" . gptel-rewrite)
+	 ("C-x C-g" . gptel)))
 
 (use-package gptel-magit
   :ensure t
+  :after (gptel magit)
   :init (setq gptel-magit-model 'gpt-4.1)
   :hook (magit-mode . gptel-magit-install))
 
