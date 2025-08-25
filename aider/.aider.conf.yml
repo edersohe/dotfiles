@@ -5,5 +5,5 @@ show-model-warnings: false
 dark-mode: true
 code-theme: one-dark
 attribute-author: false
-attribute-commiter: false
+attribute-committer: false
 attribute-co-authored-by: false

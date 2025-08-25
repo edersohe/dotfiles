@@ -149,6 +149,11 @@
   :init (setq gptel-magit-model 'gpt-4.1)
   :hook (magit-mode . gptel-magit-install))
 
+(use-package aidermacs
+  :ensure t
+  :bind (("C-c a" . aidermacs-transient-menu))
+  :custom (aidermacs-default-chat-mode 'code))
+
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
