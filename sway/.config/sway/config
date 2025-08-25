@@ -175,7 +175,7 @@ exec swayidle -w \
     # Switch the current container between different layout styles
     #bindsym $mod+s layout stacking
     #bindsym $mod+w layout tabbed
-    bindsym $mod+t layout toggle split
+    bindsym $mod+t layout toggle tabbed split
 
     # Make the current focus fullscreen
     bindsym $mod+z fullscreen
@@ -277,6 +277,6 @@ bar {
 exec --no-startup-id dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec --no-startup-id pipewire
 exec --no-startup-id foot --server
-exec --no-startup-id autotiling -l 2 -sw "0.9"
+exec --no-startup-id autotiling -l 2 -sw "0.8"
 
 include /etc/sway/config.d/*
