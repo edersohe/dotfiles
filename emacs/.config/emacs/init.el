@@ -158,5 +158,9 @@
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
 
+(use-package catppuccin-theme
+  :ensure t
+  :config (load-theme 'catppuccin :no-confirm))
+
 (provide 'init)
 ;;; init.el ends here
