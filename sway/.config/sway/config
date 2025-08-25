@@ -255,6 +255,11 @@ for_window [app_id=fzf-session] floating enable
 for_window [app_id=fzf-bookmarks] floating enable
 for_window [app_id=pavucontrol] floating enable
 
+client.focused_tab_title #89b4fa #89b4fa #1e1e2e
+client.focused #89b4fa #89b4fa #1e1e2e
+client.focused_inactive #585b70 #585b70 #cdd6f4
+client.unfocused #313244 #313244 #cdd6f4
+
 #
 # Status Bar:
 #
