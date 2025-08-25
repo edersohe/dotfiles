@@ -17,3 +17,5 @@ vim/.vim/.netrwhist
 /emacs/.config/emacs/auto-save-list/
 /emacs/.config/emacs/.cache/
 /emacs/.config/emacs/init.el.rej
+/.aider.chat.history.md
+/emacs/.config/emacs/tree-sitter/
