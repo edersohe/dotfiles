@@ -27,7 +27,6 @@
 import os
 import subprocess
 
-import libqtile.resources
 from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
@@ -114,15 +113,12 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 
     # Application keybindings
-    Key([mod], "d", lazy.spawn("foot-menu fzf-launcher 40 15"), desc="Launch application launcher"),
     Key([mod], "w", lazy.spawn("qutebrowser --no-err-windows --target tab google.com"), desc="Launch qutebrowser"),
     Key([mod], "p", lazy.spawn("qutebrowser --no-err-windows --target private-window search.brave.com -C ~/.config/qutebrowser/incognito.py"), desc="Launch private qutebrowser"),  # Commented - check if config exists
     Key([mod, "shift"], "w", lazy.spawn("google-chrome-stable --ozone-platform-hint=auto google.com"), desc="Launch Chrome"),
     Key([mod, "shift"], "p", lazy.spawn("google-chrome-stable --ozone-platform-hint=auto --incognito search.brave.com"), desc="Launch Chrome incognito"),  # Commented - check if Chrome is installed
-    Key([mod], "s", lazy.spawn("foot-menu fzf-session 20 8"), desc="Session launcher"),
     Key([mod], "x", lazy.spawn("swaylock -f -c 000000"), desc="Lock screen"),
-    Key([mod], "b", lazy.spawn("foot-menu fzf-bookmarks"), desc="Bookmarks"),
-    Key([mod], "e", lazy.spawn("emacsclient -r"), desc="Launch Emacs"),
+    Key([mod], "e", lazy.spawn("emacs"), desc="Launch Emacs"),
 
     # Volume controls
     Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"), desc="Mute audio"),
@@ -204,7 +200,6 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
-logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
 screens = [
     Screen(
         top=bar.Bar(
@@ -224,6 +219,7 @@ screens = [
                     other_screen_border=colors['surface0'],
                     background=colors['base'],
                 ),
+                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground=colors["blue"]),
                 widget.Prompt(
                     foreground=colors['text'],
                     background=colors['base'],
@@ -239,9 +235,6 @@ screens = [
                     background=colors['base'],
                 ),
                 widget.Spacer(),
-                widget.StatusNotifier(
-                    background=colors['base'],
-                ),
                 widget.Volume(
                     foreground=colors['green'],
                     background=colors['base'],
@@ -252,7 +245,6 @@ screens = [
                     foreground=colors['text'],
                     background=colors['base'],
                 ),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground=colors["blue"]),
                 widget.QuickExit(),
             ],
             24,
@@ -302,9 +294,6 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(wm_class="pavucontrol"),
-        Match(wm_class="fzf-launcher"),
-        Match(wm_class="fzf-session"),
-        Match(wm_class="fzf-bookmarks"),
     ]
 )
 auto_fullscreen = True
