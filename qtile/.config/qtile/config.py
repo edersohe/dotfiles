@@ -25,15 +25,46 @@
 # SOFTWARE.
 
 import os
+import subprocess
 
 import libqtile.resources
-from libqtile import bar, layout, qtile, widget
+from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 mod = "mod4"
 terminal = guess_terminal()
+
+# Catppuccin Mocha Colors
+colors = {
+    'rosewater': '#f5e0dc',
+    'flamingo': '#f2cdcd',
+    'pink': '#f5c2e7',
+    'mauve': '#cba6f7',
+    'red': '#f38ba8',
+    'maroon': '#eba0ac',
+    'peach': '#fab387',
+    'yellow': '#f9e2af',
+    'green': '#a6e3a1',
+    'teal': '#94e2d5',
+    'sky': '#89dceb',
+    'sapphire': '#74c7ec',
+    'blue': '#87b0f9',
+    'lavender': '#b4befe',
+    'text': '#cdd6f4',
+    'subtext1': '#bac2de',
+    'subtext0': '#a6adc8',
+    'overlay2': '#9399b2',
+    'overlay1': '#7f849c',
+    'overlay0': '#6c7086',
+    'surface2': '#585b70',
+    'surface1': '#45475a',
+    'surface0': '#313244',
+    'base': '#1e1e2e',
+    'mantle': '#181825',
+    'crust': '#11111b',
+}
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -70,17 +101,41 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "c", lazy.window.kill(), desc="Kill focused window"),
     Key(
         [mod],
-        "f",
+        "z",
         lazy.window.toggle_fullscreen(),
         desc="Toggle fullscreen on the focused window",
     ),
-    Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+
+    # Application keybindings
+    Key([mod], "d", lazy.spawn("foot-menu fzf-launcher 40 15"), desc="Launch application launcher"),
+    Key([mod], "w", lazy.spawn("qutebrowser --no-err-windows --target tab google.com"), desc="Launch qutebrowser"),
+    Key([mod], "p", lazy.spawn("qutebrowser --no-err-windows --target private-window search.brave.com -C ~/.config/qutebrowser/incognito.py"), desc="Launch private qutebrowser"),  # Commented - check if config exists
+    Key([mod, "shift"], "w", lazy.spawn("google-chrome-stable --ozone-platform-hint=auto google.com"), desc="Launch Chrome"),
+    Key([mod, "shift"], "p", lazy.spawn("google-chrome-stable --ozone-platform-hint=auto --incognito search.brave.com"), desc="Launch Chrome incognito"),  # Commented - check if Chrome is installed
+    Key([mod], "s", lazy.spawn("foot-menu fzf-session 20 8"), desc="Session launcher"),
+    Key([mod], "x", lazy.spawn("swaylock -f -c 000000"), desc="Lock screen"),
+    Key([mod], "b", lazy.spawn("foot-menu fzf-bookmarks"), desc="Bookmarks"),
+    Key([mod], "e", lazy.spawn("emacsclient -r"), desc="Launch Emacs"),
+
+    # Volume controls
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"), desc="Mute audio"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"), desc="Lower volume"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"), desc="Raise volume"),
+    Key([], "XF86AudioMicMute", lazy.spawn("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), desc="Mute microphone"),
+
+    # Brightness controls
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 5%-"), desc="Decrease brightness"),
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set 5%+"), desc="Increase brightness"),
+
+    # Screenshot
+    Key([], "Print", lazy.spawn("bash -c 'GRIM_IMG_PATH=\"$HOME/pictures/screenshots/$(date +%Y%m%d%H%M%S)_grim.png\" ; grim -g \"$(slurp)\" $GRIM_IMG_PATH && cat $GRIM_IMG_PATH | wl-copy --type image/png'"), desc="Take screenshot"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -124,7 +179,10 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Columns(
+        border_focus_stack=[colors['sapphire'], colors['blue']],
+        border_width=2,
+    ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
@@ -140,8 +198,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
-    fontsize=12,
+    font="D2CodingLigature",
+    fontsize=15,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -149,37 +207,71 @@ extension_defaults = widget_defaults.copy()
 logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
+                widget.CurrentLayout(
+                    foreground=colors['lavender'],
+                    background=colors['base'],
+                ),
+                widget.GroupBox(
+                    active=colors['text'],
+                    inactive=colors['subtext0'],
+                    highlight_method="block",
+                    block_highlight_text_color=colors['base'],
+                    this_current_screen_border=colors['sapphire'],
+                    this_screen_border=colors['blue'],
+                    other_current_screen_border=colors['surface0'],
+                    other_screen_border=colors['surface0'],
+                    background=colors['base'],
+                ),
+                widget.Prompt(
+                    foreground=colors['text'],
+                    background=colors['base'],
+                ),
                 widget.Chord(
                     chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
+                        "launch": (colors["base"], colors["teal"]),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-                # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-                # widget.StatusNotifier(),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                widget.WindowName(
+                    foreground=colors['text'],
+                    background=colors['base'],
+                ),
+                widget.Spacer(),
+                widget.StatusNotifier(
+                    background=colors['base'],
+                ),
+                widget.Volume(
+                    foreground=colors['green'],
+                    background=colors['base'],
+                    fmt='Vol: {}',
+                ),
+                widget.Clock(
+                    format="%Y-%m-%d %a %I:%M %p",
+                    foreground=colors['text'],
+                    background=colors['base'],
+                ),
+                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground=colors["blue"]),
                 widget.QuickExit(),
             ],
             24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            background=colors['base'],
+            border_width=[0, 0, 2, 0],
+            border_color=colors['surface0'],
         ),
-        background="#000000",
-        wallpaper=logo,
-        wallpaper_mode="center",
+        background=colors["base"],
+        wallpaper=os.path.expanduser("~/.wallpaper"),
+        wallpaper_mode="fill",
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
         # x11_drag_polling_rate = 60,
+    ),
+    Screen(
+        background=colors["base"],
+        wallpaper=os.path.expanduser("~/.wallpaper"),
+        wallpaper_mode="fill",
     ),
 ]
 
@@ -197,6 +289,9 @@ bring_front_click = False
 floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
+    border_focus=colors['sapphire'],
+    border_normal=colors['surface0'],
+    border_width=2,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
@@ -206,6 +301,10 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class="pavucontrol"),
+        Match(wm_class="fzf-launcher"),
+        Match(wm_class="fzf-session"),
+        Match(wm_class="fzf-bookmarks"),
     ]
 )
 auto_fullscreen = True
@@ -233,3 +332,11 @@ wl_xcursor_size = 24
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+@hook.subscribe.startup_once
+def start_once():
+    subprocess.run(["dbus-update-activation-environment", "DISPLAY", "WAYLAND_DISPLAY", "XDG_CURRENT_DESKTOP"])
+    subprocess.Popen(["pipewire"])
+    subprocess.Popen(["foot", "--server"])
+    subprocess.Popen(["emacs", "--daemon"])
+

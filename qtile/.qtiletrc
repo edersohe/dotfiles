@@ -1,0 +1,17 @@
+if [ -z $DISPLAY ] && [ "$(tty)" == "/dev/tty1" ]; then
+    export TERM_CMD=footclient
+    export XDG_CURRENT_DESKTOP=qtile
+    export XDG_SESSION_TYPE=wayland
+    export QT_QPA_PLATFORM=wayland-egl
+    export QT_QPA_PLATFORMTHEME=qt5ct
+    export ELM_DISPLAY=wl
+    export CLUTTER_BACKEND=wayland
+    export GDK_BACKEND=wayland
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export MOZ_ENABLE_WAYLAND=1
+    export SDL_VIDEODRIVER=wayland
+
+    dbus-run-session qtile start -b wayland
+
+    exit
+fi

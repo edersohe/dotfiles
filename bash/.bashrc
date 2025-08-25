@@ -24,6 +24,7 @@ export LC_ALL=en_US.UTF-8
 [ -f $HOME/.starshiprc ] && . $HOME/.starshiprc
 [ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
+[ -f $HOME/.qtilerc ] && . $HOME/.qtilerc
 [ -f $HOME/.helixrc ] && . $HOME/.helixrc
 [ -f $HOME/.emacsrc ] && . $HOME/.emacsrc
 [ -f $HOME/.tmuxrc ] && . $HOME/.tmuxrc
