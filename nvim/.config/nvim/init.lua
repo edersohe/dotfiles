@@ -353,18 +353,44 @@ add("github/copilot.vim")
 
 add("christoomey/vim-tmux-navigator")
 
-require("mini.git").setup()
-require('mini.diff').setup({
-  view = { style = "sign" }
+add('lewis6991/gitsigns.nvim')
+local gitsigns = require('gitsigns')
+gitsigns.setup({
+  preview_config = {
+    border = border,
+  },
 })
 
-vim.keymap.set("n", '<leader>gd', '<cmd>Git diff HEAD<CR>', { desc = 'Diff from HEAD' })
-vim.keymap.set("n", '<leader>gu', '<cmd>Git diff<CR>', { desc = 'Unstaged lines' })
-vim.keymap.set("n", '<leader>gs', '<cmd>Git diff --cached<CR>', { desc = 'Staged lines' })
-vim.keymap.set('n', '<leader>gl', '<cmd>Git log --decorate --graph --all --oneline<CR>', { desc = 'Log' })
-vim.keymap.set('n', '<leader>gf', '<cmd>Git log --decorate --graph --all --oneline %<CR>', { desc = 'File history' })
-vim.keymap.set("n", '<leader>go', '<cmd>lua MiniDiff.toggle_overlay()<CR>', { desc = 'Overlay Hunks' })
-vim.keymap.set("n", '<leader>gi', '<cmd>lua MiniGit.show_at_cursor()<CR>', { desc = 'Inspect' })
+add('tpope/vim-fugitive')
+add('tpope/vim-rhubarb')
+
+local commit = function()
+  local changes = vim.fn.system("commit-message-generator")
+  local exit_code = vim.v.shell_error
+
+  if exit_code ~= 0 or changes == "" then
+    vim.notify("No changes to commit", vim.log.levels.WARN)
+    return
+  end
+
+  vim.cmd("Git commit")
+  vim.api.nvim_paste(changes, true, 1)
+end
+
+vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
+vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
+vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
+vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
+vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
+vim.keymap.set("n", "<leader>ga", "<cmd>Git commit --amend<CR>", { desc = "Amend" })
+vim.keymap.set("n", "<leader>gl", "<cmd>tab Git log --decorate --graph --all --pretty=short<CR>", { desc = "Log" })
+vim.keymap.set("n", "<leader>gf", "<cmd>tab Git log --decorate --graph --all --pretty=short -- %<CR>",
+  { desc = "File commits" })
+vim.keymap.set("n", "<leader>gb", "<cmd>.GBrowse<CR>", { desc = "Browse" })
+vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "Blame" })
+vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
+vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
+vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
 
 add({
   source = "nvim-treesitter/nvim-treesitter",
@@ -463,9 +489,6 @@ miniclue.setup({
     -- Leader triggers
     { mode = 'n', keys = '<Leader>' },
     { mode = 'x', keys = '<Leader>' },
-     -- `[` and `]` keys
-    { mode = 'n', keys = '[' },
-    { mode = 'n', keys = ']' },
     -- Built-in completion
     { mode = 'i', keys = '<C-x>' },
     -- `g` key
@@ -496,7 +519,6 @@ miniclue.setup({
     { mode = 'x', keys = ']' },
   },
   clues = {
-    miniclue.gen_clues.square_brackets(),
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),
