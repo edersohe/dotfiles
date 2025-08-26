@@ -94,17 +94,15 @@
 	      ("C-c l [" . flymake-goto-prev-error)
 	      ("C-c l e" . flymake-show-diagnostics-buffer)
 	      ("C-c l E" . flymake-show-project-diagnostics)
-	      ("C-c l s" . imenu))
+	      ("C-c l m" . imenu))
   :config
   (setq eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
-	       '((yaml-mode yaml-ts-mode) . ("yaml-language-server" "--stdio")))
-  (add-to-list 'eglot-server-programs
 	       '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
-	       '((ruby-mode ruby-ts-mode) "ruby-lsp"))
+	       '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
   (add-to-list 'eglot-server-programs
-	       '((elixir-mode elixir-ts-mode) . ("elixir-ls" ""))))
+	       '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -122,6 +120,13 @@
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+
+(use-package markdown-mode
+  :ensure t
+  :hook
+  (markdown-mode . visual-line-mode)
+  (markdown-mode . flyspell-mode)
+  :init (setq markdown-command "multimarkdown"))
 
 (use-package magit
   :ensure t)
@@ -148,14 +153,21 @@
 	      ("C-p" . copilot-previous-completion)
 	      ("TAB" . copilot-accept-completion)))
 
+(defun gptel-smart-send ()
+  "Execute 'gptel-send' if text is selected, otherwise execute 'gptel'."
+  (interactive)
+  (if (use-region-p)
+      (gptel-send t)
+    (gptel "*Copilot*" nil nil t)))
+
 (use-package gptel
   :ensure t
   :init (setq gptel-model 'claude-sonnet-4
-	      gptel-default-mode 'org-mode
+	      gptel-default-mode 'markdown-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
-  :bind (("C-c RET" . gptel-send)
-         ("C-c DEL" . gptel-rewrite)
-	 ("C-x C-g" . gptel)))
+  :bind (("C-c RET" . gptel-smart-send)
+	 :map gptel-mode-map
+	      ("C-c m" . gptel-menu)))
 
 (use-package gptel-magit
   :ensure t
