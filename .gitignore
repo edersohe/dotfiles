@@ -19,3 +19,4 @@ vim/.vim/.netrwhist
 /emacs/.config/emacs/init.el.rej
 /.aider.chat.history.md
 /emacs/.config/emacs/tree-sitter/
+.aider*

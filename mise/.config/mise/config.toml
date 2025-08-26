@@ -6,6 +6,8 @@ ruff = "latest"
 ruby = "latest"
 java = "lts"
 go = "latest"
+erlang = "27"
+elixir = "1.18-otp-27"
 
 lua-language-server = "latest"
 taplo = "latest"
