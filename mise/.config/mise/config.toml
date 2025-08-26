@@ -11,6 +11,7 @@ elixir = "1.18-otp-27"
 
 lua-language-server = "latest"
 taplo = "latest"
+elixir-ls = "latest"
 
 "npm:npm" = "latest"
 "npm:yarn" = "latest"
