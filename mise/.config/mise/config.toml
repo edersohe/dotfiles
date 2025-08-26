@@ -4,6 +4,8 @@ node = "lts"
 uv = "latest"
 ruff = "latest"
 ruby = "latest"
+java = "lts"
+go = "latest"
 
 lua-language-server = "latest"
 taplo = "latest"
@@ -29,6 +31,8 @@ taplo = "latest"
 
 "gem:rails" = "latest"
 "gem:ruby-lsp" = "latest"
+
+"go:golang.org/x/tools/gopls" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
