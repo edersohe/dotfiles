@@ -83,6 +83,18 @@
 
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
+  :bind (:map eglot-mode-map
+	      ("C-c l f" . eglot-format)
+	      ("C-c l a" . eglot-code-actions)
+	      ("C-c l d" . xref-find-definitions)
+	      ("C-c l D" . xref-find-declarations)
+	      ("C-c l r" . xref-find-references)
+	      ("C-c l R" . eglot-rename)
+	      ("C-c l ]" . flymake-goto-next-error)
+	      ("C-c l [" . flymake-goto-prev-error)
+	      ("C-c l e" . flymake-show-diagnostics-buffer)
+	      ("C-c l E" . flymake-show-project-diagnostics)
+	      ("C-c l s" . imenu))
   :config
   (setq eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
