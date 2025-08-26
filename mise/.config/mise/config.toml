@@ -28,6 +28,7 @@ taplo = "latest"
 "pipx:aider-chat" = "latest"
 
 "gem:rails" = "latest"
+"gem:ruby-lsp" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []

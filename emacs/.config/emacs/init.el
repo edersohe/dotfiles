@@ -86,11 +86,13 @@
   :config
   (setq eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
-	       '(yaml-mode . ("yaml-language-server" "--stdio")))
+	       '((yaml-mode yaml-ts-mode) . ("yaml-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs
-	       '(python-mode . ("ruff" "server")))
+	       '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
-	       '(elixir-mode . ("elixir-ls" ""))))
+	       '((ruby-mode ruby-ts-mode) "ruby-lsp"))
+  (add-to-list 'eglot-server-programs
+	       '((elixir-mode elixir-ts-mode) . ("elixir-ls" ""))))
 
 (require 'package)
 (add-to-list 'package-archives
