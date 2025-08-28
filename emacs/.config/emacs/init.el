@@ -153,7 +153,7 @@
 	      ("C-p" . copilot-previous-completion)
 	      ("TAB" . copilot-accept-completion)))
 
-(defun gptel-smart-send ()
+(defun my/gptel-smart-send ()
   "Execute 'gptel-send' if text is selected, otherwise execute 'gptel'."
   (interactive)
   (if (use-region-p)
@@ -165,7 +165,7 @@
   :init (setq gptel-model 'claude-sonnet-4
 	      gptel-default-mode 'markdown-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
-  :bind (("C-c RET" . gptel-smart-send)
+  :bind (("C-c RET" . my/gptel-smart-send)
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
@@ -187,6 +187,56 @@
 (use-package catppuccin-theme
   :ensure t
   :config (load-theme 'catppuccin :no-confirm))
+
+(setq view-read-only t)
+
+(with-eval-after-load 'view
+  (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
+  (define-key view-mode-map (kbd "j") 'next-line)
+  (define-key view-mode-map (kbd "k") 'previous-line)
+  (define-key view-mode-map (kbd "h") 'backward-char)
+  (define-key view-mode-map (kbd "l") 'forward-char)
+  (define-key view-mode-map (kbd "n") 'next-line)
+  (define-key view-mode-map (kbd "p") 'previous-line)
+  (define-key view-mode-map (kbd "b") 'backward-word)
+  (define-key view-mode-map (kbd "f") 'forward-word)
+  (define-key view-mode-map (kbd "e") 'end-of-line)
+  (define-key view-mode-map (kbd "a") 'beginning-of-line)
+  (define-key view-mode-map (kbd "w") 'kill-ring-save)
+  (define-key view-mode-map (kbd "V") 'scroll-down-command)
+  (define-key view-mode-map (kbd "v") 'scroll-up-command)
+  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
+  (define-key view-mode-map (kbd "RET") nil)
+  (define-key view-mode-map (kbd "DEL") nil)
+  (define-key view-mode-map (kbd "0") 'delete-window)
+  (define-key view-mode-map (kbd "1") 'delete-other-windows)
+  (define-key view-mode-map (kbd "2") 'split-window-below)
+  (define-key view-mode-map (kbd "3") 'split-window-right)
+  (define-key view-mode-map (kbd "o") 'other-window))
+
+(add-hook 'view-mode-hook
+	  (lambda ()
+	    (setq cursor-type (if view-mode 'box 'bar))))
+
+(defun my/should-enable-view-mode-p ()
+  "Return t if view-mode should be enabled in current buffer."
+  (and (not (minibufferp))
+       (not buffer-read-only)
+       (derived-mode-p 'prog-mode)))
+  
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (when (my/should-enable-view-mode-p)
+              (view-mode 1))))
+
+(defadvice keyboard-quit (around my/keyboard-quit-advice activate)
+  "Enable view-mode instead of quitting when in a major mode buffer."
+  (if (and (my/should-enable-view-mode-p)
+           (not view-mode))
+      (view-mode 1)
+    ad-do-it))
+
+(global-set-key (kbd "C-c v") 'view-mode)
 
 (provide 'init)
 ;;; init.el ends here
