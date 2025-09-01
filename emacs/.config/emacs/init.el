@@ -128,15 +128,10 @@
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
-(use-package magit
-  :ensure t)
-
 (use-package diff-hl
   :ensure t
-  :after magit
   :custom (diff-hl-disable-on-remote t)
   :hook
-  (magit-post-refresh . diff-hl-magit-post-refresh)
   (after-init . global-diff-hl-mode)
   (after-init . diff-hl-flydiff-mode)
   (after-init . diff-hl-margin-mode))
@@ -169,12 +164,6 @@
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
-(use-package gptel-magit
-  :ensure t
-  :after (gptel magit)
-  :init (setq gptel-magit-model 'gpt-4.1)
-  :hook (magit-mode . gptel-magit-install))
-
 (use-package aidermacs
   :ensure t
   :bind (("C-c a" . aidermacs-transient-menu))
@@ -183,12 +172,6 @@
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
-
-(use-package catppuccin-theme
-  :ensure t
-  :config (load-theme 'catppuccin :no-confirm))
-
-(setq view-read-only t)
 
 (with-eval-after-load 'view
   (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
