@@ -203,10 +203,11 @@
 
 (defun my/should-enable-view-mode-p ()
   "Return t if view-mode should be enabled in current buffer."
-  (and (not (minibufferp))
+  (and (buffer-file-name)
+       (not (minibufferp))
        (not buffer-read-only)
-       (derived-mode-p 'prog-mode)))
-  
+       (not (derived-mode-p 'special-mode))))
+
 (add-hook 'after-change-major-mode-hook
           (lambda ()
             (when (my/should-enable-view-mode-p)
