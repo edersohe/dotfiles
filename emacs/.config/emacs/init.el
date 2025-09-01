@@ -164,11 +164,6 @@
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
-(use-package aidermacs
-  :ensure t
-  :bind (("C-c a" . aidermacs-transient-menu))
-  :custom (aidermacs-default-chat-mode 'code))
-
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
