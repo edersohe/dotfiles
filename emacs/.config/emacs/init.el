@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar my/original-gc-cons-threshold gc-cons-threshold)
+
 (setq gc-cons-threshold (* 100 1024 1024)
       custom-file (expand-file-name "custom.el" user-emacs-directory)
       native-comp-async-report-warnings-errors nil
@@ -21,6 +23,7 @@
       window-resize-pixelwise t
       frame-resize-pixelwise t
       load-prefer-newer t
+      help-window-select t
       completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
@@ -29,6 +32,7 @@
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
+      completion-cycle-threshold 3
       completion-ignore-case t
       completions-detailed t
       completion-show-help nil
@@ -37,7 +41,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-;(global-hl-line-mode 1)
+(global-hl-line-mode 1)
 
 (save-place-mode t)
 (savehist-mode t)
@@ -50,7 +54,7 @@
 
 (advice-add 'icomplete-post-command-hook :before #'minibuffer-hide-completions)
 
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
+(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold my/original-gc-cons-threshold)))
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
@@ -64,8 +68,8 @@
 (set-face-attribute 'default nil :font "D2CodingLigature Nerd Font" :weight 'light ':height 135)
 (set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font" :height 150)
 
-(load-theme 'modus-vivendi-tinted)
-(add-to-list 'default-frame-alist '(alpha-background . 98))
+(load-theme 'modus-vivendi-tinted :no-confirm)
+(add-to-list 'default-frame-alist '(alpha-background . 97))
 ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
@@ -158,7 +162,7 @@
 (use-package gptel
   :ensure t
   :init (setq gptel-model 'claude-sonnet-4
-	      gptel-default-mode 'markdown-mode
+	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . my/gptel-smart-send)
 	 :map gptel-mode-map
