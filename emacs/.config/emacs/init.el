@@ -161,6 +161,10 @@
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
 
+(use-package marginalia
+  :ensure t
+  :init (marginalia-mode))
+
 (use-package corfu
   :ensure t
   :custom
