@@ -48,7 +48,6 @@
 (recentf-mode t)
 (global-auto-revert-mode t)
 (fido-vertical-mode t)
-(global-completion-preview-mode 1)
 
 (require 'uniquify)
 
@@ -58,9 +57,6 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
-
-(define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
-(define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
@@ -164,6 +160,14 @@
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
+
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-cycle t)
+  :init
+  (global-corfu-mode)
+  (corfu-popupinfo-mode))
 
 (provide 'init)
 ;;; init.el ends here
