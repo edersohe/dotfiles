@@ -27,6 +27,7 @@ elixir-ls = "latest"
 "ubi:iwe-org/iwe" = { version = "latest", extract_all = true }
 "ubi:git-town/git-town" = "latest"
 "ubi:thomasschafer/scooter" = "latest"
+"ubi:elixir-lang/expert" = "nightly"
 
 "pipx:basedpyright" = "latest"
 "pipx:pyinfra" = "latest"

@@ -78,10 +78,8 @@
 ;; (add-to-list 'initial-frame-alist '(fullscreen . fullboth))
 ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
-(set-frame-parameter nil 'alpha-background 98)
 (add-to-list 'default-frame-alist '(alpha-background . 98))
 
-(gptel-make-gh-copilot "Copilot")
 (setq gptel-model 'claude-sonnet-4
       gptel-backend (gptel-make-gh-copilot "Copilot"))
 
