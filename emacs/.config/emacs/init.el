@@ -152,19 +152,12 @@
 	      ("C-p" . copilot-previous-completion)
 	      ("TAB" . copilot-accept-completion)))
 
-(defun my/gptel-smart-send ()
-  "Execute 'gptel-send' if text is selected, otherwise execute 'gptel'."
-  (interactive)
-  (if (use-region-p)
-      (gptel-send t)
-    (gptel "*Copilot*" nil nil t)))
-
 (use-package gptel
   :ensure t
   :init (setq gptel-model 'claude-sonnet-4
 	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
-  :bind (("C-c RET" . my/gptel-smart-send)
+  :bind (("C-c RET" . gptel-send)
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
