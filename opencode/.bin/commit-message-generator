@@ -10,4 +10,3 @@ fi
 
 MESSAGE=$(opencode run "\'$DIFF\'" --agent $AGENT  | sed -zr 's/(^```gitcommit\n|```$)//g')
 
-echo -e "$MESSAGE" | wl-copy

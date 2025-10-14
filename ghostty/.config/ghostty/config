@@ -1,0 +1,21 @@
+theme=Catppuccin Mocha
+# background=#1e1e2e
+font-family=D2Coding Nerd Font
+font-style=Regular
+font-size=12.5
+font-style-italic=false
+font-style-bold-italic=bold
+gtk-titlebar = false
+#gtk-tabs-location = hidden
+#window-decoration = none
+maximize = true
+#fullscreen = true
+gtk-titlebar-hide-when-maximized = true
+window-padding-y = 0
+window-padding-x = 0
+window-padding-balance = true
+keybind = alt+enter=toggle_fullscreen
+#freetype-load-flags = no-force-autohint
+#adjust-cell-height = 10
+background-opacity = 0.98
+background-blur = false

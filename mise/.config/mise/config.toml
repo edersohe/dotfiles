@@ -23,6 +23,7 @@ elixir-ls = "latest"
 "npm:marked" = "latest"
 "npm:opencode-ai" = "latest"
 "npm:@biomejs/biome" = "latest"
+"npm:tree-sitter-cli" = "latest"
 
 "ubi:iwe-org/iwe" = { version = "latest", extract_all = true }
 "ubi:git-town/git-town" = "latest"
@@ -45,6 +46,14 @@ elixir-ls = "latest"
 "go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "latest"
 "go:github.com/nametake/golangci-lint-langserver" = "latest"
 "go:github.com/go-delve/delve/cmd/dlv" = "latest"
+
+dotnet = "10.0.100-rc.1.25451.107"
+
+ripgrep = "latest"
+fd = "latest"
+neovim = "latest"
+tmux = "latest"
+starship = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
