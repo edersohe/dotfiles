@@ -70,7 +70,7 @@
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
-;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting for its name."
