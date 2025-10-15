@@ -101,6 +101,8 @@
 	      ("C-c l m" . imenu))
   :config
   (setq eglot-autoshutdown t)
+  (add-to-list 'auto-mode-alist '
+	       ("\\.exs$" . elixir-ts-mode))
   (add-to-list 'eglot-server-programs
 	       '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
