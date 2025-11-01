@@ -290,15 +290,6 @@ require("mini.statusline").setup({
   use_icons = true,
 })
 
-local MiniTabline = require("mini.tabline")
-MiniTabline.setup({
-  show_icons = true,
-  format = function(buf_id, label)
-    local suffix = vim.bo[buf_id].modified and "+ " or ""
-    return MiniTabline.default_format(buf_id, label) .. suffix
-  end,
-})
-
 require("mini.files").setup({
   mappings = {
     close       = '<Esc>',
@@ -436,9 +427,6 @@ require("mini.bracketed").setup()
 require("mini.pairs").setup()
 require("mini.surround").setup()
 require("mini.extra").setup()
-
-require("mini.jump2d").setup()
-vim.keymap.set('n', '<CR>', '<Cmd>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
 
 require("mini.move").setup({
   mappings = {
