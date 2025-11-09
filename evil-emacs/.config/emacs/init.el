@@ -2,16 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(defvar my/original-gc-cons-threshold gc-cons-threshold)
 
-(setq gc-cons-threshold (* 100 1024 1024)
-      custom-file (expand-file-name "custom.el" user-emacs-directory)
-      native-comp-async-report-warnings-errors nil
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory)
       native-comp-speed 2
       make-backup-files nil
       auto-save-default nil
       create-lockfiles nil
-      inhibit-startup-screen t
       indent-tabs-mode nil
       tab-width 4
       blink-cursor-mode nil
@@ -38,9 +34,6 @@
       completion-show-help nil
       tab-always-indent 'complete)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 (global-hl-line-mode 1)
 
 (save-place-mode t)
@@ -50,7 +43,7 @@
 
 (require 'uniquify)
 
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold my/original-gc-cons-threshold)))
+(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
