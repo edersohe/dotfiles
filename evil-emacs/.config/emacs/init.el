@@ -170,6 +170,12 @@
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
+(use-package gptel-magit
+  :ensure t
+  :init (setq gptel-magit-model 'gpt-4.1)
+  :after (gptel magit)
+  :hook (magit-mode . gptel-magit-install))
+
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
@@ -244,7 +250,7 @@
   (evil-commentary-mode 1))
 
 (use-package evil-matchit
-  :ensuree
+  :ensure
   :after evil
   :config
   (global-evil-matchit-mode 1))
