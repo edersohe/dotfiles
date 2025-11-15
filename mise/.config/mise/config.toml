@@ -47,13 +47,14 @@ elixir-ls = "latest"
 "go:github.com/nametake/golangci-lint-langserver" = "latest"
 "go:github.com/go-delve/delve/cmd/dlv" = "latest"
 
-dotnet = "10.0.100-rc.1.25451.107"
+dotnet = "latest"
 
 ripgrep = "latest"
 fd = "latest"
 neovim = "latest"
 tmux = "latest"
 starship = "latest"
+"npm:pnpm" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []

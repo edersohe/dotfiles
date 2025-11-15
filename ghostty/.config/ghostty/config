@@ -1,10 +1,10 @@
 theme=Catppuccin Mocha
 # background=#1e1e2e
-font-family=D2Coding Nerd Font
-font-style=Regular
-font-size=12.5
-font-style-italic=false
-font-style-bold-italic=bold
+font-family=ZedMono Nerd Font
+# font-style=Regular
+font-size=14
+# font-style-italic=false
+# font-style-bold-italic=bold
 gtk-titlebar = false
 #gtk-tabs-location = hidden
 #window-decoration = none

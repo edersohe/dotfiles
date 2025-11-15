@@ -146,7 +146,6 @@
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
-  (copilot-idle-delay nil)
   :bind (("C-<return>" . copilot-complete)
 	 :map copilot-completion-map
 	      ("C-n" . copilot-next-completion)
@@ -218,11 +217,16 @@
   :defer t
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
+(use-package undo-fu
+  :ensure t)
+
 (use-package evil
   :ensure t
+  :after undo-fu
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
+  (setq evil-undo-system 'undo-fu)
   :config
   (evil-mode 1))
 
@@ -266,7 +270,17 @@
     "b"  '(project-switch-to-buffer :which-key "switch buffer")
     "f"  '(project-find-file :which-key "find file")
     "g"  '(magit-status :which-key "magit status")
+    "s"  '(project-query-replace-regexp :which-key "replace")
     "t"  '(eat-project :which-key "terminal")))
+
+
+(use-package helpful
+  :ensure t
+  :bind
+  ("C-h f" . helpful-callable)
+  ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key)
+  ("C-h x" . helpful-command))
 
 (provide 'init)
 ;;; init.el ends here
