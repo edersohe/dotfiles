@@ -51,10 +51,10 @@
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
 
-(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'light ':height 135)
+(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'regular ':height 135)
 (set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
-(load-theme 'modus-vivendi-tinted :no-confirm)
+(load-theme 'modus-vivendi-tritanopia :no-confirm)
 ;; (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
