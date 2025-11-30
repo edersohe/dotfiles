@@ -2,16 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(defvar my/original-gc-cons-threshold gc-cons-threshold)
 
-(setq gc-cons-threshold (* 100 1024 1024)
-      custom-file (expand-file-name "custom.el" user-emacs-directory)
-      native-comp-async-report-warnings-errors nil
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory)
       native-comp-speed 2
       make-backup-files nil
       auto-save-default nil
       create-lockfiles nil
-      inhibit-startup-screen t
       indent-tabs-mode nil
       tab-width 4
       blink-cursor-mode nil
@@ -38,9 +34,6 @@
       completion-show-help nil
       tab-always-indent 'complete)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 (global-hl-line-mode 1)
 
 (save-place-mode t)
@@ -54,7 +47,7 @@
 
 (advice-add 'icomplete-post-command-hook :before #'minibuffer-hide-completions)
 
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold my/original-gc-cons-threshold)))
+(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
@@ -65,11 +58,11 @@
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
 
-(set-face-attribute 'default nil :font "D2CodingLigature Nerd Font" :weight 'light ':height 135)
-(set-face-attribute 'fixed-pitch nil :font "D2CodingLigature Nerd Font" :height 150)
+(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'light ':height 135)
+(set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
-(add-to-list 'default-frame-alist '(alpha-background . 97))
+;; (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
