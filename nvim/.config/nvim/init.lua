@@ -175,6 +175,7 @@ local languages = {
     ts = { "markdown", "markdown_inline" },
   },
   nix = { ts = { "nix" } },
+  perl = { lsp = { perlpls = { config = {}, bin = "pls" } }, ts = { "perl" } },
   php = { lsp = { phpactor = { config = {}, bin = "phpactor" } }, ts = { "php", "php_only" } },
   proto = { lsp = { buf_ls = { config = {}, bin = "buf" } }, ts = { "proto" } },
   python = {
@@ -671,4 +672,9 @@ vim.g.clipboard = {
   },
 }
 
-vim.cmd("colorscheme catppuccin-mocha")
+vim.cmd[[
+  colorscheme catppuccin-mocha
+  "hi Normal guibg=None
+  "hi NormalFloat guibg=None
+  "hi FloatBorder guibg=None
+]]

@@ -101,19 +101,6 @@
 	     '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-
-(use-package doom-themes
-  :ensure t
-  :custom
-  (doom-themes-enable-bold t)
-  (doom-themes-enable-italic t)
-  :config
-  (load-theme 'doom-one t)
-  (doom-themes-org-config))
-
 (use-package exec-path-from-shell
   :ensure t
   :if (memq window-system '(mac ns x))
@@ -146,6 +133,7 @@
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
+  (copilot-idle-delay nil)
   :bind (("C-<return>" . copilot-complete)
 	 :map copilot-completion-map
 	      ("C-n" . copilot-next-completion)
@@ -192,13 +180,8 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-(use-package consult
-  :ensure t
-  :after vertico)
-
 (use-package corfu
   :ensure t
-  :after evil-collection
   :init
   (global-corfu-mode)
   :custom
@@ -217,69 +200,54 @@
   :defer t
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
-(use-package undo-fu
-  :ensure t)
+(with-eval-after-load 'view
+  (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
+  (define-key view-mode-map (kbd "j") 'next-line)
+  (define-key view-mode-map (kbd "k") 'previous-line)
+  (define-key view-mode-map (kbd "h") 'backward-char)
+  (define-key view-mode-map (kbd "l") 'forward-char)
+  (define-key view-mode-map (kbd "n") 'next-line)
+  (define-key view-mode-map (kbd "p") 'previous-line)
+  (define-key view-mode-map (kbd "b") 'backward-word)
+  (define-key view-mode-map (kbd "f") 'forward-word)
+  (define-key view-mode-map (kbd "e") 'end-of-line)
+  (define-key view-mode-map (kbd "a") 'beginning-of-line)
+  (define-key view-mode-map (kbd "w") 'kill-ring-save)
+  (define-key view-mode-map (kbd "V") 'scroll-down-command)
+  (define-key view-mode-map (kbd "v") 'scroll-up-command)
+  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
+  (define-key view-mode-map (kbd "RET") nil)
+  (define-key view-mode-map (kbd "DEL") nil)
+  (define-key view-mode-map (kbd "0") 'delete-window)
+  (define-key view-mode-map (kbd "1") 'delete-other-windows)
+  (define-key view-mode-map (kbd "2") 'split-window-below)
+  (define-key view-mode-map (kbd "3") 'split-window-right)
+  (define-key view-mode-map (kbd "o") 'other-window))
 
-(use-package evil
-  :ensure t
-  :after undo-fu
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-undo-system 'undo-fu)
-  :config
-  (evil-mode 1))
+(add-hook 'view-mode-hook
+	  (lambda ()
+	    (setq cursor-type (if view-mode 'box 'bar))))
 
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config
-  (evil-collection-init))
+(defun my/should-enable-view-mode-p ()
+  "Return t if view-mode should be enabled in current buffer."
+  (and (buffer-file-name)
+       (not (minibufferp))
+       (not buffer-read-only)
+       (not (derived-mode-p 'special-mode))))
 
-(use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (when (my/should-enable-view-mode-p)
+              (view-mode 1))))
 
-(use-package evil-commentary
-  :ensure t
-  :config
-  (evil-commentary-mode 1))
+(defadvice keyboard-quit (around my/keyboard-quit-advice activate)
+  "Enable view-mode instead of quitting when in a major mode buffer."
+  (if (and (my/should-enable-view-mode-p)
+           (not view-mode))
+      (view-mode 1)
+    ad-do-it))
 
-(use-package evil-matchit
-  :ensure
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package general
-  :ensure t
-  :after evil
-  :config
-  (general-evil-setup t)
-  :init
-  (general-create-definer my/leader-keys
-    :states '(normal visual motion)
-    :keymaps 'override
-    :prefix "SPC"
-    :global-prefix "C-SPC"
-    :prefix-map 'my/leader-key-map)
-
-  (my/leader-keys
-    "p"  '(project-switch-project :which-key "switch project")
-    "b"  '(project-switch-to-buffer :which-key "switch buffer")
-    "f"  '(project-find-file :which-key "find file")
-    "g"  '(magit-status :which-key "magit status")
-    "s"  '(project-query-replace-regexp :which-key "replace")
-    "t"  '(eat-project :which-key "terminal")))
-
-(use-package helpful
-  :ensure t
-  :bind
-  ("C-h f" . helpful-callable)
-  ("C-h v" . helpful-variable)
-  ("C-h k" . helpful-key)
-  ("C-h x" . helpful-command))
+(global-set-key (kbd "C-c v") 'view-mode)
 
 (provide 'init)
 ;;; init.el ends here

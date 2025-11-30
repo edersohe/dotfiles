@@ -55,6 +55,10 @@ neovim = "latest"
 tmux = "latest"
 starship = "latest"
 "npm:pnpm" = "latest"
+bun = "latest"
+vim = "latest"
+"npm:@github/copilot" = "latest"
+"npm:perlnavigator-server" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
