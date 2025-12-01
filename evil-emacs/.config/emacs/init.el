@@ -163,7 +163,6 @@
 
 (use-package gptel
   :ensure t
-  :after magit
   :init (setq gptel-model 'claude-sonnet-4
 	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
@@ -270,28 +269,41 @@
   :config
   (general-evil-setup t)
   :init
-  (general-create-definer my/leader-keys
-    :states '(normal visual motion)
-    :keymaps 'override
-    :prefix "SPC"
-    :global-prefix "C-SPC"
-    :prefix-map 'my/leader-key-map)
-
-  (my/leader-keys
-    "p"  '(project-switch-project :which-key "switch project")
-    "b"  '(project-switch-to-buffer :which-key "switch buffer")
-    "f"  '(project-find-file :which-key "find file")
-    "g"  '(magit-status :which-key "magit status")
-    "s"  '(project-query-replace-regexp :which-key "replace")
-    "t"  '(eat-project :which-key "terminal")))
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'global
+   :prefix "SPC"
+   "p"  '(project-switch-project :which-key "switch project")
+   "b"  '(project-switch-to-buffer :which-key "switch buffer")
+   "f"  '(project-find-file :which-key "find file")
+   "e"  '(project-dired :which-key "explore")
+   "g"  '(magit-status :which-key "magit status")
+   "s"  '(project-query-replace-regexp :which-key "replace")
+   "t"  '(eat-project :which-key "terminal")
+   "RET" '(gptel-menu t :which-key "gptel menu")
+   "c"  '(gptel :which-key "chat")
+   "h"  '(helpful-symbol :which-key "help")
+   "k"  '(helpful-key :which-key "key help")
+   "i" '(imenu :which-key "imenu"))
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'eglot-mode-map
+   :prefix "SPC"
+   "l"  '(:ignore t :which-key "lsp")
+   "lf" '(eglot-format :which-key "format")
+   "la" '(eglot-code-actions :which-key "actions")
+   "lr" '(eglot-rename :which-key "rename")
+   "ld" '(eglot-find-declaration :which-key "declaration")
+   "li" '(eglot-find-implementation :which-key "implementation")
+   "lt" '(eglot-find-typeDefinition :which-key "type definition"))
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'flymake-mode-map
+   :prefix "SPC"
+   "d" '(flymake-show-project-diagnostics :which-key "diagnostics")))
 
 (use-package helpful
-  :ensure t
-  :bind
-  ("C-h f" . helpful-callable)
-  ("C-h v" . helpful-variable)
-  ("C-h k" . helpful-key)
-  ("C-h x" . helpful-command))
+  :ensure t)
 
 (provide 'init)
 ;;; init.el ends here
