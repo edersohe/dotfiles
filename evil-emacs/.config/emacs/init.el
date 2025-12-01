@@ -45,16 +45,15 @@
 
 (add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
 (display-time-mode 1)
 (setq display-time-format "%H:%M:%S")
 
-(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'light ':height 135)
+(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'regular ':height 135)
 (set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
-(load-theme 'modus-vivendi-tinted :no-confirm)
+(load-theme 'modus-vivendi-tritanopia :no-confirm)
 ;; (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
@@ -66,6 +65,16 @@
 (global-set-key (kbd "C-x k") #'my/kill-current-buffer)
 
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+
+(require 'package)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+(use-package exec-path-from-shell
+  :ensure t
+  :if (memq window-system '(mac ns x))
+  :config (exec-path-from-shell-initialize))
 
 (use-package which-key
   :custom (which-key-idle-delay 0.3)
@@ -80,26 +89,20 @@
 	      ("C-c l D" . xref-find-declarations)
 	      ("C-c l r" . xref-find-references)
 	      ("C-c l R" . eglot-rename)
-	      ("C-c l ]" . flymake-goto-next-error)
-	      ("C-c l [" . flymake-goto-prev-error)
-	      ("C-c l e" . flymake-show-diagnostics-buffer)
-	      ("C-c l E" . flymake-show-project-diagnostics)
 	      ("C-c l m" . imenu))
+  :custom
+  (eglot-autoshutdown t)
   :config
-  (setq eglot-autoshutdown t)
   (add-to-list 'auto-mode-alist '
 	       ("\\.exs$" . elixir-ts-mode))
   (add-to-list 'eglot-server-programs
 	       '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
+	       '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+  (add-to-list 'eglot-server-programs
 	       '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
   (add-to-list 'eglot-server-programs
 	       '((ruby-mode ruby-ts-mode) "ruby-lsp")))
-
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
 
 (use-package doom-modeline
   :ensure t
@@ -114,15 +117,21 @@
   (load-theme 'doom-one t)
   (doom-themes-org-config))
 
-(use-package exec-path-from-shell
-  :ensure t
-  :if (memq window-system '(mac ns x))
-  :config (exec-path-from-shell-initialize))
+(use-package flymake
+  :hook
+  (prog-mode . flymake-mode)
+  :bind (:map flymake-mode-map
+	      ("C-c l ]" . flymake-goto-next-error)
+	      ("C-c l [" . flymake-goto-prev-error)
+	      ("C-c l e" . flymake-show-diagnostics-buffer)
+	      ("C-c l E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
+  (add-to-list 'treesit-language-source-alist
+	       '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
@@ -199,8 +208,8 @@
 (use-package corfu
   :ensure t
   :after evil-collection
-  :init
-  (global-corfu-mode)
+  :hook
+  (after-init . global-corfu-mode)
   :custom
   (corfu-cycle t)
   (corfu-auto t))
@@ -218,6 +227,9 @@
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package undo-fu
+  :ensure t)
+
+(use-package rust-mode
   :ensure t)
 
 (use-package evil
