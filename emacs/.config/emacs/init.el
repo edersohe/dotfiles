@@ -93,7 +93,6 @@
 	      ("C-c l f" . eglot-format)
 	      ("C-c l a" . eglot-code-actions)
 	      ("C-c l d" . xref-find-definitions)
-	      ("C-c l D" . xref-find-declarations)
 	      ("C-c l r" . xref-find-references)
 	      ("C-c l R" . eglot-rename)
 	      ("C-c l m" . imenu))
