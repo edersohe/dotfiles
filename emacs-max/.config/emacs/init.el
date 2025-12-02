@@ -83,13 +83,12 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-	      ("C-c l f" . eglot-format)
-	      ("C-c l a" . eglot-code-actions)
-	      ("C-c l d" . xref-find-definitions)
-	      ("C-c l D" . xref-find-declarations)
-	      ("C-c l r" . xref-find-references)
-	      ("C-c l R" . eglot-rename)
-	      ("C-c l m" . imenu))
+	      ("C-c f" . eglot-format)
+	      ("C-c a" . eglot-code-actions)
+	      ("C-c d" . eglot-find-declaration)
+	      ("C-c i" . eglot-find-implementation)
+	      ("C-c t" . eglot-find-typeDefinition)
+	      ("C-c r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   :config
@@ -108,17 +107,17 @@
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-	      ("C-c l ]" . flymake-goto-next-error)
-	      ("C-c l [" . flymake-goto-prev-error)
-	      ("C-c l e" . flymake-show-diagnostics-buffer)
-	      ("C-c l E" . flymake-show-project-diagnostics)))
+	      ("C-c n" . flymake-goto-next-error)
+	      ("C-c p" . flymake-goto-prev-error)
+	      ("C-c e" . flymake-show-diagnostics-buffer)
+	      ("C-c E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
   (add-to-list 'treesit-language-source-alist
-	       '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
+               '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
@@ -151,11 +150,11 @@
 
 (use-package gptel
   :ensure t
-  :after magit
   :init (setq gptel-model 'claude-sonnet-4
 	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
+	 ("C-x c" . gptel)
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
@@ -211,18 +210,13 @@
 
 (with-eval-after-load 'view
   (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
-  (define-key view-mode-map (kbd "j") 'next-line)
-  (define-key view-mode-map (kbd "k") 'previous-line)
-  (define-key view-mode-map (kbd "h") 'backward-char)
-  (define-key view-mode-map (kbd "l") 'forward-char)
   (define-key view-mode-map (kbd "n") 'next-line)
   (define-key view-mode-map (kbd "p") 'previous-line)
-  (define-key view-mode-map (kbd "b") 'backward-word)
-  (define-key view-mode-map (kbd "f") 'forward-word)
+  (define-key view-mode-map (kbd "b") 'backward-char)
+  (define-key view-mode-map (kbd "f") 'forward-char)
   (define-key view-mode-map (kbd "e") 'end-of-line)
   (define-key view-mode-map (kbd "a") 'beginning-of-line)
   (define-key view-mode-map (kbd "w") 'kill-ring-save)
-  (define-key view-mode-map (kbd "V") 'scroll-down-command)
   (define-key view-mode-map (kbd "v") 'scroll-up-command)
   (define-key view-mode-map (kbd "SPC") 'set-mark-command)
   (define-key view-mode-map (kbd "RET") nil)
