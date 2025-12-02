@@ -90,12 +90,12 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-	      ("C-c l f" . eglot-format)
-	      ("C-c l a" . eglot-code-actions)
-	      ("C-c l d" . xref-find-definitions)
-	      ("C-c l r" . xref-find-references)
-	      ("C-c l R" . eglot-rename)
-	      ("C-c l m" . imenu))
+	      ("C-c f" . eglot-format)
+	      ("C-c a" . eglot-code-actions)
+	      ("C-c d" . eglot-find-declaration)
+	      ("C-c i" . eglot-find-implementation)
+	      ("C-c t" . eglot-find-typeDefinition)
+	      ("C-c r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   :config
@@ -114,10 +114,10 @@
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-	      ("C-c l ]" . flymake-goto-next-error)
-	      ("C-c l [" . flymake-goto-prev-error)
-	      ("C-c l e" . flymake-show-diagnostics-buffer)
-	      ("C-c l E" . flymake-show-project-diagnostics)))
+	      ("C-c n" . flymake-goto-next-error)
+	      ("C-c p" . flymake-goto-prev-error)
+	      ("C-c e" . flymake-show-diagnostics-buffer)
+	      ("C-c E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
@@ -161,12 +161,57 @@
 	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
+	 ("C-x c" . gptel)
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
+
+(with-eval-after-load 'view
+  (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
+  (define-key view-mode-map (kbd "n") 'next-line)
+  (define-key view-mode-map (kbd "p") 'previous-line)
+  (define-key view-mode-map (kbd "b") 'backward-char)
+  (define-key view-mode-map (kbd "f") 'forward-char)
+  (define-key view-mode-map (kbd "e") 'end-of-line)
+  (define-key view-mode-map (kbd "a") 'beginning-of-line)
+  (define-key view-mode-map (kbd "w") 'kill-ring-save)
+  (define-key view-mode-map (kbd "v") 'scroll-up-command)
+  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
+  (define-key view-mode-map (kbd "RET") nil)
+  (define-key view-mode-map (kbd "DEL") nil)
+  (define-key view-mode-map (kbd "0") 'delete-window)
+  (define-key view-mode-map (kbd "1") 'delete-other-windows)
+  (define-key view-mode-map (kbd "2") 'split-window-below)
+  (define-key view-mode-map (kbd "3") 'split-window-right)
+  (define-key view-mode-map (kbd "o") 'other-window))
+
+(add-hook 'view-mode-hook
+	  (lambda ()
+	    (setq cursor-type (if view-mode 'box 'bar))))
+
+(defun my/should-enable-view-mode-p ()
+  "Return t if view-mode should be enabled in current buffer."
+  (and (buffer-file-name)
+       (not (minibufferp))
+       (not buffer-read-only)
+       (not (derived-mode-p 'special-mode))))
+
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (when (my/should-enable-view-mode-p)
+              (view-mode 1))))
+
+(defadvice keyboard-quit (around my/keyboard-quit-advice activate)
+  "Enable view-mode instead of quitting when in a major mode buffer."
+  (if (and (my/should-enable-view-mode-p)
+           (not view-mode))
+      (view-mode 1)
+    ad-do-it))
+
+(global-set-key (kbd "C-c v") 'view-mode)
 
 (use-package rust-mode
   :ensure t)
