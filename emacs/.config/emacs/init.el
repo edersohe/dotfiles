@@ -121,9 +121,7 @@
 
 (use-package treesit-auto
   :ensure t
-  :custom
-  (treesit-auto-install 'prompt)
-  (treesit-font-lock-level 4)
+  :custom (treesit-auto-install 'prompt)
   :config
   (add-to-list 'treesit-language-source-alist
                '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))

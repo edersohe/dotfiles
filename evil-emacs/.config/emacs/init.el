@@ -131,7 +131,7 @@
   :custom (treesit-auto-install 'prompt)
   :config
   (add-to-list 'treesit-language-source-alist
-	       '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
+               '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
