@@ -83,13 +83,12 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-	      ("C-c l f" . eglot-format)
-	      ("C-c l a" . eglot-code-actions)
-	      ("C-c l d" . xref-find-definitions)
-	      ("C-c l D" . xref-find-declarations)
-	      ("C-c l r" . xref-find-references)
-	      ("C-c l R" . eglot-rename)
-	      ("C-c l m" . imenu))
+	      ("C-c f" . eglot-format)
+	      ("C-c a" . eglot-code-actions)
+	      ("C-c d" . eglot-find-declaration)
+	      ("C-c i" . eglot-find-implementation)
+	      ("C-c t" . eglot-find-typeDefinition)
+	      ("C-c r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   :config
@@ -121,10 +120,10 @@
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-	      ("C-c l ]" . flymake-goto-next-error)
-	      ("C-c l [" . flymake-goto-prev-error)
-	      ("C-c l e" . flymake-show-diagnostics-buffer)
-	      ("C-c l E" . flymake-show-project-diagnostics)))
+	      ("C-c n" . flymake-goto-next-error)
+	      ("C-c p" . flymake-goto-prev-error)
+	      ("C-c e" . flymake-show-diagnostics-buffer)
+	      ("C-c E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
@@ -167,6 +166,7 @@
 	      gptel-default-mode 'org-mode
 	      gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
+	 ("C-x c" . gptel)
 	 :map gptel-mode-map
 	      ("C-c m" . gptel-menu)))
 
