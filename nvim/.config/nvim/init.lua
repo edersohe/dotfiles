@@ -135,7 +135,7 @@ local languages = {
   javascript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "javascript" } },
   json = {
     lsp = { jsonls = { config = {}, bin = "json-lsp" } },
-    ts = { "json", "json5", "jsonc", "jsonnet" },
+    ts = { "json", "json5", "jsonnet" },
   },
   lua = {
     lsp = {
@@ -539,8 +539,8 @@ vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" 
 vim.keymap.set('n', "<C-c>", "<cmd>bdelete<CR>", { desc = "Close buffer" })
 vim.keymap.set('n', "<C-s>", "<cmd>write<CR>", { desc = "Save buffer" })
 vim.keymap.set('v', "p", "P", { desc = "Paste before" })
-vim.keymap.set('n', "<leader>r", ":%s///gc", { desc = "Replace" })
-vim.keymap.set('v', "<leader>r", ":s///gc", { desc = "Replace" })
+vim.keymap.set('n', "<leader>r", ":%s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
+vim.keymap.set('v', "<leader>r", ":s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('i', "<C-h>", "<Left>", { noremap = true })
 vim.keymap.set('i', "<C-j>", "<Down>", { noremap = true })
 vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
@@ -653,7 +653,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = "AutoQF",
   pattern = "qf",
   callback = function()
-    vim.keymap.set('n', '<leader>r', ':cdo s///gc', { desc = 'Replace', noremap = true, buffer = true })
+    vim.keymap.set('n', '<leader>r', ':cdo s/<C-r><C-w>//gc<Left><Left><Left>', { desc = 'Replace', noremap = true, buffer = true })
     vim.keymap.set('n', 'q', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
     vim.keymap.set('n', '<Esc>', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
   end,
@@ -674,7 +674,7 @@ vim.g.clipboard = {
 
 vim.cmd[[
   colorscheme catppuccin-mocha
-  "hi Normal guibg=None
-  "hi NormalFloat guibg=None
-  "hi FloatBorder guibg=None
+  hi Normal guibg=None
+  hi NormalFloat guibg=None
+  hi FloatBorder guibg=None
 ]]
