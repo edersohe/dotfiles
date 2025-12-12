@@ -61,7 +61,6 @@
 (set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
 (load-theme 'modus-vivendi-tritanopia :no-confirm)
-;; (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
@@ -135,6 +134,9 @@
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
+(use-package rust-mode
+  :ensure t)
+
 (use-package diff-hl
   :ensure t
   :custom (diff-hl-disable-on-remote t)
@@ -169,52 +171,18 @@
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
 
-(with-eval-after-load 'view
-  (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
-  (define-key view-mode-map (kbd "n") 'next-line)
-  (define-key view-mode-map (kbd "p") 'previous-line)
-  (define-key view-mode-map (kbd "b") 'backward-char)
-  (define-key view-mode-map (kbd "f") 'forward-char)
-  (define-key view-mode-map (kbd "e") 'end-of-line)
-  (define-key view-mode-map (kbd "a") 'beginning-of-line)
-  (define-key view-mode-map (kbd "w") 'kill-ring-save)
-  (define-key view-mode-map (kbd "v") 'scroll-up-command)
-  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
-  (define-key view-mode-map (kbd "RET") nil)
-  (define-key view-mode-map (kbd "DEL") nil)
-  (define-key view-mode-map (kbd "0") 'delete-window)
-  (define-key view-mode-map (kbd "1") 'delete-other-windows)
-  (define-key view-mode-map (kbd "2") 'split-window-below)
-  (define-key view-mode-map (kbd "3") 'split-window-right)
-  (define-key view-mode-map (kbd "o") 'other-window))
-
-(add-hook 'view-mode-hook
-	  (lambda ()
-	    (setq cursor-type (if view-mode 'box 'bar))))
-
-(defun my/should-enable-view-mode-p ()
-  "Return t if view-mode should be enabled in current buffer."
-  (and (buffer-file-name)
-       (not (minibufferp))
-       (not buffer-read-only)
-       (not (derived-mode-p 'special-mode))))
-
-(add-hook 'after-change-major-mode-hook
-          (lambda ()
-            (when (my/should-enable-view-mode-p)
-              (view-mode 1))))
-
-(defadvice keyboard-quit (around my/keyboard-quit-advice activate)
-  "Enable view-mode instead of quitting when in a major mode buffer."
-  (if (and (my/should-enable-view-mode-p)
-           (not view-mode))
-      (view-mode 1)
-    ad-do-it))
-
-(global-set-key (kbd "C-c v") 'view-mode)
-
-(use-package rust-mode
-  :ensure t)
+(defun my/eat-project ()
+  "Create an eat buffer and rename it interactively."
+  (interactive)
+  (eat-project)  ; Call the original eat command
+  (when-let* ((project (project-current))
+              (project-name (file-name-nondirectory
+                             (directory-file-name
+                              (project-root project))))
+              (eat-buffer (get-buffer (format "*%s-eat*" project-name))))
+    (with-current-buffer eat-buffer
+      (let ((new-name (read-string "Enter name for eat buffer: ")))
+        (rename-buffer (format "*%s-eat-%s*" project-name new-name) t)))))
 
 (provide 'init)
 ;;; init.el ends here
