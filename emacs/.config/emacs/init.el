@@ -153,9 +153,9 @@
   (copilot-idle-delay nil)
   :bind (("C-<return>" . copilot-complete)
 	 :map copilot-completion-map
-	      ("C-n" . copilot-next-completion)
-	      ("C-p" . copilot-previous-completion)
-	      ("TAB" . copilot-accept-completion)))
+	 ("C-n" . copilot-next-completion)
+	 ("C-p" . copilot-previous-completion)
+	 ("TAB" . copilot-accept-completion)))
 
 (use-package gptel
   :ensure t
@@ -165,7 +165,7 @@
   :bind (("C-c RET" . gptel-send)
 	 ("C-x c" . gptel)
 	 :map gptel-mode-map
-	      ("C-c m" . gptel-menu)))
+	 ("C-c m" . gptel-menu)))
 
 (use-package eat
   :ensure t
