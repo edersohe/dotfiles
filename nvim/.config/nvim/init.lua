@@ -373,11 +373,11 @@ vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
+vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
-vim.keymap.set("n", "<leader>ga", "<cmd>Git commit --amend<CR>", { desc = "Amend" })
 vim.keymap.set("n", "<leader>gl", "<cmd>tab Git log --decorate --graph --all --pretty=short<CR>", { desc = "Log" })
-vim.keymap.set("n", "<leader>gf", "<cmd>tab Git log --decorate --graph --all --pretty=short -- %<CR>",
-  { desc = "File commits" })
+vim.keymap.set("n", "<leader>gL", "<cmd>tab Git log --decorate --graph --all --pretty=short -- %<CR>",
+  { desc = "Log buffer" })
 vim.keymap.set("n", "<leader>gb", "<cmd>.GBrowse<CR>", { desc = "Browse" })
 vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "Blame" })
 vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
@@ -611,18 +611,22 @@ vim.diagnostic.config({
   },
 })
 
--- Find command
----@diagnostic disable-next-line: duplicate-set-field
-_G.Find = function(filename)
+function _G.complete_fd(arglead, _, _)
   local cmd = string.format(
-    'fd -t f -t l -L -H -i -E "{.git,node_modules,.venv,.elixir_ls}" -g "*%s*" | sed "s/$/:1: /"', filename
+    'fd -t f -t l -L -H -i -E "{.git,node_modules,.venv,.elixir_ls}" -g "*%s*"', arglead
   )
-  local result = vim.fn.systemlist(cmd)
-  vim.fn.setqflist({}, 'r', { title = 'Find Results', lines = result })
-  vim.cmd('copen')
+  local results = vim.fn.systemlist(cmd)
+  return results
 end
 
-vim.cmd [[command! -nargs=1 Find lua Find(<q-args>)]]
+vim.api.nvim_create_user_command('Fd', function(opts)
+  -- The action to execute (equivalent to: execute 'edit' <f-args>)
+  vim.cmd.edit(opts.args)
+end, {
+  nargs = 1,
+  -- You can pass the Lua function object directly here
+  complete = _G.complete_fd,
+})
 
 -- Grep command
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -653,7 +657,8 @@ vim.api.nvim_create_autocmd("FileType", {
   group = "AutoQF",
   pattern = "qf",
   callback = function()
-    vim.keymap.set('n', '<leader>r', ':cdo s/<C-r><C-w>//gc<Left><Left><Left>', { desc = 'Replace', noremap = true, buffer = true })
+    vim.keymap.set('n', '<leader>r', ':cdo s/<C-r><C-w>//gc<Left><Left><Left>',
+      { desc = 'Replace', noremap = true, buffer = true })
     vim.keymap.set('n', 'q', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
     vim.keymap.set('n', '<Esc>', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
   end,
@@ -672,7 +677,7 @@ vim.g.clipboard = {
   },
 }
 
-vim.cmd[[
+vim.cmd [[
   colorscheme catppuccin-mocha
   hi Normal guibg=None
   hi NormalFloat guibg=None
