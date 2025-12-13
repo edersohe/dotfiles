@@ -54,7 +54,6 @@
 (set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
 (load-theme 'modus-vivendi-tritanopia :no-confirm)
-;; (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
@@ -141,6 +140,9 @@
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
+(use-package rust-mode
+  :ensure t)
+
 (use-package diff-hl
   :ensure t
   :custom (diff-hl-disable-on-remote t)
@@ -156,9 +158,9 @@
   (copilot-indent-offset-warning-disable t)
   :bind (("C-<return>" . copilot-complete)
 	 :map copilot-completion-map
-	      ("C-n" . copilot-next-completion)
-	      ("C-p" . copilot-previous-completion)
-	      ("TAB" . copilot-accept-completion)))
+	 ("C-n" . copilot-next-completion)
+	 ("C-p" . copilot-previous-completion)
+	 ("TAB" . copilot-accept-completion)))
 
 (use-package gptel
   :ensure t
@@ -168,7 +170,7 @@
   :bind (("C-c RET" . gptel-send)
 	 ("C-x c" . gptel)
 	 :map gptel-mode-map
-	      ("C-c m" . gptel-menu)))
+	 ("C-c m" . gptel-menu)))
 
 (use-package gptel-magit
   :ensure t
@@ -179,6 +181,19 @@
 (use-package eat
   :ensure t
   :hook (eshell-load . eat-eshell-mode))
+
+(defun my/eat-project ()
+  "Create an eat buffer and rename it interactively."
+  (interactive)
+  (eat-project)  ; Call the original eat command
+  (when-let* ((project (project-current))
+              (project-name (file-name-nondirectory
+                             (directory-file-name
+                              (project-root project))))
+              (eat-buffer (get-buffer (format "*%s-eat*" project-name))))
+    (with-current-buffer eat-buffer
+      (let ((new-name (read-string "Enter name for eat buffer: ")))
+        (rename-buffer (format "*%s-eat-%s*" project-name new-name) t)))))
 
 (use-package vertico
   :ensure t
@@ -199,10 +214,6 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
-
-(use-package consult
-  :ensure t
-  :after vertico)
 
 (use-package corfu
   :ensure t
@@ -226,9 +237,6 @@
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package undo-fu
-  :ensure t)
-
-(use-package rust-mode
   :ensure t)
 
 (use-package evil
