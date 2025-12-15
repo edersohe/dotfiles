@@ -102,19 +102,6 @@
   (add-to-list 'eglot-server-programs
 	       '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-
-(use-package doom-themes
-  :ensure t
-  :custom
-  (doom-themes-enable-bold t)
-  (doom-themes-enable-italic t)
-  :config
-  (load-theme 'doom-one t)
-  (doom-themes-org-config))
-
 (use-package flymake
   :hook
   (prog-mode . flymake-mode)
@@ -287,7 +274,7 @@
    "e"  '(project-dired :which-key "explore")
    "g"  '(magit-status :which-key "magit status")
    "s"  '(project-query-replace-regexp :which-key "replace")
-   "t"  '(eat-project :which-key "terminal")
+   "t"  '(my/eat-project :which-key "terminal")
    "RET" '(gptel-menu t :which-key "gptel menu")
    "c"  '(gptel :which-key "chat")
    "h"  '(helpful-symbol :which-key "help")
