@@ -7,7 +7,12 @@ PS1='[\u@\h \W]\$ '
 
 bind '"\ez": "fg\n"'
 
-alias ls='ls --color=auto -h'
+if command -v "lsd" >/dev/null 2>&1; then
+  alias ls='lsd --color=auto -h'
+else
+  alias ls='ls --color=auto -h'
+fi
+
 alias ll='ls -l --group-directories-first'
 alias la='ll -a'
 alias lt='ls -lart'
@@ -16,6 +21,7 @@ alias ssh="TERM=xterm-256color ssh"
 export XKB_DEFAULT_LAYOUT=us
 export XKB_DEFAULT_VARIANT=altgr-intl
 export LC_ALL=en_US.UTF-8
+export ERL_AFLAGS="-kernel shell_history enabled"
 
 [ -f $HOME/.env ] && . $HOME/.env
 [ -f $HOME/.miserc ] && . $HOME/.miserc
@@ -31,3 +37,4 @@ export LC_ALL=en_US.UTF-8
 [ -f $HOME/.zellijrc ] && . $HOME/.zellijrc
 [ -f $HOME/.lazygitrc ] && . $HOME/.lazygitrc
 [ -f $HOME/.opencoderc ] && . $HOME/.opencoderc
+

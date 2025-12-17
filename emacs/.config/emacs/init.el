@@ -62,8 +62,9 @@
 (set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'regular ':height 135)
 (set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
 
-(load-theme 'modus-vivendi-tritanopia :no-confirm)
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+(load-theme 'modus-vivendi-tinted :no-confirm)
+(add-to-list 'default-frame-alist '(alpha-background . 97))
+;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting for its name."
@@ -124,8 +125,6 @@
   :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
-  (add-to-list 'treesit-language-source-alist
-               '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 

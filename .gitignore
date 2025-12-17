@@ -6,19 +6,8 @@ node_modules
 _build
 
 vim/.vim/.netrwhist
-/emacs/.config/emacs/transient/
-/emacs/.config/emacs/eshell/
-/emacs/.config/emacs/recentf
-/emacs/.config/emacs/projects
-/emacs/.config/emacs/places
-/emacs/.config/emacs/history
-/emacs/.config/emacs/elpa/
-/emacs/.config/emacs/eln-cache/
-/emacs/.config/emacs/custom.el
-/emacs/.config/emacs/auto-save-list/
-/emacs/.config/emacs/.cache/
-/emacs/.config/emacs/init.el.*
-/.aider.chat.history.md
-/emacs/.config/emacs/tree-sitter/
 .aider*
-/emacs/.config/emacs/tramp
+emacs/
+evil-emacs/
+emacs-max/
+qutebrowser/
