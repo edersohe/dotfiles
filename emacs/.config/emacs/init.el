@@ -29,7 +29,6 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :if (memq window-system '(mac ns x))
   :config (exec-path-from-shell-initialize))
 
 (use-package which-key
@@ -53,7 +52,7 @@
   (add-to-list 'eglot-server-programs
 	           '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
-	           '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+               '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs
 	           '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
   (add-to-list 'eglot-server-programs
@@ -83,7 +82,10 @@
   :init (setq markdown-command "multimarkdown"))
 
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  :init
+  (setq rust-format-on-save t
+        rust-mode-treesitter-derive t))
 
 (use-package diff-hl
   :ensure t
