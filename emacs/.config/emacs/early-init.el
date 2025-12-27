@@ -22,11 +22,8 @@
 	          frame-resize-pixelwise t
 	          load-prefer-newer t
 	          help-window-select t
-	          display-time-format "%H:%M:%S")
-
-(when (featurep 'native-compile)
-  (setq native-comp-async-report-warnings-errors nil
-        native-comp-speed 3))
+              native-comp-async-report-warnings-errors nil
+              native-comp-speed 3)
 
 (save-place-mode t)
 (savehist-mode t)
@@ -40,10 +37,8 @@
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
-(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
+(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-13.5"))
 ;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
-(display-time-mode 1)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
