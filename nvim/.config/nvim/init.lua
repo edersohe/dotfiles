@@ -291,6 +291,11 @@ require("mini.statusline").setup({
   use_icons = true,
 })
 
+require("mini.tabline").setup({
+  show_icons = true,
+  tabpage_section = "right",
+})
+
 require("mini.files").setup({
   mappings = {
     close       = '<Esc>',
