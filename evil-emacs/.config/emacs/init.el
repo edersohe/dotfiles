@@ -117,13 +117,6 @@
          :map gptel-mode-map
          ("C-c m" . gptel-menu)))
 
-(use-package gptel-magit
-  :ensure t
-  :defer t
-  :init (setq gptel-magit-model 'gpt-4.1)
-  :after (gptel magit)
-  :hook (magit-mode . gptel-magit-install))
-
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
   (interactive)
@@ -167,6 +160,13 @@
   :ensure t
   :defer t
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
+
+(use-package gptel-magit
+  :ensure t
+  :defer t
+  :init (setq gptel-magit-model 'gpt-4.1)
+  :after (gptel magit)
+  :hook (magit-mode . gptel-magit-install))
 
 (use-package undo-fu
   :ensure t)
