@@ -144,5 +144,51 @@
   :init
   (marginalia-mode))
 
+(setq-default cursor-type 'bar)
+(with-eval-after-load 'view
+  (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
+  (define-key view-mode-map (kbd "n") 'next-line)
+  (define-key view-mode-map (kbd "p") 'previous-line)
+  (define-key view-mode-map (kbd "b") 'backward-char)
+  (define-key view-mode-map (kbd "f") 'forward-char)
+  (define-key view-mode-map (kbd "e") 'end-of-line)
+  (define-key view-mode-map (kbd "a") 'beginning-of-line)
+  (define-key view-mode-map (kbd "w") 'kill-ring-save)
+  (define-key view-mode-map (kbd "v") 'scroll-up-command)
+  (define-key view-mode-map (kbd "t") 'my/eat-project)
+  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
+  (define-key view-mode-map (kbd "RET") nil)
+  (define-key view-mode-map (kbd "DEL") nil)
+  (define-key view-mode-map (kbd "0") 'delete-window)
+  (define-key view-mode-map (kbd "1") 'delete-other-windows)
+  (define-key view-mode-map (kbd "2") 'split-window-below)
+  (define-key view-mode-map (kbd "3") 'split-window-right)
+  (define-key view-mode-map (kbd "o") 'other-window))
+
+(add-hook 'view-mode-hook
+          (lambda ()
+            (setq cursor-type (if view-mode 'box 'bar))))
+
+(defun my/should-enable-view-mode-p ()
+  "Return t if view-mode should be enabled in current buffer."
+  (and (buffer-file-name)
+       (not (minibufferp))
+       (not buffer-read-only)
+       (not (derived-mode-p 'special-mode))))
+
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (when (my/should-enable-view-mode-p)
+              (view-mode 1))))
+
+(defadvice keyboard-quit (around my/keyboard-quit-advice activate)
+  "Enable view-mode instead of quitting when in a major mode buffer."
+  (if (and (my/should-enable-view-mode-p)
+           (not view-mode))
+      (view-mode 1)
+    ad-do-it))
+
+(global-set-key (kbd "C-c v") 'view-mode)
+
 (provide 'init)
 ;;; init.el ends here
