@@ -3,76 +3,30 @@
 ;;; Code:
 
 
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory)
-      native-comp-speed 2
-      make-backup-files nil
-      auto-save-default nil
-      create-lockfiles nil
-      indent-tabs-mode nil
-      tab-width 4
-      blink-cursor-mode nil
-      use-short-answers t
-      use-dialog-box nil
-      password-cache-expiry nil
-      confirm-kill-emacs nil
-      uniquify-buffer-name-style 'forward
-      window-resize-pixelwise t
-      frame-resize-pixelwise t
-      load-prefer-newer t
-      help-window-select t
-      completion-styles '(basic flex)
+(setq completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
-      completion-auto-help 'always
+      completion-auto-help nil
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
-      completion-cycle-threshold 3
+      completion-cycle-threshold 5
       completion-ignore-case t
       completions-detailed t
       completion-show-help nil
       tab-always-indent 'complete)
-
-(global-hl-line-mode 1)
-
-(save-place-mode t)
-(savehist-mode t)
-(recentf-mode t)
-(global-auto-revert-mode t)
-
-(require 'uniquify)
-
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(add-hook 'prog-mode-hook #'electric-pair-mode)
-
-(display-time-mode 1)
-(setq display-time-format "%H:%M:%S")
-
-(set-face-attribute 'default nil :font "ZedMono Nerd Font" :weight 'regular ':height 135)
-(set-face-attribute 'fixed-pitch nil :font "ZedMono Nerd Font" :height 150)
-
-(load-theme 'modus-vivendi-tritanopia :no-confirm)
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+(fido-vertical-mode t)
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting for its name."
   (interactive)
   (kill-buffer (current-buffer)))
-
 (global-set-key (kbd "C-x k") #'my/kill-current-buffer)
-
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
-
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
 
 (use-package exec-path-from-shell
   :ensure t
-  :if (memq window-system '(mac ns x))
   :config (exec-path-from-shell-initialize))
 
 (use-package which-key
@@ -82,41 +36,39 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-	      ("C-c f" . eglot-format)
-	      ("C-c a" . eglot-code-actions)
-	      ("C-c d" . eglot-find-declaration)
-	      ("C-c i" . eglot-find-implementation)
-	      ("C-c t" . eglot-find-typeDefinition)
-	      ("C-c r" . eglot-rename))
+              ("C-c f" . eglot-format)
+              ("C-c a" . eglot-code-actions)
+              ("C-c d" . eglot-find-declaration)
+              ("C-c i" . eglot-find-implementation)
+              ("C-c t" . eglot-find-typeDefinition)
+              ("C-c r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   :config
   (add-to-list 'auto-mode-alist '
-	       ("\\.exs$" . elixir-ts-mode))
+               ("\\.exs$" . elixir-ts-mode))
   (add-to-list 'eglot-server-programs
-	       '((python-mode python-ts-mode) . ("ruff" "server")))
+               '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
-	       '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+               '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs
-	       '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
+               '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
   (add-to-list 'eglot-server-programs
-	       '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+               '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
 (use-package flymake
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-	      ("C-c n" . flymake-goto-next-error)
-	      ("C-c p" . flymake-goto-prev-error)
-	      ("C-c e" . flymake-show-diagnostics-buffer)
-	      ("C-c E" . flymake-show-project-diagnostics)))
+              ("M-n" . flymake-goto-next-error)
+              ("M-p" . flymake-goto-prev-error)
+              ("C-c e" . flymake-show-diagnostics-buffer)
+              ("C-c E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
-  (add-to-list 'treesit-language-source-alist
-               '(rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3"))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
@@ -128,7 +80,10 @@
   :init (setq markdown-command "multimarkdown"))
 
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  :init
+  (setq rust-format-on-save t
+        rust-mode-treesitter-derive t))
 
 (use-package diff-hl
   :ensure t
@@ -140,34 +95,34 @@
 
 (use-package copilot
   :ensure t
+  :defer t
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
   :bind (("C-<return>" . copilot-complete)
-	 :map copilot-completion-map
-	 ("C-n" . copilot-next-completion)
-	 ("C-p" . copilot-previous-completion)
-	 ("TAB" . copilot-accept-completion)))
+         :map copilot-completion-map
+         ("C-n" . copilot-next-completion)
+         ("C-p" . copilot-previous-completion)
+         ("TAB" . copilot-accept-completion)))
 
 (use-package gptel
   :ensure t
-  :init (setq gptel-model 'claude-sonnet-4
-	      gptel-default-mode 'org-mode
-	      gptel-backend (gptel-make-gh-copilot "Copilot"))
+  :defer t
+  :init
+  (setq gptel-model 'claude-sonnet-4
+        gptel-default-mode 'org-mode
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
-	 ("C-x c" . gptel)
-	 :map gptel-mode-map
-	 ("C-c m" . gptel-menu)))
+         ("C-x c" . gptel)
+         :map gptel-mode-map
+         ("C-c m" . gptel-menu)))
 
 (use-package gptel-magit
   :ensure t
+  :defer t
   :init (setq gptel-magit-model 'gpt-4.1)
   :after (gptel magit)
   :hook (magit-mode . gptel-magit-install))
-
-(use-package eat
-  :ensure t
-  :hook (eshell-load . eat-eshell-mode))
 
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
@@ -182,25 +137,15 @@
       (let ((new-name (read-string "Enter name for eat buffer: ")))
         (rename-buffer (format "*%s-eat-%s*" project-name new-name) t)))))
 
-(use-package vertico
+(use-package eat
   :ensure t
-  :init
-  (vertico-mode)
-  :custom
-  (vertico-cycle t))
+  :hook (eshell-load . eat-eshell-mode)
+  :bind ("C-x p t" . my/eat-project))
 
 (use-package marginalia
   :ensure t
-  :after vertico
   :init
   (marginalia-mode))
-
-(use-package orderless
-  :ensure t
-  :after vertico
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package corfu
   :ensure t
@@ -277,8 +222,8 @@
    "t"  '(my/eat-project :which-key "terminal")
    "RET" '(gptel-menu t :which-key "gptel menu")
    "c"  '(gptel :which-key "chat")
-   "h"  '(helpful-symbol :which-key "help")
-   "k"  '(helpful-key :which-key "key help")
+   "h"  '(describe-symbol :which-key "help")
+   "k"  '(describe-key :which-key "key help")
    "i" '(imenu :which-key "imenu"))
   (general-define-key
    :states '(normal visual)
@@ -296,9 +241,6 @@
    :keymaps 'flymake-mode-map
    :prefix "SPC"
    "d" '(flymake-show-project-diagnostics :which-key "diagnostics")))
-
-(use-package helpful
-  :ensure t)
 
 (provide 'init)
 ;;; init.el ends here

@@ -6,6 +6,7 @@
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
+      completion-auto-select 'second-tab
       completion-auto-help nil
       completions-format 'one-column
       completions-sort 'historical
@@ -38,34 +39,34 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-	          ("C-c f" . eglot-format)
-	          ("C-c a" . eglot-code-actions)
-	          ("C-c d" . eglot-find-declaration)
-	          ("C-c i" . eglot-find-implementation)
-	          ("C-c t" . eglot-find-typeDefinition)
-	          ("C-c r" . eglot-rename))
+              ("C-c f" . eglot-format)
+              ("C-c a" . eglot-code-actions)
+              ("C-c d" . eglot-find-declaration)
+              ("C-c i" . eglot-find-implementation)
+              ("C-c t" . eglot-find-typeDefinition)
+              ("C-c r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   :config
   (add-to-list 'auto-mode-alist '
-	           ("\\.exs$" . elixir-ts-mode))
+               ("\\.exs$" . elixir-ts-mode))
   (add-to-list 'eglot-server-programs
-	           '((python-mode python-ts-mode) . ("ruff" "server")))
+               '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs
                '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs
-	           '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
+               '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
   (add-to-list 'eglot-server-programs
-	           '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+               '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
 (use-package flymake
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-	          ("M-n" . flymake-goto-next-error)
-	          ("M-p" . flymake-goto-prev-error)
-	          ("C-c e" . flymake-show-diagnostics-buffer)
-	          ("C-c E" . flymake-show-project-diagnostics)))
+              ("M-n" . flymake-goto-next-error)
+              ("M-p" . flymake-goto-prev-error)
+              ("C-c e" . flymake-show-diagnostics-buffer)
+              ("C-c E" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
@@ -95,32 +96,30 @@
   (after-init . diff-hl-flydiff-mode)
   (after-init . diff-hl-margin-mode))
 
-(use-package marginalia
-  :ensure t
-  :init
-  (marginalia-mode))
-
 (use-package copilot
   :ensure t
+  :defer t
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
   (copilot-idle-delay nil)
   :bind (("C-<return>" . copilot-complete)
-	     :map copilot-completion-map
-	     ("C-n" . copilot-next-completion)
-	     ("C-p" . copilot-previous-completion)
-	     ("TAB" . copilot-accept-completion)))
+         :map copilot-completion-map
+         ("C-n" . copilot-next-completion)
+         ("C-p" . copilot-previous-completion)
+         ("TAB" . copilot-accept-completion)))
 
 (use-package gptel
   :ensure t
-  :init (setq gptel-model 'claude-sonnet-4
-	          gptel-default-mode 'org-mode
-	          gptel-backend (gptel-make-gh-copilot "Copilot"))
+  :defer t
+  :init
+  (setq gptel-model 'claude-sonnet-4
+        gptel-default-mode 'org-mode
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
-	     ("C-x c" . gptel)
-	     :map gptel-mode-map
-	     ("C-c m" . gptel-menu)))
+         ("C-x c" . gptel)
+         :map gptel-mode-map
+         ("C-c m" . gptel-menu)))
 
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
@@ -139,6 +138,11 @@
   :ensure t
   :hook (eshell-load . eat-eshell-mode)
   :bind ("C-x p t" . my/eat-project))
+
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode))
 
 (provide 'init)
 ;;; init.el ends here

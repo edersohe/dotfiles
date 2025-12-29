@@ -7,6 +7,7 @@
 	          gc-cons-threshold most-positive-fixnum
 	          inhibit-startup-screen t
 	          initial-scratch-message nil
+              initial-major-mode 'fundamental-mode
 	          make-backup-files nil
 	          auto-save-default nil
 	          create-lockfiles nil
