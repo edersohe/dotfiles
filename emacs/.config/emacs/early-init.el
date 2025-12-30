@@ -24,7 +24,8 @@
 	          load-prefer-newer t
 	          help-window-select t
               native-comp-async-report-warnings-errors nil
-              native-comp-speed 3)
+              native-comp-speed 3
+              project-mode-line t)
 
 (save-place-mode t)
 (savehist-mode t)
