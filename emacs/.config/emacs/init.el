@@ -146,6 +146,21 @@
 
 (setq-default cursor-type 'bar)
 (with-eval-after-load 'view
+  (defvar view-mode-leader-map (make-sparse-keymap)
+    "Keymap for view-mode leader keys starting with SPC.")
+  
+  (define-key view-mode-map (kbd "SPC") view-mode-leader-map)
+
+  (define-key view-mode-leader-map (kbd "p") 'project-switch-project)
+  (define-key view-mode-leader-map (kbd "d") 'project-dired)
+  (define-key view-mode-leader-map (kbd "v") 'project-vc-dir)
+  (define-key view-mode-leader-map (kbd "f") 'project-find-file)
+  (define-key view-mode-leader-map (kbd "b") 'project-switch-to-buffer)
+  (define-key view-mode-leader-map (kbd "t") 'my/eat-project)
+  (define-key view-mode-leader-map (kbd "h") 'describe-symbol)
+  (define-key view-mode-leader-map (kbd "k") 'describe-key)
+  (define-key view-mode-leader-map (kbd "C-g") 'keyboard-quit)
+
   (define-key view-mode-map (kbd "i") 'View-exit-and-edit)
   (define-key view-mode-map (kbd "n") 'next-line)
   (define-key view-mode-map (kbd "p") 'previous-line)
@@ -155,8 +170,6 @@
   (define-key view-mode-map (kbd "a") 'beginning-of-line)
   (define-key view-mode-map (kbd "w") 'kill-ring-save)
   (define-key view-mode-map (kbd "v") 'scroll-up-command)
-  (define-key view-mode-map (kbd "t") 'my/eat-project)
-  (define-key view-mode-map (kbd "SPC") 'set-mark-command)
   (define-key view-mode-map (kbd "RET") nil)
   (define-key view-mode-map (kbd "DEL") nil)
   (define-key view-mode-map (kbd "0") 'delete-window)
@@ -174,7 +187,12 @@
   (and (buffer-file-name)
        (not (minibufferp))
        (not buffer-read-only)
-       (not (derived-mode-p 'special-mode))))
+       (not (derived-mode-p 'special-mode)))
+  (or (derived-mode-p 'prog-mode)
+      (derived-mode-p 'fundamental-mode)
+      (derived-mode-p 'markdown-mode)
+      (derived-mode-p 'org-mode)
+      (derived-mode-p 'help-mode)))
 
 (add-hook 'after-change-major-mode-hook
           (lambda ()
