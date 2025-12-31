@@ -36,6 +36,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
+(set-fringe-mode 10)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
