@@ -262,13 +262,13 @@ local on_attach = function(_, bufnr)
 
   -- lsp pickers
   vim.keymap.set("n", "<leader>ld", '<cmd>Pick diagnostic scope="current"<CR>',
-    { buffer = bufnr, desc = "Document diagnostics" })
+  { buffer = bufnr, desc = "Document diagnostics" })
   vim.keymap.set("n", "<leader>lD", '<cmd>Pick diagnostic scope="all"<CR>',
-    { buffer = bufnr, desc = "Workspace diagnostics" })
+  { buffer = bufnr, desc = "Workspace diagnostics" })
   vim.keymap.set("n", "<leader>ls", '<cmd>Pick lsp scope="document_symbol"<CR>',
-    { buffer = bufnr, desc = "Document symbols" })
+  { buffer = bufnr, desc = "Document symbols" })
   vim.keymap.set("n", "<leader>lS", '<cmd>Pick lsp scope="workspace_symbol"<CR>',
-    { buffer = bufnr, desc = "Workspace symbols" })
+  { buffer = bufnr, desc = "Workspace symbols" })
   vim.keymap.set("n", "<leader>lr", '<cmd>Pick lsp scope="references"<CR>', { buffer = bufnr, desc = "References" })
 end
 
@@ -370,20 +370,24 @@ local commit = function()
   vim.api.nvim_paste(changes, true, 1)
 end
 
-vim.keymap.set("n", "<leader>ga", "<cmd>Git diff --cached<CR>", { desc = "Added diff" })
-vim.keymap.set("n", "<leader>gA", "<cmd>Git diff --cached -- %<CR>", { desc = "Added diff buffer" })
+local git_log = "Git log --decorate --graph --all --pretty=short"
+
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
-vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>", { desc = "Diff" })
-vim.keymap.set("n", "<leader>gD", "<cmd>Git diff -- %<CR>", { desc = "Diff buffer" })
-vim.keymap.set("n", "<leader>gl", "<cmd>Git log --decorate --graph --all --pretty=short<CR>", { desc = "Log" })
-vim.keymap.set("n", "<leader>gL", "<cmd>Git log --decorate --graph --all --pretty=short -- %<CR>",
-  { desc = "Log buffer" })
+vim.keymap.set("n", "<leader>gdu", "<cmd>Git diff -- %<CR>", { desc = "Unstaged diff buffer" })
+vim.keymap.set("n", "<leader>gdU", "<cmd>Git diff<CR>", { desc = "Unstaged diff" })
+vim.keymap.set("n", "<leader>gds", "<cmd>Git diff --cached -- %<CR>", { desc = "Staged diff buffer" })
+vim.keymap.set("n", "<leader>gdS", "<cmd>Git diff --cached<CR>", { desc = "Staged diff" })
+vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
+vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Toggle overlay" })
-vim.keymap.set({ "n", "x" }, "<leader>gs", "<cmd>lua MiniGit.show_at_cursor()<CR>",
-  { desc = "Show at cursor/selection" })
+vim.keymap.set({ "n", "x" }, "<leader>gi", "<cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Inspect" })
+vim.keymap.set("n", "<leader>ghs", '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', { desc = "Staged hunks buffer" })
+vim.keymap.set("n", "<leader>ghS", '<cmd>Pick git_hunks scope="staged"<CR>', { desc = "Staged hunks" })
+vim.keymap.set("n", "<leader>ghu", '<cmd>Pick git_hunks path="%"<CR>', { desc = "Unstaged hunks buffer" })
+vim.keymap.set("n", "<leader>ghU", "<cmd>Pick git_hunks<CR>", { desc = "Unstaged hunks" })
 
 add({
   source = "nvim-treesitter/nvim-treesitter",
@@ -499,14 +503,18 @@ miniclue.setup({
     miniclue.gen_clues.windows({ submode_resize = true }),
     miniclue.gen_clues.z(),
 
-    { mode = 'n', keys = '<leader>g', desc = '+Git' },
-    { mode = 'x', keys = '<leader>g', desc = '+Git' },
-    { mode = 'n', keys = '<leader>n', desc = '+Neovim' },
-    { mode = 'x', keys = '<leader>n', desc = '+Neovim' },
-    { mode = 'n', keys = '<leader>l', desc = '+Lsp' },
-    { mode = 'x', keys = '<leader>l', desc = '+Lsp' },
-    { mode = 'n', keys = '<leader>s', desc = '+Session' },
-    { mode = 'x', keys = '<leader>s', desc = '+Session' },
+    { mode = 'n', keys = '<leader>g',  desc = '+Git' },
+    { mode = 'x', keys = '<leader>g',  desc = '+Git' },
+    { mode = 'n', keys = '<leader>n',  desc = '+Neovim' },
+    { mode = 'x', keys = '<leader>n',  desc = '+Neovim' },
+    { mode = 'n', keys = '<leader>l',  desc = '+Lsp' },
+    { mode = 'x', keys = '<leader>l',  desc = '+Lsp' },
+    { mode = 'n', keys = '<leader>s',  desc = '+Session' },
+    { mode = 'x', keys = '<leader>s',  desc = '+Session' },
+    { mode = 'n', keys = '<leader>gh', desc = '+Hunks' },
+    { mode = 'x', keys = '<leader>gh', desc = '+Hunks' },
+    { mode = 'n', keys = '<leader>gd', desc = '+Diff' },
+    { mode = 'x', keys = '<leader>gd', desc = '+Diff' },
   },
   window = {
     config = {
@@ -533,12 +541,12 @@ vim.keymap.set('n', '<M-z>', ':suspend<CR>', { noremap = true })
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
-  { desc = "Config" })
+{ desc = "Config" })
 vim.keymap.set('n', "<leader>nu", "<cmd>DepsUpdate!<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>np", "<cmd>DepsClean!<CR>", { desc = "Prune plugins" })
 vim.keymap.set('n', "<leader>ns", "<cmd>DepsShowLog<CR>", { desc = "Show plugins log" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
-  { desc = "Reload" })
+{ desc = "Reload" })
 
 -- nvim improvements
 vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -614,7 +622,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "qf",
   callback = function()
     vim.keymap.set('n', '<leader>r', ':cdo s/<C-r><C-w>//gc<Left><Left><Left>',
-      { desc = 'Replace', noremap = true, buffer = true })
+    { desc = 'Replace', noremap = true, buffer = true })
     vim.keymap.set('n', 'q', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
     vim.keymap.set('n', '<Esc>', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
   end,
