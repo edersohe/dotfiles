@@ -350,16 +350,12 @@ add("github/copilot.vim")
 
 add("christoomey/vim-tmux-navigator")
 
-add('lewis6991/gitsigns.nvim')
-local gitsigns = require('gitsigns')
-gitsigns.setup({
-  preview_config = {
-    border = border,
-  },
+require('mini.git').setup()
+require('mini.diff').setup({
+  view = {
+    style = 'sign'
+  }
 })
-
-add('tpope/vim-fugitive')
-add('tpope/vim-rhubarb')
 
 local commit = function()
   local changes = vim.fn.system("commit-message-generator")
@@ -374,20 +370,20 @@ local commit = function()
   vim.api.nvim_paste(changes, true, 1)
 end
 
-vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
+vim.keymap.set("n", "<leader>ga", "<cmd>Git diff --cached<CR>", { desc = "Added diff" })
+vim.keymap.set("n", "<leader>gA", "<cmd>Git diff --cached -- %<CR>", { desc = "Added diff buffer" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
-vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
-vim.keymap.set("n", "<leader>gl", "<cmd>tab Git log --decorate --graph --all --pretty=short<CR>", { desc = "Log" })
-vim.keymap.set("n", "<leader>gL", "<cmd>tab Git log --decorate --graph --all --pretty=short -- %<CR>",
+vim.keymap.set("n", "<leader>gd", "<cmd>Git diff<CR>", { desc = "Diff" })
+vim.keymap.set("n", "<leader>gD", "<cmd>Git diff -- %<CR>", { desc = "Diff buffer" })
+vim.keymap.set("n", "<leader>gl", "<cmd>Git log --decorate --graph --all --pretty=short<CR>", { desc = "Log" })
+vim.keymap.set("n", "<leader>gL", "<cmd>Git log --decorate --graph --all --pretty=short -- %<CR>",
   { desc = "Log buffer" })
-vim.keymap.set("n", "<leader>gb", "<cmd>.GBrowse<CR>", { desc = "Browse" })
-vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "Blame" })
-vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
-vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
-vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
+vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Toggle overlay" })
+vim.keymap.set({ "n", "x" }, "<leader>gs", "<cmd>lua MiniGit.show_at_cursor()<CR>",
+  { desc = "Show at cursor/selection" })
 
 add({
   source = "nvim-treesitter/nvim-treesitter",
@@ -480,44 +476,27 @@ MiniIndentScope.setup({
 local miniclue = require('mini.clue')
 miniclue.setup({
   triggers = {
-    -- Leader triggers
-    { mode = 'n', keys = '<Leader>' },
-    { mode = 'x', keys = '<Leader>' },
-    -- Built-in completion
-    { mode = 'i', keys = '<C-x>' },
-    -- `g` key
-    { mode = 'n', keys = 'g' },
-    { mode = 'x', keys = 'g' },
-    -- Marks
-    { mode = 'n', keys = "'" },
-    { mode = 'n', keys = '`' },
-    { mode = 'x', keys = "'" },
-    { mode = 'x', keys = '`' },
-    -- Registers
-    { mode = 'n', keys = '"' },
-    { mode = 'x', keys = '"' },
-    { mode = 'i', keys = '<C-r>' },
-    { mode = 'c', keys = '<C-r>' },
-    -- Window commands
-    { mode = 'n', keys = '<C-w>' },
-    -- `z` key
-    { mode = 'n', keys = 'z' },
-    { mode = 'x', keys = 'z' },
-    -- mini.surround
-    { mode = 'n', keys = 's' },
-    { mode = 'x', keys = 's' },
-    -- mini.bracketed
-    { mode = 'n', keys = '[' },
-    { mode = 'x', keys = '[' },
-    { mode = 'n', keys = ']' },
-    { mode = 'x', keys = ']' },
+    { mode = { 'n', 'x' }, keys = '<Leader>' }, -- Leader triggers
+    { mode = 'n',          keys = '\\' },       -- mini.basics
+    { mode = 'i',          keys = '<C-x>' },    -- Built-in completion
+    { mode = { 'n', 'x' }, keys = 'g' },        -- `g` key
+    { mode = { 'n', 'x' }, keys = "'" },        -- Marks
+    { mode = { 'n', 'x' }, keys = '`' },
+    { mode = { 'n', 'x' }, keys = '"' },        -- Registers
+    { mode = { 'i', 'c' }, keys = '<C-r>' },
+    { mode = 'n',          keys = '<C-w>' },    -- Window commands
+    { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
+    { mode = { 'n', 'x' }, keys = 's' },        -- mini.surround
+    { mode = { 'n', 'x' }, keys = '[' },        -- mini.bracketed
+    { mode = { 'n', 'x' }, keys = ']' },
   },
   clues = {
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
     miniclue.gen_clues.marks(),
     miniclue.gen_clues.registers(),
-    miniclue.gen_clues.windows(),
+    miniclue.gen_clues.square_brackets(),
+    miniclue.gen_clues.windows({ submode_resize = true }),
     miniclue.gen_clues.z(),
 
     { mode = 'n', keys = '<leader>g', desc = '+Git' },
@@ -616,34 +595,6 @@ vim.diagnostic.config({
   },
 })
 
-function _G.complete_fd(arglead, _, _)
-  local cmd = string.format(
-    'fd -t f -t l -L -H -i -E "{.git,node_modules,.venv,.elixir_ls}" -g "*%s*"', arglead
-  )
-  local results = vim.fn.systemlist(cmd)
-  return results
-end
-
-vim.api.nvim_create_user_command('Fd', function(opts)
-  -- The action to execute (equivalent to: execute 'edit' <f-args>)
-  vim.cmd.edit(opts.args)
-end, {
-  nargs = 1,
-  -- You can pass the Lua function object directly here
-  complete = _G.complete_fd,
-})
-
--- Grep command
----@diagnostic disable-next-line: duplicate-set-field
-_G.Grep = function(filename)
-  local cmd = string.format('rg --vimgrep -. %s', filename)
-  local result = vim.fn.systemlist(cmd)
-  vim.fn.setqflist({}, 'r', { title = 'Grep Results', lines = result })
-  vim.cmd('copen')
-end
-
-vim.cmd [[command! -nargs=1 Grep lua Grep(<q-args>)]]
-
 -- Auto close quickfix or location list
 vim.api.nvim_create_augroup("AutoQF", { clear = true })
 vim.api.nvim_create_autocmd("WinLeave", {
@@ -682,9 +633,4 @@ vim.g.clipboard = {
   },
 }
 
-vim.cmd [[
-  colorscheme catppuccin-mocha
-  hi Normal guibg=None
-  hi NormalFloat guibg=None
-  hi FloatBorder guibg=None
-]]
+vim.cmd("colorscheme catppuccin-mocha")
