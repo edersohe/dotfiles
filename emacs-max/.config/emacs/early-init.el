@@ -24,7 +24,8 @@
 	          load-prefer-newer t
 	          help-window-select t
               native-comp-async-report-warnings-errors nil
-              native-comp-speed 3)
+              native-comp-speed 3
+              project-mode-line t)
 
 (save-place-mode t)
 (savehist-mode t)
@@ -35,6 +36,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
+(set-fringe-mode 10)
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))

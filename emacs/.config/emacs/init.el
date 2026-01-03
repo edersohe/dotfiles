@@ -89,6 +89,9 @@
   (setq rust-format-on-save t
         rust-mode-treesitter-derive t))
 
+(use-package geiser-guile
+  :ensure t)
+
 (use-package diff-hl
   :ensure t
   :custom (diff-hl-disable-on-remote t)

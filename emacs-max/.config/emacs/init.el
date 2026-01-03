@@ -43,6 +43,7 @@
               ("C-c t" . eglot-find-typeDefinition)
               ("C-c r" . eglot-rename))
   :custom
+  (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
   :config
   (add-to-list 'auto-mode-alist '
@@ -84,6 +85,9 @@
   :init
   (setq rust-format-on-save t
         rust-mode-treesitter-derive t))
+
+(use-package geiser-guile
+  :ensure t)
 
 (use-package diff-hl
   :ensure t
