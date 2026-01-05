@@ -1,0 +1,20 @@
+# Exclude files from .gitignore .ignore
+--ignore
+
+# Search hidden files / directories (e.g. dotfiles) by default
+--hidden
+
+# Using glob patterns to include/exclude files or folders
+--glob=!{.git,node_modules,.venv,.elixir_ls}/
+
+# Because who cares about case!?
+--smart-case
+
+# vimgrep format for location and quickfix lists
+--vimgrep
+
+# sort files by name
+--sort=path
+
+# follow symlinks
+--follow

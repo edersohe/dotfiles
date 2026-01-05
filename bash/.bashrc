@@ -29,6 +29,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 [ -f $HOME/.footrc ] && . $HOME/.footrc
 [ -f $HOME/.starshiprc ] && . $HOME/.starshiprc
 [ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
+[ -f $HOME/.ripgreprc ] && . $HOME/.ripgreprc
 [ -f $HOME/.swayrc ] && . $HOME/.swayrc
 [ -f $HOME/.qtilerc ] && . $HOME/.qtilerc
 [ -f $HOME/.helixrc ] && . $HOME/.helixrc
