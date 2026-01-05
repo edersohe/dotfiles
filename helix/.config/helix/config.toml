@@ -88,6 +88,11 @@ C-h = "move_char_left"
 C-j = "move_line_down"
 C-k = "move_line_up"
 C-l = "move_char_right"
+tab = "inline_completion_accept"
+esc = "inline_completion_dismiss"
+C-n = "inline_completion_next"
+C-p = "inline_completion_prev"
+C-space = "inline_completion_trigger"
 
 [keys.normal.-]
 d = ":cd %sh{echo $DOTFILES}"

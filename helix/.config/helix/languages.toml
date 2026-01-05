@@ -2,14 +2,23 @@
 [language-server.gpt]
 command = "helix-gpt"
 
+# Copilot language server
+[language-server.copilot]
+command = "copilot-language-server"
+args = ["--stdio"]
+
+[language-server.copilot.config]
+editorInfo = { name = "Helix", version = "25.07.1" }
+editorPluginInfo = { name = "helix-copilot", version = "0.1.0" }
+
 # Elixir
 [[language]]
 name = "elixir"
-language-servers = ["elixir-ls", "gpt"]
+language-servers = ["elixir-ls", "gpt", "copilot"]
 
 [[language]]
 name = "heex"
-language-servers = ["elixir-ls", "tailwindcss-ls", "gpt"]
+language-servers = ["elixir-ls", "tailwindcss-ls", "gpt", "copilot"]
 
 # Rust
 [language-server.rust-analyzer.config.check]
@@ -20,14 +29,14 @@ features = "all"
 
 [[language]]
 name = "rust"
-language-servers = ["rust-analyzer", "gpt"]
+language-servers = ["rust-analyzer", "gpt", "copilot"]
 
 # Go
 [[language]]
 name = "go"
 auto-format = true
 formatter = { command = "goimports" }
-language-servers = ["gopls", "golangci-lint-lsp", "gpt"]
+language-servers = ["gopls", "golangci-lint-lsp", "gpt", "copilot"]
 
 # PHP
 [language-server.phpactor]
@@ -36,7 +45,7 @@ args = ["language-server"]
 
 [[language]]
 name = "php"
-language-servers = ["phpactor", "gpt"]
+language-servers = ["phpactor", "gpt", "copilot"]
 
 # SQL
 [language-server.sql-language-server]
@@ -45,7 +54,7 @@ args = ["up", "--method", "stdio"]
 
 [[language]]
 name = "sql"
-language-servers = ["sql-language-server", "gpt"]
+language-servers = ["sql-language-server", "gpt", "copilot"]
 
 # Python
 [language-server.basedpyright.config.python.analysis]
@@ -57,7 +66,7 @@ args = ["server"]
 
 [[language]]
 name = "python"
-language-servers = ["pyright", "ruff", "gpt"]
+language-servers = ["pyright", "ruff", "gpt", "copilot"]
 
 # Ruby
 [language-server.ruby-lsp]
@@ -66,7 +75,7 @@ config = { diagnostics = true, formatting = true }
 
 [[language]]
 name = "ruby"
-language-servers = ["ruby-lsp", "gpt"]
+language-servers = ["ruby-lsp", "gpt", "copilot"]
 
 # HTML, CCS, JavaScript, TypeScript, JSX, and TSX
 [language-server]
@@ -81,6 +90,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
@@ -92,6 +102,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
@@ -103,6 +114,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
@@ -114,6 +126,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
@@ -125,6 +138,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
@@ -136,6 +150,7 @@ language-servers = [
   "biome",
   "tailwindcss-ls",
   "gpt",
+  "copilot",
 ]
 
 # JSON, TOML and YAML
@@ -147,12 +162,13 @@ language-servers = [
   ] },
   "biome",
   "gpt",
+  "copilot",
 ]
 
 [[language]]
 name = "toml"
 formatter = { command = "taplo", args = ["fmt", "-"] }
-language-servers = ["taplo", "gpt"]
+language-servers = ["taplo", "gpt", "copilot"]
 
 [language-server.yaml-language-server.config.yaml]
 format = { enable = true }
@@ -160,7 +176,7 @@ validation = true
 
 [[language]]
 name = "yaml"
-language-servers = ["yaml-language-server", "gpt"]
+language-servers = ["yaml-language-server", "gpt", "copilot"]
 
 # Markdown
 [language-server.iwe]
@@ -168,5 +184,5 @@ command = "iwes"
 
 [[language]]
 name = "markdown"
-language-servers = ["iwe", "gpt"]
+language-servers = ["iwe", "gpt", "copilot"]
 auto-format = true

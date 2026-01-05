@@ -117,7 +117,7 @@
   :ensure t
   :defer t
   :init
-  (setq gptel-model 'claude-sonnet-4
+  (setq gptel-model 'gemini-3-pro-preview
         gptel-default-mode 'org-mode
         gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)

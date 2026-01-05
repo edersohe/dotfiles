@@ -25,7 +25,8 @@
 	          help-window-select t
               native-comp-async-report-warnings-errors nil
               native-comp-speed 3
-              project-mode-line t)
+              project-mode-line t
+              visible-bell t)
 
 (save-place-mode t)
 (savehist-mode t)
