@@ -262,13 +262,13 @@ local on_attach = function(_, bufnr)
 
   -- lsp pickers
   vim.keymap.set("n", "<leader>ld", '<cmd>Pick diagnostic scope="current"<CR>',
-  { buffer = bufnr, desc = "Document diagnostics" })
+    { buffer = bufnr, desc = "Document diagnostics" })
   vim.keymap.set("n", "<leader>lD", '<cmd>Pick diagnostic scope="all"<CR>',
-  { buffer = bufnr, desc = "Workspace diagnostics" })
+    { buffer = bufnr, desc = "Workspace diagnostics" })
   vim.keymap.set("n", "<leader>ls", '<cmd>Pick lsp scope="document_symbol"<CR>',
-  { buffer = bufnr, desc = "Document symbols" })
+    { buffer = bufnr, desc = "Document symbols" })
   vim.keymap.set("n", "<leader>lS", '<cmd>Pick lsp scope="workspace_symbol"<CR>',
-  { buffer = bufnr, desc = "Workspace symbols" })
+    { buffer = bufnr, desc = "Workspace symbols" })
   vim.keymap.set("n", "<leader>lr", '<cmd>Pick lsp scope="references"<CR>', { buffer = bufnr, desc = "References" })
 end
 
@@ -541,12 +541,12 @@ vim.keymap.set('n', '<M-z>', ':suspend<CR>', { noremap = true })
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
-{ desc = "Config" })
+  { desc = "Config" })
 vim.keymap.set('n', "<leader>nu", "<cmd>DepsUpdate!<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>np", "<cmd>DepsClean!<CR>", { desc = "Prune plugins" })
 vim.keymap.set('n', "<leader>ns", "<cmd>DepsShowLog<CR>", { desc = "Show plugins log" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
-{ desc = "Reload" })
+  { desc = "Reload" })
 
 -- nvim improvements
 vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -622,7 +622,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "qf",
   callback = function()
     vim.keymap.set('n', '<leader>r', ':cdo s/<C-r><C-w>//gc<Left><Left><Left>',
-    { desc = 'Replace', noremap = true, buffer = true })
+      { desc = 'Replace', noremap = true, buffer = true })
     vim.keymap.set('n', 'q', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
     vim.keymap.set('n', '<Esc>', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
   end,
