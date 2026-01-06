@@ -4,28 +4,29 @@
 
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
-	          gc-cons-threshold most-positive-fixnum
-	          inhibit-startup-screen t
-	          initial-scratch-message nil
+              gc-cons-threshold most-positive-fixnum
+              inhibit-startup-screen t
+              initial-scratch-message nil
               initial-major-mode 'fundamental-mode
-	          make-backup-files nil
-	          auto-save-default nil
-	          create-lockfiles nil
-	          indent-tabs-mode nil
-	          tab-width 4
-	          blink-cursor-mode nil
-	          use-short-answers t
-	          use-dialog-box nil
-	          password-cache-expiry nil
-	          confirm-kill-emacs nil
-	          uniquify-buffer-name-style 'forward
-	          window-resize-pixelwise t
-	          frame-resize-pixelwise t
-	          load-prefer-newer t
-	          help-window-select t
+              make-backup-files nil
+              auto-save-default nil
+              create-lockfiles nil
+              indent-tabs-mode nil
+              tab-width 4
+              blink-cursor-mode nil
+              use-short-answers t
+              use-dialog-box nil
+              password-cache-expiry nil
+              confirm-kill-emacs nil
+              uniquify-buffer-name-style 'forward
+              window-resize-pixelwise t
+              frame-resize-pixelwise t
+              load-prefer-newer t
+              help-window-select t
               native-comp-async-report-warnings-errors nil
               native-comp-speed 3
-              project-mode-line t)
+              project-mode-line t
+              scroll-conservatively 101)
 
 (save-place-mode t)
 (savehist-mode t)
@@ -48,7 +49,7 @@
 
 (require 'package)
 (add-to-list 'package-archives
-	         '("melpa" . "https://melpa.org/packages/"))
+             '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
 (add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
