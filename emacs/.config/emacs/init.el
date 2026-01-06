@@ -143,9 +143,9 @@
   (goto-char (point-max))
   (gptel-with-preset 'commit-preset
     (gptel-request nil
-      :callback (lambda (response _)
-                  (vc-next-action)
-                  (insert reponse)))))
+      :callback (lambda (response info)
+                  (vc-next-action nil)
+                  (insert response)))))
 
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
