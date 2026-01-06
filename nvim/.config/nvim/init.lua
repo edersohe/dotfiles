@@ -388,6 +388,8 @@ vim.keymap.set("n", "<leader>ghs", '<Cmd>Pick git_hunks path="%" scope="staged"<
 vim.keymap.set("n", "<leader>ghS", '<cmd>Pick git_hunks scope="staged"<CR>', { desc = "Staged hunks" })
 vim.keymap.set("n", "<leader>ghu", '<cmd>Pick git_hunks path="%"<CR>', { desc = "Unstaged hunks buffer" })
 vim.keymap.set("n", "<leader>ghU", "<cmd>Pick git_hunks<CR>", { desc = "Unstaged hunks" })
+vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>", { desc = "Status" })
+vim.keymap.set("n", "<leader>gS", "<cmd>Git stash<CR>", { desc = "Stash" })
 
 add({
   source = "nvim-treesitter/nvim-treesitter",
@@ -641,4 +643,10 @@ vim.g.clipboard = {
   },
 }
 
-vim.cmd("colorscheme catppuccin-mocha")
+
+vim.cmd [[
+  colorscheme catppuccin-mocha
+  hi Normal guibg=NONE
+  hi NormalFloat guibg=NONE
+  hi FloatBorder guibg=NONE
+]]

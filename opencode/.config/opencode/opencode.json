@@ -1,16 +1,16 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "catppuccin",
-  "model": "github-copilot/claude-sonnet-4",
+  "model": "github-copilot/gemini-3-flash",
   "autoupdate": true,
   "layout": "stretch",
   "share": "disabled",
   "agent": {
     "commit-message-generator": {
       "mode": "primary",
-      "model": "github-copilot/gpt-4.1",
+      "model": "github-copilot/gpt-5-mini",
       "temperature": 0.1,
-      "prompt": "Write commit message for the diff changes with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters.",
+      "prompt": "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations.",
       "tools": {
         "bash": false,
         "edit": false,
