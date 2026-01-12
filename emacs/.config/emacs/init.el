@@ -147,6 +147,9 @@
                   (vc-next-action nil)
                   (insert response)))))
 
+(with-eval-after-load 'diff-mode
+  (define-key diff-mode-map (kbd "C-c C-g") #'my/generate-commit))
+
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
   (interactive)
