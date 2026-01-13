@@ -29,5 +29,5 @@ customCommands:
     - key: "C"
       context: "files"
       description: "Generate commit message with Claude Code"
-      command: "commit-message-generator > /tmp/commit_msg && GIT_EDITOR=hx git commit -e -F /tmp/commit_msg"
+      command: "commit-message-generator > /tmp/commit_msg && git commit -e -F /tmp/commit_msg"
       output: terminal
