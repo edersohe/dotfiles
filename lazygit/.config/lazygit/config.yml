@@ -1,4 +1,7 @@
 gui:
+  showRandomTip: false
+  showCommandLog: false
+  screenMode: half
   nerdFontsVersion: "3"
   theme:
     activeBorderColor:
@@ -22,3 +25,10 @@ gui:
       - '#f9e2af'
   authorColors:
     '*': '#b4befe'
+
+customCommands:
+    - key: "C"
+      context: "files"
+      description: "Generate commit message with Claude Code"
+      command: "commit-message-generator > /tmp/commit_msg && GIT_EDITOR=hx git commit -e -F /tmp/commit_msg"
+      output: terminal
