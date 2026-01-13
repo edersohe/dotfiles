@@ -1,7 +1,6 @@
 gui:
   showRandomTip: false
   showCommandLog: false
-  screenMode: half
   nerdFontsVersion: "3"
   theme:
     activeBorderColor:
