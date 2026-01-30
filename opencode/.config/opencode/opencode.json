@@ -1,14 +1,21 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "catppuccin",
-  "model": "github-copilot/gemini-3-flash",
   "autoupdate": true,
-  "layout": "stretch",
   "share": "disabled",
+  "plugin": ["opencode-gemini-auth@latest"],
+  "mode": {
+    "plan": {
+      "model": "github-copilot/gpt-5-mini"
+    },
+    "build": {
+      "model": "github-copilot/grok-code-fast-1"
+    }
+  },
   "agent": {
     "commit-message-generator": {
       "mode": "primary",
-      "model": "github-copilot/gpt-5-mini",
+      "model": "github-copilot/gpt-4.1",
       "temperature": 0.1,
       "prompt": "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations.",
       "tools": {

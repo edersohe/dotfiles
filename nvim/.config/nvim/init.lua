@@ -211,7 +211,7 @@ local languages = {
   svelte = { lsp = { svelte = { config = {}, bin = "svelte-language-server" } }, ts = { "svelte" } },
   templ = { lsp = { templ = { config = {}, bin = "templ" } }, ts = { "templ" } },
   terraform = { lsp = { terraformls = { config = {}, bin = "terraform-ls" } }, ts = { "terraform", "hcl" } },
-  toml = { lsp = { taplo = { config = {}, bin = "taplo" } }, ts = { "toml" } },
+  toml = { lsp = { tombi = { config = {}, bin = "tombi" } }, ts = { "toml" } },
   typescript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "typescript", "tsx" } },
   twig = { ts = { "twig" } },
   vim = { ts = { "vim", "vimdoc", "query" } },
@@ -525,6 +525,9 @@ miniclue.setup({
     delay = 0,
   },
 })
+
+add('MeanderingProgrammer/render-markdown.nvim')
+require('render-markdown').setup()
 
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
