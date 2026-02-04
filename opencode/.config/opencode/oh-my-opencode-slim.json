@@ -1,0 +1,13 @@
+{
+  "preset": "alvin",
+  "presets": {
+    "alvin": {
+      "orchestrator": { "model": "openrouter/moonshotai/kimi-k2.5", "skills": ["*"], "mcps": ["*"] },
+      "oracle": { "model": "openrouter/moonshotai/kimi-k2.5", "variant": "high", "skills": [], "mcps": [] },
+      "librarian": { "model": "google/gemini-3-flash-preview", "variant": "low", "skills": [], "mcps": ["websearch", "context7", "grep_app"] },
+      "explorer": { "model": "nano-gpt/zai-org/glm-4.7", "variant": "low", "skills": [], "mcps": [] },
+      "designer": { "model": "google/gemini-3-flash-preview", "variant": "medium", "skills": ["agent-browser"], "mcps": [] },
+      "fixer": { "model": "nano-gpt/zai-org/glm-4.7", "variant": "low", "skills": [], "mcps": [] }
+    }
+  }
+}
