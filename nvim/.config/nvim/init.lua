@@ -350,12 +350,16 @@ add("github/copilot.vim")
 
 add("christoomey/vim-tmux-navigator")
 
-require('mini.git').setup()
-require('mini.diff').setup({
-  view = {
-    style = 'sign'
-  }
+add('lewis6991/gitsigns.nvim')
+local gitsigns = require('gitsigns')
+gitsigns.setup({
+  preview_config = {
+    border = border,
+  },
 })
+
+add('tpope/vim-fugitive')
+add('tpope/vim-rhubarb')
 
 local commit = function()
   local changes = vim.fn.system("commit-message-generator")
@@ -370,26 +374,23 @@ local commit = function()
   vim.api.nvim_paste(changes, true, 1)
 end
 
-local git_log = "Git log --decorate --graph --all --pretty=short"
+local git_log = "tab Git log --decorate --graph --all --pretty=short"
 
+vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
-vim.keymap.set("n", "<leader>gdu", "<cmd>Git diff -- %<CR>", { desc = "Unstaged diff buffer" })
-vim.keymap.set("n", "<leader>gdU", "<cmd>Git diff<CR>", { desc = "Unstaged diff" })
-vim.keymap.set("n", "<leader>gds", "<cmd>Git diff --cached -- %<CR>", { desc = "Staged diff buffer" })
-vim.keymap.set("n", "<leader>gdS", "<cmd>Git diff --cached<CR>", { desc = "Staged diff" })
+vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
-vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Toggle overlay" })
-vim.keymap.set({ "n", "x" }, "<leader>gi", "<cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Inspect" })
-vim.keymap.set("n", "<leader>ghs", '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', { desc = "Staged hunks buffer" })
-vim.keymap.set("n", "<leader>ghS", '<cmd>Pick git_hunks scope="staged"<CR>', { desc = "Staged hunks" })
-vim.keymap.set("n", "<leader>ghu", '<cmd>Pick git_hunks path="%"<CR>', { desc = "Unstaged hunks buffer" })
-vim.keymap.set("n", "<leader>ghU", "<cmd>Pick git_hunks<CR>", { desc = "Unstaged hunks" })
 vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>", { desc = "Status" })
 vim.keymap.set("n", "<leader>gS", "<cmd>Git stash<CR>", { desc = "Stash" })
+vim.keymap.set("n", "<leader>gb", "<cmd>.GBrowse<CR>", { desc = "Browse" })
+vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "Blame" })
+vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
+vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
+vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
 
 add({
   source = "nvim-treesitter/nvim-treesitter",

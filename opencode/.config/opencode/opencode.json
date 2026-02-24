@@ -3,7 +3,9 @@
   "theme": "catppuccin",
   "autoupdate": true,
   "share": "disabled",
-  "plugin": ["opencode-gemini-auth@latest"],
+  "plugin": [
+    "opencode-gemini-auth@latest"
+  ],
   "mode": {
     "plan": {
       "model": "github-copilot/gpt-5-mini"
@@ -15,7 +17,7 @@
   "agent": {
     "commit-message-generator": {
       "mode": "primary",
-      "model": "github-copilot/gpt-4.1",
+      "model": "github-copilot/gpt-5-mini",
       "temperature": 0.1,
       "prompt": "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations.",
       "tools": {
@@ -29,7 +31,7 @@
         "patch": false,
         "todowrite": false,
         "todoread": true,
-        "webfetch": false,
+        "webfetch": false
       },
       "permission": {
         "bash": "deny",
