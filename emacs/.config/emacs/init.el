@@ -144,11 +144,10 @@
 (defun my/eat-project ()
   "Create an eat buffer and rename it interactively."
   (interactive)
-  (eat-project)  ; Call the original eat command
+  (eat-project)
   (when-let* ((project (project-current))
-              (project-name (file-name-nondirectory
-                             (directory-file-name
-                              (project-root project))))
+              (project-root (project-root project))
+              (project-name (file-name-nondirectory (directory-file-name project-root)))
               (eat-buffer (get-buffer (format "*%s-eat*" project-name))))
     (with-current-buffer eat-buffer
       (let ((new-name (read-string "Enter name for eat buffer: ")))
