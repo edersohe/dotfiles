@@ -56,9 +56,12 @@
   (add-to-list 'eglot-server-programs
                '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs
-               '((elixir-mode elixir-ts-mode heex-ts-mode) . ("elixir-ls")))
+               '((elixir-mode elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
   (add-to-list 'eglot-server-programs
                '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+
+(setq-default eglot-workspace-configuration
+  '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
   :hook
