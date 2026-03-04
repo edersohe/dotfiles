@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
-AGENT=commit-message-generator
-DIFF=$(git diff --cached)
-STATUS=$(git status | sed -r 's/(.*)/# \1/g' | sed -r 's/(# 	)/#	/g')
+CHANGES=$(git diff --cached --name-status)
 
-if [ -z "$DIFF" ]; then
+if [ -z "$CHANGES" ]; then
+  echo "No changes staged for commit."
   exit 1
 fi
 
-MESSAGE=$(opencode run "\'$DIFF\'" --agent $AGENT  | sed -zr 's/(^```gitcommit\n|```$)//g')
-
-echo -e "$MESSAGE"
+git diff --cached | opencode run "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations." --model "github-copilot/gpt-5-mini" 2>/dev/null

@@ -361,7 +361,7 @@ gitsigns.setup({
 add('tpope/vim-fugitive')
 add('tpope/vim-rhubarb')
 
-local commit = function()
+Commit = function()
   local changes = vim.fn.system("commit-message-generator")
   local exit_code = vim.v.shell_error
 
@@ -370,7 +370,7 @@ local commit = function()
     return
   end
 
-  vim.cmd("Git commit")
+  vim.cmd("tab Git commit")
   vim.api.nvim_paste(changes, true, 1)
 end
 
@@ -379,7 +379,7 @@ local git_log = "tab Git log --decorate --graph --all --pretty=short"
 vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
-vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
+vim.keymap.set("n", "<leader>gc", Commit, { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })

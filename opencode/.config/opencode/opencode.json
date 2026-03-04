@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "catppuccin",
   "autoupdate": true,
   "share": "disabled",
   "plugin": [
@@ -8,36 +7,10 @@
   ],
   "mode": {
     "plan": {
-      "model": "github-copilot/gpt-5-mini"
+      "model": "zai-coding-plan/glm-5"
     },
     "build": {
-      "model": "github-copilot/grok-code-fast-1"
-    }
-  },
-  "agent": {
-    "commit-message-generator": {
-      "mode": "primary",
-      "model": "github-copilot/gpt-5-mini",
-      "temperature": 0.1,
-      "prompt": "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations.",
-      "tools": {
-        "bash": false,
-        "edit": false,
-        "write": false,
-        "read": true,
-        "grep": true,
-        "glob": true,
-        "list": true,
-        "patch": false,
-        "todowrite": false,
-        "todoread": true,
-        "webfetch": false
-      },
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "webfetch": "deny"
-      }
+      "model": "minimax-coding-plan/MiniMax-M2.5"
     }
   }
 }

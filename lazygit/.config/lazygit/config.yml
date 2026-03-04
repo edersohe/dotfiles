@@ -28,6 +28,6 @@ gui:
 customCommands:
     - key: "C"
       context: "files"
-      description: "Generate commit message with Claude Code"
-      command: "commit-message-generator > /tmp/commit_msg && git commit -e -F /tmp/commit_msg"
+      description: "Generate commit message with OpenCode"
+      command: "commit-message-generator | git commit -e -F -"
       output: terminal
