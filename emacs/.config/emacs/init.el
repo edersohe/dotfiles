@@ -117,7 +117,7 @@
   :ensure t
   :defer t
   :init
-  (setq gptel-model 'gemini-3-flash-preview
+  (setq gptel-model 'gpt-5-mini
         gptel-default-mode 'org-mode
         gptel-backend (gptel-make-gh-copilot "Copilot"))
   :bind (("C-c RET" . gptel-send)
@@ -125,27 +125,18 @@
          :map gptel-mode-map
          ("C-c m" . gptel-menu)))
 
-(setf (alist-get 'commit-directive gptel-directives)
-      "You are a specialized commit message generator.
-       Input: Git Diff.
-       Output: Conventional Commit formatted message only. No explanations.")
-
-(gptel-make-preset 'commit-preset
-  :description  "Generate a commit message."
-  :system       'commit-directive
-  :backend      "Copilot"
-  :model        'gpt-5-mini
-  :temperature  0.1)
-
 (defun my/generate-commit ()
-  "Generate commit message from 'vc-diff'."
+  "Generate commit message from 'vc-diff' and insert into log buffer."
   (interactive)
-  (goto-char (point-max))
-  (gptel-with-preset 'commit-preset
-    (gptel-request nil
-      :callback (lambda (response info)
-                  (vc-next-action nil)
-                  (insert response)))))
+  (let ((diff (buffer-string)))
+    (vc-next-action nil)
+    (gptel-request
+     diff
+     :system "You are a commit message generator. Use the Conventional Commits format. Be concise."
+     :callback (lambda (response info)
+                 (if response
+                     (insert response)
+                   (message "GPTel failed to generate a message."))))))
 
 (with-eval-after-load 'diff-mode
   (define-key diff-mode-map (kbd "C-c C-g") #'my/generate-commit))
