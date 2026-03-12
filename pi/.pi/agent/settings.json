@@ -1,0 +1,19 @@
+{
+  "lastChangelogVersion": "0.57.1",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5-mini",
+  "defaultThinkingLevel": "low",
+  "enabledModels": [
+    "github-copilot/gemini-3-flash-preview",
+    "github-copilot/gpt-5-mini",
+    "google-gemini-cli/gemini-3-flash-preview",
+    "google-gemini-cli/gemini-3-pro-preview",
+    "nano-gpt-anthropic/moonshotai/kimi-k2.5:thinking",
+    "nano-gpt-openai/minimax/minimax-m2.5",
+    "nano-gpt-openai/xiaomi/mimo-v2-flash-thinking",
+    "nano-gpt-openai/zai-org/glm-5:thinking"
+  ],
+  "theme": "dark",
+  "packages": [],
+  "skills": []
+}

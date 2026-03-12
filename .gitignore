@@ -58,3 +58,4 @@ helix/.config/helix/runtime
 qutebrowser/.config/qutebrowser/qsettings
 qutebrowser/.config/qutebrowser/autoconfig.yml
 qutebrowser/.config/qutebrowser/quickmarks
+/pi/.pi/agent/auth.json

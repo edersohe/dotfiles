@@ -1,0 +1,33 @@
+{
+  "servers": [
+    {
+      "name": "elixir",
+      "command": [
+        "expert",
+        "--stdio"
+      ],
+      "fileTypes": [
+        ".exs",
+        ".ex",
+        ".eex",
+        ".leex",
+        ".heex",
+        "mix.exs"
+      ],
+      "disabled": false
+    },
+    {
+      "name": "typescript",
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "fileTypes": [
+        ".tsx",
+        ".ts",
+        "package.json"
+      ],
+      "disabled": false
+    }
+  ]
+}
