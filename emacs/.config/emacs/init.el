@@ -4,7 +4,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
               make-backup-files nil
@@ -27,7 +26,7 @@
               project-mode-line t
               scroll-conservatively 101)
 
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
+(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold (* 32 1024 1024))))
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
@@ -65,7 +64,7 @@
   (interactive)
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") #'my/kill-current-buffer)
-(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -73,9 +72,9 @@
 
 (use-package org
   :defer t
-  :bind (("C-c a" . org-agenda)
-         ("C-c c" . org-capture)
-         ("C-c l" . org-store-link)))
+  :bind (("C-c o a" . org-agenda)
+         ("C-c o c" . org-capture)
+         ("C-c o l" . org-store-link)))
 
 (use-package which-key
   :custom (which-key-idle-delay 0.3)
@@ -84,12 +83,12 @@
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
-              ("C-c f" . eglot-format)
-              ("C-c a" . eglot-code-actions)
-              ("C-c d" . eglot-find-declaration)
-              ("C-c i" . eglot-find-implementation)
-              ("C-c t" . eglot-find-typeDefinition)
-              ("C-c r" . eglot-rename))
+              ("C-c e f" . eglot-format)
+              ("C-c e a" . eglot-code-actions)
+              ("C-c e d" . eglot-find-declaration)
+              ("C-c e i" . eglot-find-implementation)
+              ("C-c e t" . eglot-find-typeDefinition)
+              ("C-c e r" . eglot-rename))
   :custom
   (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
@@ -112,10 +111,10 @@
   :hook
   (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-              ("M-n" . flymake-goto-next-error)
-              ("M-p" . flymake-goto-prev-error)
-              ("C-c e" . flymake-show-diagnostics-buffer)
-              ("C-c E" . flymake-show-project-diagnostics)))
+              ("C-c f n" . flymake-goto-next-error)
+              ("C-c f p" . flymake-goto-prev-error)
+              ("C-c f d" . flymake-show-diagnostics-buffer)
+              ("C-c f D" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
@@ -219,6 +218,3 @@
   :after undo-fu
   :config
   (undo-fu-session-global-mode))
-
-(provide 'init)
-;;; init.el ends here

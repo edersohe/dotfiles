@@ -12,6 +12,3 @@
 
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
-
-(provide 'early-init)
-;;; early-init.el ends here
