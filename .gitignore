@@ -22,6 +22,7 @@ emacs/.config/emacs/places
 emacs/.config/emacs/projects
 emacs/.config/emacs/recentf
 emacs/.config/emacs/tramp
+emacs/.config/emacs/auto-save-list
 
 evil-emacs/.config/emacs/copilot-chat
 evil-emacs/.config/emacs/.cache/
@@ -58,4 +59,5 @@ helix/.config/helix/runtime
 qutebrowser/.config/qutebrowser/qsettings
 qutebrowser/.config/qutebrowser/autoconfig.yml
 qutebrowser/.config/qutebrowser/quickmarks
-/pi/.pi/agent/auth.json
+pi/.pi/agent/auth.json
+pi/.pi/agent/sessions
