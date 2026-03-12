@@ -71,6 +71,12 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
+(use-package org
+  :defer t
+  :bind (("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+         ("C-c l" . org-store-link)))
+
 (use-package which-key
   :custom (which-key-idle-delay 0.3)
   :config (which-key-mode))
