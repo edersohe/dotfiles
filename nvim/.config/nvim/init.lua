@@ -98,11 +98,14 @@ local languages = {
   },
   elixir = {
     lsp = {
-      elixirls = {
+      expert = {
         config = {
-          cmd = { "elixir-ls" },
+          settings = {
+            workspaceSymbols = {
+              minQueryLength = 0
+            }
+          }
         },
-        bin = "elixir-ls",
       },
     },
     ts = { "elixir", "eex", "heex" },
@@ -646,7 +649,6 @@ vim.g.clipboard = {
     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
   },
 }
-
 
 vim.cmd [[
   colorscheme catppuccin-mocha
