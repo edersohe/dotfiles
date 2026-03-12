@@ -2,6 +2,45 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
+              make-backup-files nil
+              auto-save-default nil
+              create-lockfiles nil
+              indent-tabs-mode nil
+              tab-width 4
+              blink-cursor-mode nil
+              use-short-answers t
+              use-dialog-box nil
+              password-cache-expiry nil
+              confirm-kill-emacs nil
+              uniquify-buffer-name-style 'forward
+              window-resize-pixelwise t
+              frame-resize-pixelwise t
+              load-prefer-newer t
+              help-window-select t
+              native-comp-async-report-warnings-errors nil
+              native-comp-speed 3
+              project-mode-line t
+              scroll-conservatively 101)
+
+(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold 800000)))
+
+(load-theme 'modus-vivendi-tinted :no-confirm)
+(add-to-list 'default-frame-alist '(alpha-background . 97))
+(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-15"))
+;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
+(save-place-mode t)
+(savehist-mode t)
+(recentf-mode t)
+(global-auto-revert-mode t)
+
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'prog-mode-hook #'electric-pair-mode)
 
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
