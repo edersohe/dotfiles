@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+app=$1
+width=$2
+height=$3
+
+if [ -z "$width" ] && [ -z "$height" ]; then
+  width=50
+  height=15
+fi
+
+ghostty --class="term.$app" --window-width=${width} --window-height=${height} -e "$app"
+

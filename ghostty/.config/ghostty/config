@@ -1,10 +1,10 @@
 theme=catppuccin-mocha
 # background=#1e1e2e
 font-family=ZedMono Nerd Font
-# font-style=Regular
+font-style=Regular
 font-size=15.5
-# font-style-italic=false
-# font-style-bold-italic=bold
+font-style-italic=false
+font-style-bold-italic=bold
 gtk-titlebar = false
 #gtk-tabs-location = hidden
 #window-decoration = none
@@ -19,3 +19,5 @@ keybind = alt+enter=toggle_fullscreen
 #adjust-cell-height = 10
 background-opacity = 0.97
 background-blur = false
+clipboard-paste-protection = false
+confirm-close-surface = false

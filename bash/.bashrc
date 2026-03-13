@@ -27,6 +27,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 [ -f $HOME/.miserc ] && . $HOME/.miserc
 [ -f $HOME/.ezarc ] && . $HOME/.ezarc
 [ -f $HOME/.footrc ] && . $HOME/.footrc
+[ -f $HOME/.ghostty ] && . $HOME/.ghosttyrc
 [ -f $HOME/.starshiprc ] && . $HOME/.starshiprc
 [ -f $HOME/.fzfrc ] && . $HOME/.fzfrc
 [ -f $HOME/.ripgreprc ] && . $HOME/.ripgreprc
