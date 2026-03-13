@@ -1,8 +1,8 @@
-theme=Catppuccin Mocha
+theme=catppuccin-mocha
 # background=#1e1e2e
 font-family=ZedMono Nerd Font
 # font-style=Regular
-font-size=14
+font-size=15.5
 # font-style-italic=false
 # font-style-bold-italic=bold
 gtk-titlebar = false
@@ -17,5 +17,5 @@ window-padding-balance = true
 keybind = alt+enter=toggle_fullscreen
 #freetype-load-flags = no-force-autohint
 #adjust-cell-height = 10
-background-opacity = 0.98
+background-opacity = 0.97
 background-blur = false
