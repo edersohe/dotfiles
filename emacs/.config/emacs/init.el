@@ -26,7 +26,7 @@
               project-mode-line t
               scroll-conservatively 101)
 
-(add-hook 'after-init-hook (lambda ()(setq gc-cons-threshold (* 32 1024 1024))))
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
 (load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
@@ -41,6 +41,7 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
+;;; Built-in Completion
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
@@ -59,62 +60,184 @@
 (define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
-(defun my/kill-current-buffer ()
-  "Kill the current buffer without prompting for its name."
-  (interactive)
-  (kill-buffer (current-buffer)))
-(global-set-key (kbd "C-x k") #'my/kill-current-buffer)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
+;;; Essential Utilities
 (use-package exec-path-from-shell
   :ensure t
   :config (exec-path-from-shell-initialize))
-
-(use-package org
-  :defer t
-  :bind (("C-c o a" . org-agenda)
-         ("C-c o c" . org-capture)
-         ("C-c o l" . org-store-link)))
 
 (use-package which-key
   :custom (which-key-idle-delay 0.3)
   :config (which-key-mode))
 
+(use-package marginalia
+  :ensure t
+  :config (marginalia-mode))
+
+;;; Undo System (Required for Evil to behave nicely)
+(use-package undo-fu
+  :ensure t)
+
+(use-package undo-fu-session
+  :ensure t
+  :after undo-fu
+  :config (undo-fu-session-global-mode))
+
+;;; Evil Mode Ecosystem
+;; Note: evil-want-keybinding must be nil BEFORE evil and evil-collection load
+(setq evil-want-integration t
+      evil-want-keybinding nil
+      evil-want-C-u-scroll t
+      evil-want-C-i-jump t
+      evil-undo-system 'undo-fu)
+
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-matchit
+  :ensure t
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode))
+
+;;; Keybindings (General.el)
+(defun my/kill-current-buffer ()
+  "Kill the current buffer without prompting."
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x k") #'my/kill-current-buffer)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+(use-package general
+  :ensure t
+  :after evil
+  :config
+  (general-evil-setup t)
+  
+  ;; Create a definer for your leader key (Space)
+  (general-create-definer my/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  ;; Global Leader Bindings
+  (my/leader-keys
+    "SPC" '(execute-extended-command :which-key "M-x")
+    "ESC" '(keyboard-escape-quit :which-key "escape")
+
+    ;; Buffers & Files
+    "b" '(:ignore t :which-key "buffers")
+    "bb" '(switch-to-buffer :which-key "switch buffer")
+    "bk" '(my/kill-current-buffer :which-key "kill buffer")
+    
+    "f" '(:ignore t :which-key "files")
+    "ff" '(find-file :which-key "find file")
+    "fs" '(save-buffer :which-key "save")
+
+    "d" '(:ignore t :which-key "directories")
+    "dd" '(dired :which-key "dired")
+    "dj" '(dired-jump :which-key "dired jump")
+
+    ;; Vterm
+    "t" '(:ignore t :which-key "terminal")
+    "tt" '(vterm :which-key "vterm")
+
+    ;; Code (Eglot / Flymake)
+    "c" '(:ignore t :which-key "code")
+    "cf" '(eglot-format :which-key "format")
+    "ca" '(eglot-code-actions :which-key "code actions")
+    "cr" '(eglot-rename :which-key "rename")
+    "cd" '(eglot-find-declaration :which-key "find decl")
+    "ci" '(eglot-find-implementation :which-key "find impl")
+    "ct" '(eglot-find-typeDefinition :which-key "find type")
+    
+    "e" '(:ignore t :which-key "errors")
+    "]d" '(flymake-goto-next-error :which-key "next err")
+    "[d" '(flymake-goto-prev-error :which-key "prev err")
+    "eb" '(flymake-show-diagnostics-buffer :which-key "buffer errs")
+    "ep" '(flymake-show-project-diagnostics :which-key "project errs")
+
+    ;; Org
+    "o" '(:ignore t :which-key "org")
+    "oa" '(org-agenda :which-key "agenda")
+    "oc" '(org-capture :which-key "capture")
+    "ol" '(org-store-link :which-key "store link")
+
+    ;; project.el
+    "p" '(:ignore t :which-key "project")
+    "pf" '(project-find-file :which-key "find file")
+    "pb" '(project-switch-to-buffer :which-key "switch buffer")
+    "pp" '(project-switch-project :which-key "switch project")
+    "pd" '(project-dired :which-key "dired")
+    "pg" '(project-find-regexp :which-key "grep")
+    "pr" '(project-query-replace-regexp :which-key "replace")
+    "pc" '(project-compile :which-key "compile")
+    "pv" '(project-vc-dir :which-key "version control")
+    "pk" '(project-kill-buffers :which-key "kill buffers")
+    
+    ;; vc-git
+    "g" '(:ignore t :which-key "git")
+    "gs" '(vc-dir :which-key "status")
+    "gd" '(vc-diff :which-key "diff")
+    "gD" '(vc-root-diff :which-key "diff root")
+    "gP" '(vc-push :which-key "push")
+    "gl" '(vc-print-log :which-key "log")
+    "gb" '(vc-annotate :which-key "blame")
+    "gp" '(vc-update :which-key "pull")
+    "gn" '(vc-next-action :which-key "next action")
+    "]h" '(diff-hl-next-hunk :which-key "next hunk")
+    "[h" '(diff-hl-previous-hunk :which-key "prev hunk")
+    "gh" '(diff-hl-show-hunk :which-key "show hunk")
+
+    ;; help
+    "h" '(:ignore t :which-key "help")
+    "hf" '(describe-function :which-key "describe function")
+    "hv" '(describe-variable :which-key "describe variable")
+    "hb" '(describe-bindings :which-key "describe bindings")
+    "hk" '(describe-key :which-key "describe key")
+    "hm" '(describe-mode :which-key "describe mode")
+    "hs" '(describe-symbol :which-key "help symbol")))
+    
+;;; Vterm
+(use-package vterm
+  :ensure t
+  :custom
+  (vterm-max-scrollback 10000))
+
+;;; Programming Environments
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
-  :bind (:map eglot-mode-map
-              ("C-c e f" . eglot-format)
-              ("C-c e a" . eglot-code-actions)
-              ("C-c e d" . eglot-find-declaration)
-              ("C-c e i" . eglot-find-implementation)
-              ("C-c e t" . eglot-find-typeDefinition)
-              ("C-c e r" . eglot-rename))
   :custom
   (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
   :config
-  (add-to-list 'auto-mode-alist '
-               ("\\.exs$" . elixir-ts-mode))
-  (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("ruff" "server")))
-  (add-to-list 'eglot-server-programs
-               '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
-  (add-to-list 'eglot-server-programs
-               '((elixir-mode elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
-  (add-to-list 'eglot-server-programs
-               '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+  (add-to-list 'auto-mode-alist '("\\.exs$" . elixir-ts-mode))
+  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("ruff" "server")))
+  (add-to-list 'eglot-server-programs '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs '((elixir-mode elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
 (setq-default eglot-workspace-configuration
   '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
-  :hook
-  (prog-mode . flymake-mode)
-  :bind (:map flymake-mode-map
-              ("C-c f n" . flymake-goto-next-error)
-              ("C-c f p" . flymake-goto-prev-error)
-              ("C-c f d" . flymake-show-diagnostics-buffer)
-              ("C-c f D" . flymake-show-project-diagnostics)))
+  :hook (prog-mode . flymake-mode))
 
 (use-package treesit-auto
   :ensure t
@@ -153,68 +276,10 @@
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
-  (copilot-idle-delay nil)
-  :bind (("C-<return>" . copilot-complete)
-         :map copilot-completion-map
+  :bind (:map copilot-completion-map
          ("C-n" . copilot-next-completion)
          ("C-p" . copilot-previous-completion)
          ("TAB" . copilot-accept-completion)))
 
-(use-package gptel
-  :ensure t
-  :defer t
-  :init
-  (setq gptel-model 'gpt-5-mini
-        gptel-default-mode 'org-mode
-        gptel-backend (gptel-make-gh-copilot "Copilot"))
-  :bind (("C-c RET" . gptel-send)
-         ("C-x c" . gptel)
-         :map gptel-mode-map
-         ("C-c m" . gptel-menu)))
-
-(defun my/generate-commit ()
-  "Generate commit message from 'vc-diff' and insert into log buffer."
-  (interactive)
-  (let ((diff (buffer-string)))
-    (vc-next-action nil)
-    (gptel-request
-     diff
-     :system "You are a commit message generator. Use the Conventional Commits format. Be concise."
-     :callback (lambda (response info)
-                 (if response
-                     (insert response)
-                   (message "GPTel failed to generate a message."))))))
-
-(with-eval-after-load 'diff-mode
-  (define-key diff-mode-map (kbd "C-c C-g") #'my/generate-commit))
-
-(defun my/eat-project ()
-  "Create an eat buffer and rename it interactively."
-  (interactive)
-  (eat-project)
-  (when-let* ((project (project-current))
-              (project-root (project-root project))
-              (project-name (file-name-nondirectory (directory-file-name project-root)))
-              (eat-buffer (get-buffer (format "*%s-eat*" project-name))))
-    (with-current-buffer eat-buffer
-      (let ((new-name (read-string "Enter name for eat buffer: ")))
-        (rename-buffer (format "*%s-eat-%s*" project-name new-name) t)))))
-
-(use-package eat
-  :ensure t
-  :hook (eshell-load . eat-eshell-mode)
-  :bind ("C-x p t" . my/eat-project))
-
-(use-package marginalia
-  :ensure t
-  :init
-  (marginalia-mode))
-
-(use-package undo-fu
-  :ensure t)
-
-(use-package undo-fu-session
-  :ensure t
-  :after undo-fu
-  :config
-  (undo-fu-session-global-mode))
+(use-package org
+  :defer t)
