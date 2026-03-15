@@ -29,6 +29,15 @@
              :ensure t
              :config (exec-path-from-shell-initialize))
 
+(use-package catppuccin-theme
+  :ensure t
+  :config
+  (load-theme 'catppuccin :no-confirm))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
 (use-package which-key
              :custom (which-key-idle-delay 0.3)
              :config (which-key-mode))
@@ -36,12 +45,12 @@
 (use-package eglot
              :hook (prog-mode . eglot-ensure)
              :bind (:map eglot-mode-map
-                         ("C-c f" . eglot-format)
-                         ("C-c a" . eglot-code-actions)
-                         ("C-c d" . eglot-find-declaration)
-                         ("C-c i" . eglot-find-implementation)
-                         ("C-c t" . eglot-find-typeDefinition)
-                         ("C-c r" . eglot-rename))
+                         ("C-c e f" . eglot-format)
+                         ("C-c e a" . eglot-code-actions)
+                         ("C-c e d" . eglot-find-declaration)
+                         ("C-c e i" . eglot-find-implementation)
+                         ("C-c e t" . eglot-find-typeDefinition)
+                         ("C-c e r" . eglot-rename))
              :custom
              (eglot-events-buffer-config '(:size 0 :format full))
              (eglot-autoshutdown t)
@@ -61,10 +70,10 @@
              :hook
              (prog-mode . flymake-mode)
              :bind (:map flymake-mode-map
-                         ("M-n" . flymake-goto-next-error)
-                         ("M-p" . flymake-goto-prev-error)
-                         ("C-c e" . flymake-show-diagnostics-buffer)
-                         ("C-c E" . flymake-show-project-diagnostics)))
+                         ("]d" . flymake-goto-next-error)
+                         ("[d" . flymake-goto-prev-error)
+                         ("C-c d b" . flymake-show-diagnostics-buffer)
+                         ("C-c d p" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
              :ensure t

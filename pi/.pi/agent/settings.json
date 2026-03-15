@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.57.1",
+  "lastChangelogVersion": "0.58.1",
   "defaultProvider": "github-copilot",
   "defaultModel": "gpt-5-mini",
   "defaultThinkingLevel": "low",
@@ -15,5 +15,6 @@
   ],
   "theme": "dark",
   "packages": [],
-  "skills": []
+  "skills": [],
+  "hideThinkingBlock": false
 }
