@@ -38,6 +38,7 @@ evil-emacs/.config/emacs/places
 evil-emacs/.config/emacs/projects
 evil-emacs/.config/emacs/recentf
 evil-emacs/.config/emacs/tramp
+evil-emacs/.config/emacs/auto-save-list
 
 emacs-max/.config/emacs/copilot-chat
 emacs-max/.config/emacs/.cache/
@@ -53,6 +54,7 @@ emacs-max/.config/emacs/places
 emacs-max/.config/emacs/projects
 emacs-max/.config/emacs/recentf
 emacs-max/.config/emacs/tramp
+emacs-max/.config/emacs/auto-save-list
 
 helix/.config/helix/runtime
 
