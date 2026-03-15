@@ -70,10 +70,10 @@
              :hook
              (prog-mode . flymake-mode)
              :bind (:map flymake-mode-map
-                         ("]d" . flymake-goto-next-error)
-                         ("[d" . flymake-goto-prev-error)
+                         ("C-c d n" . flymake-goto-next-error)
+                         ("C-c d p" . flymake-goto-prev-error)
                          ("C-c d b" . flymake-show-diagnostics-buffer)
-                         ("C-c d p" . flymake-show-project-diagnostics)))
+                         ("C-c d a" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
              :ensure t
@@ -104,7 +104,11 @@
              :hook
              (after-init . global-diff-hl-mode)
              (after-init . diff-hl-flydiff-mode)
-             (after-init . diff-hl-margin-mode))
+             (after-init . diff-hl-margin-mode)
+             :bind (:map diff-hl-mode-map
+                         ("C-c h n" . diff-hl-next-hunk)
+                         ("C-c h p" . diff-hl-previous-hunk)
+                         ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package copilot
              :ensure t
@@ -240,14 +244,20 @@
                "e"  '(project-dired :which-key "explore")
                "E" '(dired :which-key "dired")
                "g"  '(magit-status :which-key "magit status")
+               "h"  '(diff-hl-show-hunk :which-key "show hunk")
                "s"  '(project-query-replace-regexp :which-key "replace")
                "t"  '(my/eat-project :which-key "terminal")
                "T"  '(eat :which-key "terminal")
                "RET" '(gptel-menu t :which-key "gptel menu")
                "c"  '(gptel :which-key "chat")
-               "h"  '(describe-symbol :which-key "help")
-               "k"  '(describe-key :which-key "key help")
-               "i" '(imenu :which-key "imenu"))
+               "?"  '(describe-symbol :which-key "help")
+               "k"  '(describe-key :which-key "describe key")
+               "K"  '(describe-bindings :which-key "keybindings")
+               "i" '(imenu :which-key "imenu")
+               "/" '(project-find-regexp :which-key "find")
+               "c" '(org-capture :which-key "capture")
+               "a" '(org-agenda :which-key "agenda")
+               "w" '(save-buffer :which-key "save"))
              (general-define-key
                :states '(normal visual)
                :keymaps 'eglot-mode-map
@@ -263,7 +273,19 @@
                :states '(normal visual)
                :keymaps 'flymake-mode-map
                :prefix "SPC"
-               "d" '(flymake-show-project-diagnostics :which-key "diagnostics")))
+               "d" '(flymake-show-project-diagnostics :which-key "diagnostics"))
+             (general-define-key
+               :states '(normal visual)
+               :keymaps 'flymake-mode-map
+               :prefix nil
+               "]d" '(flymake-goto-next-error :which-key "next diagnostic")
+               "[d" '(flymake-goto-prev-error :which-key "previous diagnostic"))
+             (general-define-key
+               :states '(normal visual)
+               :keymaps 'diff-hl-mode-map
+               :prefix nil
+               "]h" '(diff-hl-next-hunk :which-key "next hunk")
+               "[h" '(diff-hl-previous-hunk :which-key "previous hunk")))
 
 (provide 'init)
 ;;; init.el ends here
