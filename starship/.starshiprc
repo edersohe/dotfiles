@@ -1,1 +1,5 @@
-eval "$(starship init bash)"
+if [[ "$SHELL" = "$(which zsh)" ]]; then
+  eval "$(starship init zsh)"
+else
+  eval "$(starship init bash)"
+fi
