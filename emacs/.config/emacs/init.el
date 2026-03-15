@@ -24,7 +24,8 @@
               native-comp-async-report-warnings-errors nil
               native-comp-speed 3
               project-mode-line t
-              scroll-conservatively 101)
+              scroll-conservatively 101
+              use-package-always-ensure t)
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
@@ -59,27 +60,22 @@
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
 (use-package exec-path-from-shell
-  :ensure t
   :config (exec-path-from-shell-initialize))
 
 (use-package catppuccin-theme
-  :ensure t
-  :config
-  (load-theme 'catppuccin :no-confirm))
+  :config (load-theme 'catppuccin :no-confirm))
 
 (use-package which-key
+  :ensure nil
   :custom (which-key-idle-delay 0.3)
   :config (which-key-mode))
 
 (use-package marginalia
-  :ensure t
   :config (marginalia-mode))
 
-(use-package undo-fu
-  :ensure t)
+(use-package undo-fu)
 
 (use-package undo-fu-session
-  :ensure t
   :after undo-fu
   :config (undo-fu-session-global-mode))
 
@@ -91,11 +87,10 @@
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package vterm
-  :ensure t
-  :custom
-  (vterm-max-scrollback 10000))
+  :custom (vterm-max-scrollback 10000))
 
 (use-package eglot
+  :ensure nil
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
@@ -112,14 +107,14 @@
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("ruff" "server")))
   (add-to-list 'eglot-server-programs '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs '((elixir-mode elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) . ("ruby-lsp"))))
 
 (setq-default eglot-workspace-configuration
   '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
-  :hook
-  (prog-mode . flymake-mode)
+  :ensure nil
+  :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c d n" . flymake-goto-next-error)
               ("C-c d p" . flymake-goto-prev-error)
@@ -127,30 +122,25 @@
               ("C-c d a" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
-  :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
 (use-package markdown-mode
-  :ensure t
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
 (use-package rust-mode
-  :ensure t
   :init
   (setq rust-format-on-save t
         rust-mode-treesitter-derive t))
 
-(use-package geiser-guile
-  :ensure t)
+(use-package geiser-guile)
 
 (use-package diff-hl
-  :ensure t
   :custom (diff-hl-disable-on-remote t)
   :hook
   (after-init . global-diff-hl-mode)
@@ -162,7 +152,6 @@
               ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package copilot
-  :ensure t
   :defer t
   :hook (prog-mode . copilot-mode)
   :custom
@@ -174,27 +163,37 @@
               ("C-p" . copilot-previous-completion)
               ("TAB" . copilot-accept-completion)))
 
+(use-package magit
+  :defer t
+  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
+
+(use-package gptel
+  :defer t
+  :init
+  (setq gptel-model 'gpt-5-mini
+        gptel-default-mode 'org-mode
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
+  :bind (("C-c RET" . gptel-send)
+         ("C-x c" . gptel)
+         :map gptel-mode-map
+         ("C-c m" . gptel-menu)))
+
+(use-package gptel-magit
+  :defer t
+  :init (setq gptel-magit-model 'gpt-5-mini)
+  :after (gptel magit)
+  :hook (magit-mode . gptel-magit-install))
+
 (use-package org
+  :ensure nil
   :defer t
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
 
-(use-package helix
-  :ensure t
-  :hook ((helix-normal-mode . (lambda () (setq display-line-numbers 'relative)))
-         (helix-insert-mode . (lambda () (setq display-line-numbers t))))
-  :config
-  (helix-define-key 'normal "]h" #'diff-hl-next-hunk)
-  (helix-define-key 'normal "[h" #'diff-hl-previous-hunk)
-  (helix-mode))
-
 (use-package diminish
-  :ensure t
   :defer t
   :init
   (diminish 'which-key-mode)
   (diminish 'completion-preview-mode)
-  (diminish 'helix-insert-mode "Insert")
-  (diminish 'helix-normal-mode "Normal")
   (diminish 'eldoc-mode))
