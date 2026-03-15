@@ -5,4 +5,9 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#45475A \
 --color=border:#6C7086,label:#CDD6F4"
 
-eval "$(fzf --bash)"
+
+if [[ "$SHELL" = "$(which zsh)" ]]; then
+  eval "$(fzf --zsh)"
+else
+  eval "$(fzf --bash)"
+fi

@@ -1,5 +1,5 @@
 
-if [ -z "$TERMINAL" ]; then
+if [[ -z "$TERMINAL" ]]; then
   export TERMINAL=footclient
 fi
 

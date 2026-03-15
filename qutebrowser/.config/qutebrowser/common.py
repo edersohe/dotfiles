@@ -4,10 +4,9 @@ config.set('colors.webpage.darkmode.enabled', True)
 
 c.tabs.position = 'top'
 
-font = 'D2CodingLigature Nerd Font'
+font = 'ZedMono Nerd Font'
 c.fonts.default_family = font
-c.fonts.default_size = "14pt"
+c.fonts.default_size = "15pt"
 
 import catppuccin
 catppuccin.setup(c, 'mocha', True)
-
