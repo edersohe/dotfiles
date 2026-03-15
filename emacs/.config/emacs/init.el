@@ -40,7 +40,6 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
-;;; Built-in Completion
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
@@ -59,7 +58,6 @@
 (define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
-;;; Essential Utilities
 (use-package exec-path-from-shell
   :ensure t
   :config (exec-path-from-shell-initialize))
@@ -77,7 +75,6 @@
   :ensure t
   :config (marginalia-mode))
 
-;;; Undo System (Required for Evil to behave nicely)
 (use-package undo-fu
   :ensure t)
 
@@ -86,7 +83,6 @@
   :after undo-fu
   :config (undo-fu-session-global-mode))
 
-;;; Keybindings (General.el)
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
@@ -94,13 +90,11 @@
 (global-set-key (kbd "C-x k") #'my/kill-current-buffer)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
-;;; Vterm
 (use-package vterm
   :ensure t
   :custom
   (vterm-max-scrollback 10000))
 
-;;; Programming Environments
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
@@ -186,10 +180,21 @@
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
 
+(use-package helix
+  :ensure t
+  :hook ((helix-normal-mode . (lambda () (setq display-line-numbers 'relative)))
+         (helix-insert-mode . (lambda () (setq display-line-numbers t))))
+  :config
+  (helix-define-key 'normal "]h" #'diff-hl-next-hunk)
+  (helix-define-key 'normal "[h" #'diff-hl-previous-hunk)
+  (helix-mode))
+
 (use-package diminish
   :ensure t
   :defer t
   :init
   (diminish 'which-key-mode)
   (diminish 'completion-preview-mode)
+  (diminish 'helix-insert-mode "Insert")
+  (diminish 'helix-normal-mode "Normal")
   (diminish 'eldoc-mode))
