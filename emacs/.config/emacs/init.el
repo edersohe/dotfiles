@@ -28,7 +28,6 @@
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
-(load-theme 'modus-vivendi-tinted :no-confirm)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-15"))
 ;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
@@ -65,6 +64,11 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
+(use-package catppuccin-theme
+  :ensure t
+  :config
+  (load-theme 'catppuccin :no-confirm))
+
 (use-package which-key
   :custom (which-key-idle-delay 0.3)
   :config (which-key-mode))
@@ -82,138 +86,14 @@
   :after undo-fu
   :config (undo-fu-session-global-mode))
 
-;;; Evil Mode Ecosystem
-;; Note: evil-want-keybinding must be nil BEFORE evil and evil-collection load
-(setq evil-want-integration t
-      evil-want-keybinding nil
-      evil-want-C-u-scroll t
-      evil-want-C-i-jump t
-      evil-undo-system 'undo-fu)
-
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1))
-
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config
-  (evil-collection-init))
-
-(use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-matchit
-  :ensure t
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil-commentary
-  :ensure t
-  :config
-  (evil-commentary-mode))
-
 ;;; Keybindings (General.el)
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") #'my/kill-current-buffer)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
-(use-package general
-  :ensure t
-  :after evil
-  :config
-  (general-evil-setup t)
-  
-  ;; Create a definer for your leader key (Space)
-  (general-create-definer my/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  ;; Global Leader Bindings
-  (my/leader-keys
-    "SPC" '(execute-extended-command :which-key "M-x")
-    "ESC" '(keyboard-escape-quit :which-key "escape")
-
-    ;; Buffers & Files
-    "b" '(:ignore t :which-key "buffers")
-    "bb" '(switch-to-buffer :which-key "switch buffer")
-    "bk" '(my/kill-current-buffer :which-key "kill buffer")
-    
-    "f" '(:ignore t :which-key "files")
-    "ff" '(find-file :which-key "find file")
-    "fs" '(save-buffer :which-key "save")
-
-    "d" '(:ignore t :which-key "directories")
-    "dd" '(dired :which-key "dired")
-    "dj" '(dired-jump :which-key "dired jump")
-
-    ;; Vterm
-    "t" '(:ignore t :which-key "terminal")
-    "tt" '(vterm :which-key "vterm")
-
-    ;; Code (Eglot / Flymake)
-    "c" '(:ignore t :which-key "code")
-    "cf" '(eglot-format :which-key "format")
-    "ca" '(eglot-code-actions :which-key "code actions")
-    "cr" '(eglot-rename :which-key "rename")
-    "cd" '(eglot-find-declaration :which-key "find decl")
-    "ci" '(eglot-find-implementation :which-key "find impl")
-    "ct" '(eglot-find-typeDefinition :which-key "find type")
-    
-    "e" '(:ignore t :which-key "errors")
-    "]d" '(flymake-goto-next-error :which-key "next err")
-    "[d" '(flymake-goto-prev-error :which-key "prev err")
-    "eb" '(flymake-show-diagnostics-buffer :which-key "buffer errs")
-    "ep" '(flymake-show-project-diagnostics :which-key "project errs")
-
-    ;; Org
-    "o" '(:ignore t :which-key "org")
-    "oa" '(org-agenda :which-key "agenda")
-    "oc" '(org-capture :which-key "capture")
-    "ol" '(org-store-link :which-key "store link")
-
-    ;; project.el
-    "p" '(:ignore t :which-key "project")
-    "pf" '(project-find-file :which-key "find file")
-    "pb" '(project-switch-to-buffer :which-key "switch buffer")
-    "pp" '(project-switch-project :which-key "switch project")
-    "pd" '(project-dired :which-key "dired")
-    "pg" '(project-find-regexp :which-key "grep")
-    "pr" '(project-query-replace-regexp :which-key "replace")
-    "pc" '(project-compile :which-key "compile")
-    "pv" '(project-vc-dir :which-key "version control")
-    "pk" '(project-kill-buffers :which-key "kill buffers")
-    
-    ;; vc-git
-    "g" '(:ignore t :which-key "git")
-    "gs" '(vc-dir :which-key "status")
-    "gd" '(vc-diff :which-key "diff")
-    "gD" '(vc-root-diff :which-key "diff root")
-    "gP" '(vc-push :which-key "push")
-    "gl" '(vc-print-log :which-key "log")
-    "gb" '(vc-annotate :which-key "blame")
-    "gp" '(vc-update :which-key "pull")
-    "gn" '(vc-next-action :which-key "next action")
-    "]h" '(diff-hl-next-hunk :which-key "next hunk")
-    "[h" '(diff-hl-previous-hunk :which-key "prev hunk")
-    "gh" '(diff-hl-show-hunk :which-key "show hunk")
-
-    ;; help
-    "h" '(:ignore t :which-key "help")
-    "hf" '(describe-function :which-key "describe function")
-    "hv" '(describe-variable :which-key "describe variable")
-    "hb" '(describe-bindings :which-key "describe bindings")
-    "hk" '(describe-key :which-key "describe key")
-    "hm" '(describe-mode :which-key "describe mode")
-    "hs" '(describe-symbol :which-key "help symbol")))
-    
 ;;; Vterm
 (use-package vterm
   :ensure t
@@ -223,6 +103,13 @@
 ;;; Programming Environments
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
+  :bind (:map eglot-mode-map
+              ("C-c l f" . eglot-format)
+              ("C-c l a" . eglot-code-actions)
+              ("C-c l d" . eglot-find-declaration)
+              ("C-c l i" . eglot-find-implementation)
+              ("C-c l t" . eglot-find-typeDefinition)
+              ("C-c l r" . eglot-rename))
   :custom
   (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
@@ -237,7 +124,13 @@
   '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
-  :hook (prog-mode . flymake-mode))
+  :hook
+  (prog-mode . flymake-mode)
+  :bind (:map flymake-mode-map
+              ("C-c d n" . flymake-goto-next-error)
+              ("C-c d p" . flymake-goto-prev-error)
+              ("C-c d b" . flymake-show-diagnostics-buffer)
+              ("C-c d a" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
   :ensure t
@@ -268,7 +161,11 @@
   :hook
   (after-init . global-diff-hl-mode)
   (after-init . diff-hl-flydiff-mode)
-  (after-init . diff-hl-margin-mode))
+  (after-init . diff-hl-margin-mode)
+  :bind (:map diff-hl-mode-map
+              ("C-c h n" . diff-hl-next-hunk)
+              ("C-c h p" . diff-hl-previous-hunk)
+              ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package copilot
   :ensure t
@@ -276,10 +173,23 @@
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
-  :bind (:map copilot-completion-map
-         ("C-n" . copilot-next-completion)
-         ("C-p" . copilot-previous-completion)
-         ("TAB" . copilot-accept-completion)))
+  (copilot-idle-delay nil)
+  :bind (("C-<return>" . copilot-complete)
+         :map copilot-completion-map
+              ("C-n" . copilot-next-completion)
+              ("C-p" . copilot-previous-completion)
+              ("TAB" . copilot-accept-completion)))
 
 (use-package org
-  :defer t)
+  :defer t
+  :bind(("C-c o l" . org-store-link)
+        ("C-c o a" . org-agenda)
+        ("C-c o c" . org-capture)))
+
+(use-package diminish
+  :ensure t
+  :defer t
+  :init
+  (diminish 'which-key-mode)
+  (diminish 'completion-preview-mode)
+  (diminish 'eldoc-mode))
