@@ -181,7 +181,6 @@
 (use-package gptel-magit
   :defer t
   :init (setq gptel-magit-model 'gpt-5-mini)
-  :after (gptel magit)
   :hook (magit-mode . gptel-magit-install))
 
 (use-package org
