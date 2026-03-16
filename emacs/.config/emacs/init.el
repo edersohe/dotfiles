@@ -151,44 +151,16 @@
               ("C-c h p" . diff-hl-previous-hunk)
               ("C-c h s" . diff-hl-show-hunk)))
 
-(use-package copilot
-  :defer t
-  :hook (prog-mode . copilot-mode)
-  :custom
-  (copilot-indent-offset-warning-disable t)
-  (copilot-idle-delay nil)
-  :bind (("C-<return>" . copilot-complete)
-         :map copilot-completion-map
-              ("C-n" . copilot-next-completion)
-              ("C-p" . copilot-previous-completion)
-              ("TAB" . copilot-accept-completion)))
-
-(use-package magit
-  :defer t
-  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
-
-(use-package gptel
-  :defer t
-  :init
-  (setq gptel-model 'gpt-5-mini
-        gptel-default-mode 'org-mode
-        gptel-backend (gptel-make-gh-copilot "Copilot"))
-  :bind (("C-c RET" . gptel-send)
-         ("C-x c" . gptel)
-         :map gptel-mode-map
-         ("C-c m" . gptel-menu)))
-
-(use-package gptel-magit
-  :defer t
-  :init (setq gptel-magit-model 'gpt-5-mini)
-  :hook (magit-mode . gptel-magit-install))
-
 (use-package org
   :ensure nil
   :defer t
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
+
+(use-package eca
+  :ensure t
+  :vc (:url "https://github.com/editor-code-assistant/eca-emacs" :rev :newest))
 
 (use-package diminish
   :defer t
