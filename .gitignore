@@ -63,3 +63,4 @@ qutebrowser/.config/qutebrowser/autoconfig.yml
 qutebrowser/.config/qutebrowser/quickmarks
 pi/.pi/agent/auth.json
 pi/.pi/agent/sessions
+/emacs/.config/emacs/eca

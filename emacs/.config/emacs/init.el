@@ -168,3 +168,6 @@
   (diminish 'which-key-mode)
   (diminish 'completion-preview-mode)
   (diminish 'eldoc-mode))
+
+(provide 'init)
+;;; init.el ends here
