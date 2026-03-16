@@ -27,19 +27,27 @@ local border = "rounded"
 add({ source = "catppuccin/nvim", name = "catppuccin" })
 
 require("catppuccin").setup({
+  auto_integrations = true,
   flavour = "mocha",
   transparent_background = true,
   float = {
     transparent = true,
+    solid = true,
   },
   integrations = {
-    blink_cmp = true,
+    blink_cmp = {
+      style = 'bordered',
+    },
     gitsigns = true,
-    mini = { enabled = true },
+    mini = { enabled = true, indentscope_color = "" },
     which_key = true,
-    snacks = true,
     notify = true,
     todo_comments = true,
+    snacks = {
+      enabled = true,
+      indent_scope_color = "",
+    },
+    render_markdown = true,
   },
 })
 
