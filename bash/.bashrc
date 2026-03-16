@@ -23,21 +23,21 @@ export XKB_DEFAULT_VARIANT=altgr-intl
 export LC_ALL=en_US.UTF-8
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-[[ -f $HOME/.env ]] && . $HOME/.env
-[[ -f $HOME/.miserc ]] && . $HOME/.miserc
-[[ -f $HOME/.ezarc ]] && . $HOME/.ezarc
-[[ -f $HOME/.footrc ]] && . $HOME/.footrc
-[[ -f $HOME/.starshiprc ]] && . $HOME/.starshiprc
-[[ -f $HOME/.fzfrc ]] && . $HOME/.fzfrc
-[[ -f $HOME/.ripgreprc ]] && . $HOME/.ripgreprc
-[[ -f $HOME/.swayrc ]] && . $HOME/.swayrc
-[[ -f $HOME/.qtilerc ]] && . $HOME/.qtilerc
-[[ -f $HOME/.helixrc ]] && . $HOME/.helixrc
-[[ -f $HOME/.emacsrc ]] && . $HOME/.emacsrc
-[[ -f $HOME/.tmuxrc ]] && . $HOME/.tmuxrc
-[[ -f $HOME/.zellijrc ]] && . $HOME/.zellijrc
-[[ -f $HOME/.lazygitrc ]] && . $HOME/.lazygitrc
-[[ -f $HOME/.opencoderc ]] && . $HOME/.opencoderc
+[[ -f $HOME/.env ]] && . "$HOME"/.env
+[[ -f $HOME/.miserc ]] && . "$HOME"/.miserc
+[[ -f $HOME/.ezarc ]] && . "$HOME"/.ezarc
+[[ -f $HOME/.footrc ]] && . "$HOME"/.footrc
+[[ -f $HOME/.starshiprc ]] && . "$HOME"/.starshiprc
+[[ -f $HOME/.fzfrc ]] && . "$HOME"/.fzfrc
+[[ -f $HOME/.ripgreprc ]] && . "$HOME"/.ripgreprc
+[[ -f $HOME/.swayrc ]] && . "$HOME"/.swayrc
+[[ -f $HOME/.qtilerc ]] && . "$HOME"/.qtilerc
+[[ -f $HOME/.helixrc ]] && . "$HOME"/.helixrc
+[[ -f $HOME/.emacsrc ]] && . "$HOME"/.emacsrc
+[[ -f $HOME/.tmuxrc ]] && . "$HOME"/.tmuxrc
+[[ -f $HOME/.zellijrc ]] && . "$HOME"/.zellijrc
+[[ -f $HOME/.lazygitrc ]] && . "$HOME"/.lazygitrc
+[[ -f $HOME/.opencoderc ]] && . "$HOME"/.opencoderc
 
 . "$HOME/.cargo/env"
 eval "$(/home/eder/.local/bin/mise activate bash)"

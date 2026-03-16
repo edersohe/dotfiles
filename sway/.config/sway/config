@@ -14,9 +14,9 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term footclient
+set $term ghostty
 # Your preferred application launcher
-set $menu foot-menu
+set $menu ghostty-menu
 
 gaps outer 4
 gaps inner 2
