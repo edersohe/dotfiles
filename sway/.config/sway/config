@@ -254,7 +254,7 @@ bindsym $mod+r mode "resize"
     bindsym $mod+s exec $menu fzf-session 20 8
     bindsym $mod+x exec swaylock -f -c 000000
     bindsym $mod+b exec $menu fzf-bookmarks
-    bindsym $mod+e exec emacs
+    bindsym $mod+e exec emacsclient -c -a emacs
 
 for_window [app_id=fzf-launcher] floating enable
 for_window [app_id=fzf-session] floating enable
@@ -291,6 +291,7 @@ bar {
 exec --no-startup-id dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec --no-startup-id pipewire
 exec --no-startup-id foot --server
+exec --no-startup-id emacs --fg-daemon
 exec --no-startup-id autotiling -l 2 -sw "0.8"
 
 include /etc/sway/config.d/*

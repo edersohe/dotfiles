@@ -4,8 +4,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(unless package-archive-contents
-  (package-refresh-contents))
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
               make-backup-files nil
@@ -21,6 +19,9 @@
               uniquify-buffer-name-style 'forward
               window-resize-pixelwise t
               frame-resize-pixelwise t
+              frame-inhibit-implied-resize t
+              resize-mini-windows t
+              max-mini-window-height 0.15
               load-prefer-newer t
               help-window-select t
               native-comp-async-report-warnings-errors nil
@@ -69,8 +70,12 @@
   :init (load-theme 'catppuccin :no-confirm))
 
 (use-package which-key
-  :custom (which-key-idle-delay 0.3)
-  :config (which-key-mode))
+  :custom
+  (which-key-idle-delay 0.3)
+  (which-key-allow-imprecise-window-fit t)
+  :config
+  (which-key-mode)
+  (which-key-setup-minibuffer))
 
 (use-package marginalia
   :ensure t
