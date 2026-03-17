@@ -4,6 +4,8 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(unless package-archive-contents
+  (package-refresh-contents))
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
               make-backup-files nil
@@ -24,8 +26,7 @@
               native-comp-async-report-warnings-errors nil
               native-comp-speed 3
               project-mode-line t
-              scroll-conservatively 101
-              use-package-always-ensure t)
+              scroll-conservatively 101)
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
@@ -60,22 +61,26 @@
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
 (use-package exec-path-from-shell
+  :ensure t
   :config (exec-path-from-shell-initialize))
 
 (use-package catppuccin-theme
-  :config (load-theme 'catppuccin :no-confirm))
+  :ensure t
+  :init (load-theme 'catppuccin :no-confirm))
 
 (use-package which-key
-  :ensure nil
   :custom (which-key-idle-delay 0.3)
   :config (which-key-mode))
 
 (use-package marginalia
+  :ensure t
   :config (marginalia-mode))
 
-(use-package undo-fu)
+(use-package undo-fu
+  :ensure t)
 
 (use-package undo-fu-session
+  :ensure t
   :after undo-fu
   :config (undo-fu-session-global-mode))
 
@@ -87,10 +92,10 @@
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package vterm
+  :ensure t
   :custom (vterm-max-scrollback 10000))
 
 (use-package eglot
-  :ensure nil
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
@@ -113,7 +118,6 @@
   '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
-  :ensure nil
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c d n" . flymake-goto-next-error)
@@ -122,25 +126,30 @@
               ("C-c d a" . flymake-show-project-diagnostics)))
 
 (use-package treesit-auto
+  :ensure t
   :custom (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
 (use-package markdown-mode
+  :ensure t
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
 (use-package rust-mode
+  :ensure t
   :init
   (setq rust-format-on-save t
         rust-mode-treesitter-derive t))
 
-(use-package geiser-guile)
+(use-package geiser-guile
+  :ensure t)
 
 (use-package diff-hl
+  :ensure t
   :custom (diff-hl-disable-on-remote t)
   :hook
   (after-init . global-diff-hl-mode)
@@ -152,18 +161,12 @@
               ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package org
-  :ensure nil
-  :defer t
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
 
-(use-package eca
-  :ensure t
-  :vc (:url "https://github.com/editor-code-assistant/eca-emacs" :rev :newest))
-
 (use-package diminish
-  :defer t
+  :ensure t
   :init
   (diminish 'which-key-mode)
   (diminish 'completion-preview-mode)
