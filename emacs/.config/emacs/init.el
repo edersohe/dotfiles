@@ -65,9 +65,9 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-(use-package catppuccin-theme
+(use-package doom-themes
   :ensure t
-  :init (load-theme 'catppuccin :no-confirm))
+  :init (load-theme 'doom-one :no-confirm))
 
 (use-package which-key
   :custom

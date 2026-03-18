@@ -16,8 +16,3 @@
 
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
-
-;(add-to-list 'default-frame-alist '(alpha-background . 97))
-;(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-16"))
-;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
