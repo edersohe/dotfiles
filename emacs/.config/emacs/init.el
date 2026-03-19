@@ -100,6 +100,9 @@
   :ensure t
   :custom (vterm-max-scrollback 10000))
 
+(use-package multi-vterm
+  :ensure t)
+
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
@@ -176,6 +179,32 @@
   (diminish 'which-key-mode)
   (diminish 'completion-preview-mode)
   (diminish 'eldoc-mode))
+
+(use-package copilot
+             :ensure t
+             :hook (prog-mode . copilot-mode)
+             :custom
+             (copilot-indent-offset-warning-disable t)
+             (copilot-idle-delay nil)
+             :bind (("C-<return>" . copilot-complete)
+                    :map copilot-completion-map
+                    ("C-n" . copilot-next-completion)
+                    ("C-p" . copilot-previous-completion)
+                    ("TAB" . copilot-accept-completion)))
+
+(use-package gptel
+             :ensure t
+             :init
+             (setq gptel-model 'gemini-3-flash-preview
+                   gptel-default-mode 'org-mode
+                   gptel-backend (gptel-make-gh-copilot "Copilot"))
+             :bind (("C-c RET" . gptel-send)
+                    ("C-x c" . gptel)
+                    :map gptel-mode-map
+                    ("C-c m" . gptel-menu)))
+
+(use-package gptel-agent
+  :config (gptel-agent-update))
 
 (provide 'init)
 ;;; init.el ends here
