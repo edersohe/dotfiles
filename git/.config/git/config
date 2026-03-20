@@ -9,6 +9,7 @@
 	program = gpg
 [init]
 	defaultBranch = main
+	templatedir = /home/eder/.config/git/template
 [push]
 	default = simple
 	autoSetupRemote = true
