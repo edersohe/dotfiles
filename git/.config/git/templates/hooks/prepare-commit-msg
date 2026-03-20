@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+COMMIT_MSG_FILE=$1
+
+if [ -z "$(git diff --cached --name-status)" ]; then
+  echo "No changes staged for commit."
+  exit 1
+fi
+
+COMMIT_MSG_OLD="$(cat "$COMMIT_MSG_FILE")"
+COMMIT_MSG_NEW="$(git diff --cached | pi --np --ne --ns --no-tools --model github-copilot/gpt-5-mini -p  --system-prompt 'You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations.')"
+
+echo "$COMMIT_MSG_NEW" > "$COMMIT_MSG_FILE"
+echo "$COMMIT_MSG_OLD" >> "$COMMIT_MSG_FILE"

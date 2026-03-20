@@ -29,5 +29,5 @@ customCommands:
     - key: "C"
       context: "files"
       description: "Generate commit message with OpenCode"
-      command: "commit-message-generator | git commit -e -F -"
+      command: "git commit -e"
       output: terminal

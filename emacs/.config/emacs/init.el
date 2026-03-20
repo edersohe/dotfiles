@@ -180,6 +180,10 @@
   (diminish 'completion-preview-mode)
   (diminish 'eldoc-mode))
 
+(use-package magit
+             :ensure t
+             :hook (magit-post-refresh . diff-hl-magit-post-refresh))
+
 (use-package copilot
              :ensure t
              :hook (prog-mode . copilot-mode)
@@ -192,18 +196,12 @@
                     ("C-p" . copilot-previous-completion)
                     ("TAB" . copilot-accept-completion)))
 
-(use-package gptel
-             :ensure t
-             :init
-             (setq gptel-model 'gemini-3-flash-preview
-                   gptel-default-mode 'org-mode
-                   gptel-backend (gptel-make-gh-copilot "Copilot"))
-             :bind (("C-c RET" . gptel-send)
-                    ("C-x c" . gptel)
-                    :map gptel-mode-map
-                    ("C-c m" . gptel-menu)))
-
 (use-package gptel-agent
+  :ensure t
+  :init
+  (setq gptel-model 'gemini-3-flash-preview
+        gptel-default-mode 'org-mode
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
   :config (gptel-agent-update))
 
 (provide 'init)
