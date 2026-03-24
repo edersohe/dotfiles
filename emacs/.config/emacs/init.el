@@ -76,10 +76,6 @@
   :ensure t
   :init (load-theme 'doom-one :no-confirm))
 
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
-
 (use-package which-key
   :custom
   (which-key-idle-delay 0.3)
@@ -91,22 +87,6 @@
 (use-package marginalia
   :ensure t
   :config (marginalia-mode))
-
-(use-package corfu
-  :ensure t
-  :after evil-collection
-  :hook
-  (after-init . global-corfu-mode)
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t))
-
-(use-package cape
-  :ensure t
-  :after corfu
-  :init
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
 (use-package undo-fu
   :ensure t)
@@ -209,7 +189,7 @@
   :hook (prog-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
-  ;; (copilot-idle-delay nil)
+  (copilot-idle-delay nil)
   :bind (("C-<return>" . copilot-complete)
          :map copilot-completion-map
          ("C-n" . copilot-next-completion)
@@ -223,99 +203,6 @@
         gptel-default-mode 'org-mode
         gptel-backend (gptel-make-gh-copilot "Copilot"))
   :config (gptel-agent-update))
-
-(use-package evil
-  :ensure t
-  :after undo-fu
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-undo-system 'undo-fu)
-  :config
-  (evil-mode 1))
-
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config
-  (evil-collection-init))
-
-(use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-commentary
-  :ensure t
-  :config
-  (evil-commentary-mode 1))
-
-(use-package evil-matchit
-  :ensure
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package general
-  :ensure t
-  :after evil
-  :config
-  (general-evil-setup t)
-  :init
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'global
-   :prefix "SPC"
-   "p"  '(project-switch-project :which-key "switch project")
-   "b"  '(project-switch-to-buffer :which-key "switch buffer")
-   "B"  '(switch-to-buffer :which-key "switch buffer")
-   "f"  '(project-find-file :which-key "find file")
-   "F"  '(find-file :which-key "find file")
-   "e"  '(project-dired :which-key "explore")
-   "E" '(dired :which-key "dired")
-   "g"  '(magit-status :which-key "magit status")
-   "h"  '(diff-hl-show-hunk :which-key "show hunk")
-   "s"  '(project-query-replace-regexp :which-key "replace")
-   "t"  '(my/eat-project :which-key "terminal")
-   "T"  '(eat :which-key "terminal")
-   "RET" '(gptel-menu t :which-key "gptel menu")
-   "c"  '(gptel :which-key "chat")
-   "?"  '(describe-symbol :which-key "help")
-   "k"  '(describe-key :which-key "describe key")
-   "K"  '(describe-bindings :which-key "keybindings")
-   "i" '(imenu :which-key "imenu")
-   "/" '(project-find-regexp :which-key "find")
-   "c" '(org-capture :which-key "capture")
-   "a" '(org-agenda :which-key "agenda")
-   "w" '(save-buffer :which-key "save"))
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'eglot-mode-map
-   :prefix "SPC"
-   "l"  '(:ignore t :which-key "lsp")
-   "lf" '(eglot-format :which-key "format")
-   "la" '(eglot-code-actions :which-key "actions")
-   "lr" '(eglot-rename :which-key "rename")
-   "ld" '(eglot-find-declaration :which-key "declaration")
-   "li" '(eglot-find-implementation :which-key "implementation")
-   "lt" '(eglot-find-typeDefinition :which-key "type definition"))
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'flymake-mode-map
-   :prefix "SPC"
-   "d" '(flymake-show-project-diagnostics :which-key "diagnostics"))
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'flymake-mode-map
-   :prefix nil
-   "]d" '(flymake-goto-next-error :which-key "next diagnostic")
-   "[d" '(flymake-goto-prev-error :which-key "previous diagnostic"))
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'diff-hl-mode-map
-   :prefix nil
-   "]h" '(diff-hl-next-hunk :which-key "next hunk")
-   "[h" '(diff-hl-previous-hunk :which-key "previous hunk")))
 
 (provide 'init)
 ;;; init.el ends here
