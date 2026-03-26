@@ -11,7 +11,7 @@
               create-lockfiles nil
               indent-tabs-mode nil
               tab-width 4
-              blink-cursor-mode nil
+              blink-cursor-mode t
               use-short-answers t
               use-dialog-box nil
               password-cache-expiry nil
