@@ -17,11 +17,6 @@
               password-cache-expiry nil
               confirm-kill-emacs nil
               uniquify-buffer-name-style 'forward
-              window-resize-pixelwise t
-              frame-resize-pixelwise t
-              frame-inhibit-implied-resize t
-              resize-mini-windows t
-              max-mini-window-height 0.15
               load-prefer-newer t
               help-window-select t
               native-comp-async-report-warnings-errors nil
@@ -42,6 +37,7 @@
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
+(add-hook 'prog-mode-hook #'hl-line-mode)
 
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
@@ -77,12 +73,14 @@
   :init (load-theme 'doom-one :no-confirm))
 
 (use-package which-key
+  :demand t
   :custom
   (which-key-idle-delay 0.3)
-  (which-key-allow-imprecise-window-fit t)
+  (which-key-idle-secondary-delay 0.3)
+  (which-key-sort-order 'which-key-key-order-alpha)
+  (which-key-allow-imprecise-window-fit nil)
   :config
-  (which-key-mode)
-  (which-key-setup-minibuffer))
+  (which-key-mode))
 
 (use-package marginalia
   :ensure t
@@ -199,7 +197,7 @@
 (use-package gptel-agent
   :ensure t
   :init
-  (setq gptel-model 'gemini-3-flash-preview
+  (setq gptel-model 'gpt-5-mini
         gptel-default-mode 'org-mode
         gptel-backend (gptel-make-gh-copilot "Copilot"))
   :config (gptel-agent-update))
