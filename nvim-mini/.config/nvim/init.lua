@@ -3,25 +3,6 @@ vim.g.maplocalleader = " "
 
 vim.env.NVIM = vim.v.servername
 
-local path_package = vim.fn.stdpath("data") .. "/site/"
-local mini_path = path_package .. "pack/deps/start/mini.nvim"
-if not vim.loop.fs_stat(mini_path) then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
-  local clone_cmd = {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/echasnovski/mini.nvim",
-    mini_path,
-  }
-  vim.fn.system(clone_cmd)
-  vim.cmd("packadd mini.nvim | helptags ALL")
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
-
-local MiniDeps = require("mini.deps")
-MiniDeps.setup({ path = { package = path_package } })
-local add = MiniDeps.add
 local border = "rounded"
 
 vim.g.netrw_browsex_viewer = "xdg-open"
@@ -225,6 +206,31 @@ for _, lang_config in pairs(languages) do
   end
 end
 
+vim.pack.add({
+  { src = 'https://github.com/nvim-mini/mini.nvim' },
+  { src = 'https://github.com/github/copilot.vim' },
+  { src = 'https://github.com/nvim-mini/mini.nvim' },
+  { src = 'https://github.com/christoomey/vim-tmux-navigator' },
+  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
+  { src = 'https://github.com/tpope/vim-fugitive' },
+  { src = 'https://github.com/tpope/vim-rhubarb' },
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
+  { src = 'https://github.com/nvim-orgmode/orgmode' },
+  { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
+})
+
+local hooks = function(ev)
+  local name, kind = ev.data.spec.name, ev.data.kind
+  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
+    vim.cmd('TSUpdate')
+  end
+  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
+    vim.cmd("Org install_treesitter_grammar")
+  end
+end
+vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
+
 local on_attach = function(_, bufnr)
   -- lsp actions
   vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
@@ -315,11 +321,6 @@ vim.keymap.set("n", "<leader>j", '<cmd>Pick list scope="jump"<CR>', { desc = "Ju
 vim.keymap.set("n", "<leader>'", "<cmd>Pick marks<CR>", { desc = "Marks" })
 vim.keymap.set("n", '<leader>"', "<cmd>Pick registers<CR>", { desc = "Registers" })
 
-add("github/copilot.vim")
-
-add("christoomey/vim-tmux-navigator")
-
-add('lewis6991/gitsigns.nvim')
 local gitsigns = require('gitsigns')
 gitsigns.setup({
   preview_config = {
@@ -327,28 +328,11 @@ gitsigns.setup({
   },
 })
 
-add('tpope/vim-fugitive')
-add('tpope/vim-rhubarb')
-
-Commit = function()
-  local changes = vim.fn.system("commit-message-generator")
-  local exit_code = vim.v.shell_error
-
-  if exit_code ~= 0 or changes == "" then
-    vim.notify("No changes to commit", vim.log.levels.WARN)
-    return
-  end
-
-  vim.cmd("tab Git commit")
-  vim.api.nvim_paste(changes, true, 1)
-end
-
 local git_log = "tab Git log --decorate --graph --all --pretty=short"
-
 vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
-vim.keymap.set("n", "<leader>gc", Commit, { desc = "Commit" })
+vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
@@ -361,23 +345,10 @@ vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk"
 vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
 vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
 
-add({
-  source = "nvim-treesitter/nvim-treesitter",
-  checkout = "main",
-  monitor = "main",
-  hooks = {
-    post_checkout = function()
-      vim.cmd("TSUpdate")
-    end,
-  }
-})
-
 require 'nvim-treesitter'.setup {
   install_dir = vim.fn.stdpath('data') .. '/site'
 }
-
 require 'nvim-treesitter'.install(tree_sitters)
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = tree_sitters,
   callback = function()
@@ -385,10 +356,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 
-add({ source = "neovim/nvim-lspconfig" })
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-
 for server, config in pairs(language_servers) do
   config.on_attach = on_attach
   if config.capabilities then
@@ -427,7 +395,6 @@ require("mini.hipatterns").setup({
     NOTE = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
   },
 })
-
 vim.keymap.set("n", "<leader>t", "<cmd>Pick hipatterns<CR>", { desc = "Todo comments" })
 
 require("mini.completion").setup({
@@ -498,17 +465,7 @@ miniclue.setup({
   },
 })
 
-add('MeanderingProgrammer/render-markdown.nvim')
 require('render-markdown').setup()
-
-add({
-  source = 'nvim-orgmode/orgmode',
-  hooks = {
-    post_checkout = function()
-      vim.cmd("Org install_treesitter_grammar")
-    end,
-  }
-})
 
 require('orgmode').setup({
   org_agenda_files = { '~/org/**/*' },
@@ -534,9 +491,7 @@ vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
   { desc = "Config" })
-vim.keymap.set('n', "<leader>nu", "<cmd>DepsUpdate!<CR>", { desc = "Update plugins" })
-vim.keymap.set('n', "<leader>np", "<cmd>DepsClean!<CR>", { desc = "Prune plugins" })
-vim.keymap.set('n', "<leader>ns", "<cmd>DepsShowLog<CR>", { desc = "Show plugins log" })
+vim.keymap.set('n', "<leader>nu", "<cmd>lua vim.pack.update()<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
   { desc = "Reload" })
 
@@ -634,7 +589,7 @@ vim.g.clipboard = {
 }
 
 vim.cmd [[
-  colorscheme catppuccin-mocha
+  colorscheme catppuccin
   hi Normal guibg=NONE
   hi NormalFloat guibg=NONE
   hi FloatBorder guibg=NONE
