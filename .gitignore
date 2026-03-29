@@ -64,3 +64,5 @@ qutebrowser/.config/qutebrowser/quickmarks
 pi/.pi/agent/auth.json
 pi/.pi/agent/sessions
 /emacs/.config/emacs/eca
+emacs/.config/emacs/eshell/history
+emacs/.config/emacs/bookmarks

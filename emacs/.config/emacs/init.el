@@ -33,6 +33,7 @@
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
+(repeat-mode t)
 (global-auto-revert-mode t)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
@@ -68,9 +69,8 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-(use-package doom-themes
-  :ensure t
-  :init (load-theme 'doom-one :no-confirm))
+(use-package modus-themes
+  :init (load-theme 'modus-vivendi-tinted :no-confirm))
 
 (use-package which-key
   :demand t
@@ -98,8 +98,13 @@
   :ensure t
   :custom (vterm-max-scrollback 10000))
 
-(use-package multi-vterm
-  :ensure t)
+(defun my/vterm ()
+  "Open a new vterm buffer with a custom name."
+  (interactive)
+  (let ((name (read-string "Name for vterm buffer: ")))
+    (vterm (concat "*vterm-" name "*"))))
+
+(global-set-key (kbd "C-x x v") #'my/vterm)
 
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
@@ -167,20 +172,12 @@
               ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package org
+  :init
+  (setq org-directory "~/org"
+        org-default-notes-file (concat org-directory "/notes.org"))
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
-
-(use-package diminish
-  :ensure t
-  :init
-  (diminish 'which-key-mode)
-  (diminish 'completion-preview-mode)
-  (diminish 'eldoc-mode))
-
-(use-package magit
-  :ensure t
-  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package copilot
   :ensure t
@@ -197,9 +194,20 @@
 (use-package gptel-agent
   :ensure t
   :init
-  (setq gptel-model 'gpt-5-mini
-        gptel-default-mode 'org-mode
-        gptel-backend (gptel-make-gh-copilot "Copilot"))
+  (gptel-make-anthropic "Z.AI"
+    :host "api.z.ai"
+    :endpoint "/api/anthropic/v1/messages"
+    :key (getenv "ZAI_API_KEY")
+    :stream t
+    :models '(GLM-5.1 GLM-5))
+  (gptel-make-anthropic "MiniMax"
+    :host "api.minimax.io"
+    :endpoint "/anthropic/v1/messages"
+    :key (getenv "MINIMAX_API_KEY")
+    :stream t
+    :models '(MiniMax-M2.7 MiniMax-M2.5))
+  (setq gptel-backend (gptel-make-gh-copilot "Copilot")
+        gptel-model 'gpt-5-mini)
   :config (gptel-agent-update))
 
 (provide 'init)
