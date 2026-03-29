@@ -75,6 +75,7 @@ vim.opt.grepprg = 'rg --vimgrep -.'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
+vim.opt.clipboard = "unnamedplus"
 
 local languages = {
   bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
