@@ -76,6 +76,8 @@ vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
 vim.opt.clipboard = "unnamedplus"
+vim.opt.conceallevel = 2
+vim.opt.concealcursor = 'nc'
 
 local languages = {
   bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
@@ -161,48 +163,13 @@ local languages = {
     },
     ts = { "lua", "luadoc" },
   },
-  markdown = {
-    lsp = {
-      markdown_oxide = {
-        config = {
-          capabilities = {
-            workspace = {
-              didChangeWatchedFiles = {
-                dynamicRegistration = true,
-              },
-            },
-          },
-        },
-        bin = "markdown-oxide",
-      },
-    },
-    ts = { "markdown", "markdown_inline" },
-  },
+  markdown = { lsp = { marksman = { config = {}, bin = "marksman" }, }, ts = { "markdown", "markdown_inline" } },
   nix = { ts = { "nix" } },
   perl = { lsp = { perlpls = { config = {}, bin = "pls" } }, ts = { "perl" } },
   php = { lsp = { phpactor = { config = {}, bin = "phpactor" } }, ts = { "php", "php_only" } },
   proto = { lsp = { buf_ls = { config = {}, bin = "buf" } }, ts = { "proto" } },
   python = {
-    lsp = {
-      ruff =
-      {
-        config = {
-        },
-        bin = "ruff"
-      },
-      basedpyright = {
-        config = {
-          settings = {
-            basedpyright = {
-              analysis = {
-                typeCheckingMode = "off",
-              },
-            },
-          },
-        },
-        bin = "basedpyright"
-      }
-    },
+    lsp = { ruff = { config = {}, bin = "ruff" }, ty = { config = {}, bin = "ty" } },
     ts = { "python" }
   },
   ruby = {
@@ -228,6 +195,7 @@ local languages = {
   embedded_template = { ts = { "embedded_template" } },
   git = { ts = { "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore" } },
   http = { ts = { "http" } },
+  org = { lsp = { org = { config = {} } } },
 }
 
 local tree_sitters = {}
@@ -326,13 +294,10 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-require("mini.sessions").setup({
-  directory = "",
-  file = ".session.vim",
-})
-vim.keymap.set("n", "<leader>ss", '<cmd>lua MiniSessions.write(".session.vim")<CR>', { desc = "Save" })
-vim.keymap.set("n", "<leader>sl", '<cmd>lua MiniSessions.read(".session.vim")<CR>', { desc = "Load" })
-vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.delete(".session.vim")<CR>', { desc = "Delete" })
+require("mini.sessions").setup()
+vim.keymap.set("n", "<leader>sw", ':lua MiniSessions.write("")<Left><Left>', { desc = "Write" })
+vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.select("delete", {force = true})<CR>', { desc = "Delete" })
+vim.keymap.set("n", "<leader>sr", '<cmd>lua MiniSessions.select("read")<CR>', { desc = "Read" })
 
 local MiniPick = require("mini.pick")
 MiniPick.setup({
@@ -518,6 +483,8 @@ miniclue.setup({
     { mode = 'x', keys = '<leader>l',  desc = '+Lsp' },
     { mode = 'n', keys = '<leader>s',  desc = '+Session' },
     { mode = 'x', keys = '<leader>s',  desc = '+Session' },
+    { mode = 'n', keys = '<leader>o',  desc = '+Org' },
+    { mode = 'x', keys = '<leader>o',  desc = '+Org' },
     { mode = 'n', keys = '<leader>gh', desc = '+Hunks' },
     { mode = 'x', keys = '<leader>gh', desc = '+Hunks' },
     { mode = 'n', keys = '<leader>gd', desc = '+Diff' },
@@ -534,20 +501,35 @@ miniclue.setup({
 add('MeanderingProgrammer/render-markdown.nvim')
 require('render-markdown').setup()
 
+add({
+  source = 'nvim-orgmode/orgmode',
+  hooks = {
+    post_checkout = function()
+      vim.cmd("Org install_treesitter_grammar")
+    end,
+  }
+})
+
+require('orgmode').setup({
+  org_agenda_files = { '~/org/**/*' },
+  org_default_notes_file = '~/org/refile.org',
+})
+
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 vim.keymap.set('n', "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set('n', "<C-c>", "<cmd>bdelete<CR>", { desc = "Close buffer" })
 vim.keymap.set('n', "<C-s>", "<cmd>write<CR>", { desc = "Save buffer" })
-vim.keymap.set('v', "p", "P", { desc = "Paste before" })
+vim.keymap.set('v', "P", "\"+p", { desc = "Paste after" })
+vim.keymap.set('v', "p", "\"+P", { desc = "Paste before" })
 vim.keymap.set('n', "<leader>r", ":%s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('v', "<leader>r", ":s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('i', "<C-h>", "<Left>", { noremap = true })
 vim.keymap.set('i', "<C-j>", "<Down>", { noremap = true })
 vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
 vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
-vim.keymap.set('n', '<M-z>', ':suspend<CR>', { noremap = true })
+vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
