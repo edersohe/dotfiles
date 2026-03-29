@@ -207,17 +207,16 @@ for _, lang_config in pairs(languages) do
 end
 
 vim.pack.add({
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-mini/mini.nvim' },
-  { src = 'https://github.com/github/copilot.vim' },
-  { src = 'https://github.com/nvim-mini/mini.nvim' },
-  { src = 'https://github.com/christoomey/vim-tmux-navigator' },
   { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/tpope/vim-fugitive' },
   { src = 'https://github.com/tpope/vim-rhubarb' },
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
-  { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-orgmode/orgmode' },
   { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
+  { src = 'https://github.com/christoomey/vim-tmux-navigator' },
+  { src = 'https://github.com/github/copilot.vim' },
 })
 
 local hooks = function(ev)
