@@ -12,6 +12,12 @@ vim.g.netrw_preview = 1
 vim.g.netrw_keepdir = 0
 vim.g.netrw_localcopydircmd = 'cp -r'
 
+vim.opt.clipboard:append("unnamedplus")
+vim.g.clipboard = 'osc52'
+if vim.env.TMUX then
+  vim.g.clipboard = 'tmux'
+end
+
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -56,7 +62,6 @@ vim.opt.grepprg = 'rg --vimgrep -.'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
-vim.opt.clipboard = "unnamedplus"
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
@@ -479,8 +484,8 @@ vim.keymap.set('n', "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set('n', "<C-c>", "<cmd>bdelete<CR>", { desc = "Close buffer" })
 vim.keymap.set('n', "<C-s>", "<cmd>write<CR>", { desc = "Save buffer" })
-vim.keymap.set('v', "P", "\"+p", { desc = "Paste after" })
-vim.keymap.set('v', "p", "\"+P", { desc = "Paste before" })
+vim.keymap.set({ 'n', 'x' }, "P", '"+P', { desc = "Paste before" })
+vim.keymap.set({ 'n', 'x' }, "p", '"+p', { desc = "Paste after" })
 vim.keymap.set('n', "<leader>r", ":%s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('v', "<leader>r", ":s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('i', "<C-h>", "<Left>", { noremap = true })
@@ -489,6 +494,7 @@ vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
 vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
 vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
+
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
@@ -577,22 +583,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Clipboard with OSC 52
-vim.g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-  },
-  paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-  },
-}
-
 vim.cmd [[
-  colorscheme catppuccin
-  hi Normal guibg=NONE
-  hi NormalFloat guibg=NONE
-  hi FloatBorder guibg=NONE
+   colorscheme catppuccin "default catppuccin lunaperche habamax miniautumn miniwinter retrobox sorbet unokai wildcharm zaibatsu
+   hi Normal guibg=NONE
+   hi NormalFloat guibg=NONE
+   hi FloatBorder guibg=NONE
 ]]
