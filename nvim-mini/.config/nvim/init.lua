@@ -486,6 +486,7 @@ vim.keymap.set('i', "<C-j>", "<Down>", { noremap = true })
 vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
 vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
 vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
+vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",

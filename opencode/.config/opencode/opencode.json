@@ -7,10 +7,10 @@
   ],
   "mode": {
     "plan": {
-      "model": "zai-coding-plan/glm-5"
+      "model": "zai-coding-plan/glm-5.1"
     },
     "build": {
-      "model": "minimax-coding-plan/MiniMax-M2.5"
+      "model": "minimax-coding-plan/MiniMax-M2.7"
     }
   }
 }
