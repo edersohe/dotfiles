@@ -470,6 +470,8 @@ require('orgmode').setup({
   org_agenda_files = { '~/org/**/*' },
   org_default_notes_file = '~/org/refile.org',
 })
+vim.keymap.set('n', "<leader>of",
+  '<cmd>lua MiniPick.builtin.files(nil, { source = { cwd = vim.fn.expand("~/org") }})<CR>', { desc = "Find" })
 
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
