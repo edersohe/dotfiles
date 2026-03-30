@@ -35,7 +35,6 @@
 (recentf-mode t)
 (repeat-mode t)
 (global-auto-revert-mode t)
-(global-hl-line-mode t)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
@@ -58,6 +57,8 @@
 (define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
+(load-theme 'modus-vivendi-tinted :no-confirm)
+
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
@@ -68,10 +69,6 @@
 (use-package exec-path-from-shell
   :ensure t
   :config (exec-path-from-shell-initialize))
-
-(use-package doom-themes
-  :ensure t
-  :init (load-theme 'doom-one :no-confirm))
 
 (use-package which-key
   :demand t
@@ -172,17 +169,6 @@
               ("C-c h p" . diff-hl-previous-hunk)
               ("C-c h s" . diff-hl-show-hunk)))
 
-(use-package diminish
-  :ensure t
-  :init
-  (diminish 'which-key-mode)
-  (diminish 'completion-preview-mode)
-  (diminish 'eldoc-mode))
-
-(use-package magit
-  :ensure t
-  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
-
 (use-package org
   :init
   (setq org-directory "~/org"
@@ -202,25 +188,6 @@
          ("C-n" . copilot-next-completion)
          ("C-p" . copilot-previous-completion)
          ("TAB" . copilot-accept-completion)))
-
-(use-package gptel-agent
-  :ensure t
-  :init
-  (gptel-make-anthropic "Z.AI"
-                        :host "api.z.ai"
-                        :endpoint "/api/anthropic/v1/messages"
-                        :key (getenv "ZAI_API_KEY")
-                        :stream t
-                        :models '(GLM-5.1 GLM-5))
-  (gptel-make-anthropic "MiniMax"
-                        :host "api.minimax.io"
-                        :endpoint "/anthropic/v1/messages"
-                        :key (getenv "MINIMAX_API_KEY")
-                        :stream t
-                        :models '(MiniMax-M2.7 MiniMax-M2.5))
-  (setq gptel-backend (gptel-make-gh-copilot "Copilot")
-        gptel-model 'gpt-5-mini)
-  :config (gptel-agent-update))
 
 (provide 'init)
 ;;; init.el ends here
