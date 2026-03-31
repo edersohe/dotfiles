@@ -177,12 +177,48 @@
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package org
-  :init
-  (setq org-directory "~/org"
-        org-default-notes-file (concat org-directory "/notes.org"))
-  :bind (("C-c o l" . org-store-link)
-         ("C-c o a" . org-agenda)
-         ("C-c o c" . org-capture)))
+  :bind (("C-x c l" . org-store-link)
+         ("C-x c a" . org-agenda)
+         ("C-x c c" . org-capture)
+         ("C-x c o" . (lambda () (interactive) (find-file "~/org/life.org"))))
+  :custom
+  (org-directory "~/org/")
+  (org-default-notes-file "life.org")
+  (org-agenda-files '("life.org"))
+  (org-log-done 'time)
+  (org-agenda-hide-tags-regexp "work\\|personal")
+  (org-tag-alist '(("work"          . ?w)
+                   ("personal"      . ?p)
+                   ("call"          . ?c)
+                   ("meet"          . ?m)
+                   ("errand"        . ?e)
+                   ("email"         . ?E)
+                   ("code"          . ?C)
+                   ("review"        . ?r)
+                   ("planning"      . ?l)))
+  :config
+  (setq org-capture-templates
+        '(
+          ("t" "Task / Meeting" entry (file+headline "life.org" "Actionable")
+           "* TODO %^{Title/Subject} %^g\n  SCHEDULED: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n "
+           :empty-lines 1)
+          ("n" "Timeless Note" entry (file+headline "life.org" "Reference")
+           "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
+           :empty-lines 1)))
+  (setq org-agenda-custom-commands
+        '(
+          ("w" "Work Dashboard"
+           ((agenda "" ((org-agenda-span 'day)
+                        (org-agenda-overriding-header "Today's Work Schedule")))
+            (tags-todo "+work"
+                       ((org-agenda-overriding-header "All Active Work Tasks"))))
+           ((org-agenda-tag-filter-preset '("+work"))))
+          ("p" "Personal Dashboard"
+           ((agenda "" ((org-agenda-span 'day)
+                        (org-agenda-overriding-header "Today's Personal Schedule")))
+            (tags-todo "+personal"
+                       ((org-agenda-overriding-header "All Active Personal Tasks"))))
+           ((org-agenda-tag-filter-preset '("+personal")))))))
 
 (use-package copilot
   :ensure t
