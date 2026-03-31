@@ -38,6 +38,7 @@
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
+(add-hook 'prog-mode-hook #'hl-line-mode)
 
 (setq completion-styles '(basic flex)
       completion-category-defaults nil
@@ -57,8 +58,6 @@
 (define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
 (define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
 
-(load-theme 'modus-vivendi-tinted :no-confirm)
-
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
@@ -69,6 +68,10 @@
 (use-package exec-path-from-shell
   :ensure t
   :config (exec-path-from-shell-initialize))
+
+(use-package doom-themes
+  :ensure t
+  :config (load-theme 'doom-tokyo-night :no-confirm))
 
 (use-package which-key
   :demand t
@@ -102,7 +105,7 @@
   (let ((name (read-string "Name for vterm buffer: ")))
     (vterm (concat "*vterm-" name "*"))))
 
-(global-set-key (kbd "C-x x v") #'my/vterm)
+(global-set-key (kbd "C-x c v") #'my/vterm)
 
 (use-package eglot
   :hook (prog-mode . eglot-ensure)
@@ -169,6 +172,10 @@
               ("C-c h p" . diff-hl-previous-hunk)
               ("C-c h s" . diff-hl-show-hunk)))
 
+(use-package magit
+  :ensure t
+  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
+
 (use-package org
   :init
   (setq org-directory "~/org"
@@ -188,6 +195,19 @@
          ("C-n" . copilot-next-completion)
          ("C-p" . copilot-previous-completion)
          ("TAB" . copilot-accept-completion)))
+
+(use-package eca
+  :vc (:url "https://github.com/editor-code-assistant/eca-emacs" :rev :newest)
+  :custom
+  (eca-completion-idle-delay nil)
+  :bind (("C-x c e" . eca)))
+
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'which-key-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'completion-preview-mode))
 
 (provide 'init)
 ;;; init.el ends here
