@@ -186,28 +186,19 @@
   (org-default-notes-file "life.org")
   (org-agenda-files '("life.org"))
   (org-log-done 'time)
+  (org-hide-leading-stars t)
   (org-agenda-hide-tags-regexp "work\\|personal")
-  (org-tag-alist '(("work"          . ?w)
-                   ("personal"      . ?p)
-                   ("call"          . ?c)
-                   ("meet"          . ?m)
-                   ("errand"        . ?e)
-                   ("email"         . ?E)
-                   ("code"          . ?C)
-                   ("review"        . ?r)
-                   ("planning"      . ?l)))
+  (org-tag-alist '("work" "personal" "call" "meet" "errand" "email" "code" "review" "planning"))
   :config
   (setq org-capture-templates
-        '(
-          ("t" "Task / Meeting" entry (file+headline "life.org" "Actionable")
-           "* TODO %^{Title/Subject} %^g\n  SCHEDULED: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n "
+        '(("t" "Task / Meeting" entry (file+headline "life.org" "Actionable")
+           "* TODO %^{Title/Subject} %^g\n  SCHEDULED: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
            :empty-lines 1)
           ("n" "Timeless Note" entry (file+headline "life.org" "Reference")
            "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
            :empty-lines 1)))
   (setq org-agenda-custom-commands
-        '(
-          ("w" "Work Dashboard"
+        '(("w" "Work Dashboard"
            ((agenda "" ((org-agenda-span 'day)
                         (org-agenda-overriding-header "Today's Work Schedule")))
             (tags-todo "+work"
