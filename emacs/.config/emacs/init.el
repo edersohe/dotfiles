@@ -177,10 +177,15 @@
   :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 (use-package org
+  :init
+  (defun my/org-open-life ()
+    "Open the main org file for life management."
+    (interactive)
+    (find-file "~/org/life.org"))
   :bind (("C-x c l" . org-store-link)
          ("C-x c a" . org-agenda)
          ("C-x c c" . org-capture)
-         ("C-x c o" . (lambda () (interactive) (find-file "~/org/life.org"))))
+         ("C-x c o" . my/org-open-life))
   :custom
   (org-directory "~/org/")
   (org-default-notes-file "life.org")
@@ -192,7 +197,7 @@
   :config
   (setq org-capture-templates
         '(("t" "Task / Meeting" entry (file+headline "life.org" "Actionable")
-           "* TODO %^{Title/Subject} %^g\n  SCHEDULED: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
+           "* TODO %^{Title/Subject} %^g\n  %^{When|SCHEDULED|DEADLINE}: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
            :empty-lines 1)
           ("n" "Timeless Note" entry (file+headline "life.org" "Reference")
            "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
@@ -224,7 +229,7 @@
          ("TAB" . copilot-accept-completion)))
 
 (use-package eca
-  :vc (:url "https://github.com/editor-code-assistant/eca-emacs" :rev :newest)
+  :ensure t
   :custom
   (eca-completion-idle-delay nil)
   :bind (("C-x c e" . eca)))
