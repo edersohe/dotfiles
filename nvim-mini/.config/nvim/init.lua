@@ -229,7 +229,7 @@ local hooks = function(ev)
   if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
     vim.cmd('TSUpdate')
   end
-  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
+  if name == 'orgmode' and (kind == 'install' or kind == 'update') then
     vim.cmd("Org install_treesitter_grammar")
   end
 end
@@ -472,11 +472,49 @@ miniclue.setup({
 require('render-markdown').setup()
 
 require('orgmode').setup({
-  org_agenda_files = { '~/org/**/*' },
-  org_default_notes_file = '~/org/refile.org',
+  org_agenda_files = { '~/org/life.org' },
+  org_default_notes_file = '~/org/life.org',
+  org_log_done = 'time',
+  org_hide_leading_stars = true,
+  org_capture_templates = {
+    t = {
+      description = 'Task / Meeting',
+      template =
+      '* TODO %^{Title/Subject} :%^{Tags}:\n  %^{WHEN|SCHEDULED|DEADLINE}: %^T\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]',
+      target = '~/org/life.org',
+      headline = 'Actionable',
+      properties = { empty_lines = 1 },
+    },
+    n = {
+      description = 'Timeless Note',
+      template = '* %^{Title} :%^{Tags}:\n  Captured: %U\n\n  %?',
+      target = '~/org/life.org',
+      headline = 'Reference',
+      properties = { empty_lines = 1 },
+    }
+  },
+  org_agenda_custom_commands = {
+    w = {
+      description = 'Work Dashboard',
+      types = {
+        {
+          type = 'tags',
+          match = 'work',
+        },
+      }
+    },
+    p = {
+      description = 'Personal Dashboard',
+      types = {
+        {
+          type = 'tags',
+          match = 'personal',
+        },
+      }
+    }
+  }
 })
-vim.keymap.set('n', "<leader>of",
-  '<cmd>lua MiniPick.builtin.files(nil, { source = { cwd = vim.fn.expand("~/org") }})<CR>', { desc = "Find" })
+vim.keymap.set('n', '<Leader>oo', '<Cmd>edit ~/org/life.org<CR>', { desc = 'open' })
 
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
@@ -494,7 +532,6 @@ vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
 vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
 vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
-
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
