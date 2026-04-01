@@ -28,6 +28,7 @@
 
 (add-to-list 'default-frame-alist '(alpha-background . 97))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-15"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (save-place-mode t)
