@@ -23,6 +23,9 @@ emacs/.config/emacs/projects
 emacs/.config/emacs/recentf
 emacs/.config/emacs/tramp
 emacs/.config/emacs/auto-save-list
+/emacs/.config/emacs/eca
+emacs/.config/emacs/eshell/history
+emacs/.config/emacs/bookmarks
 
 evil-emacs/.config/emacs/copilot-chat
 evil-emacs/.config/emacs/.cache/
@@ -61,8 +64,8 @@ helix/.config/helix/runtime
 qutebrowser/.config/qutebrowser/qsettings
 qutebrowser/.config/qutebrowser/autoconfig.yml
 qutebrowser/.config/qutebrowser/quickmarks
+
 pi/.pi/agent/auth.json
 pi/.pi/agent/sessions
-/emacs/.config/emacs/eca
-emacs/.config/emacs/eshell/history
-emacs/.config/emacs/bookmarks
+
+nvim-mini/.config/nvim/nvim-pack-lock.json
