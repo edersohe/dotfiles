@@ -69,3 +69,4 @@ pi/.pi/agent/auth.json
 pi/.pi/agent/sessions
 
 nvim-mini/.config/nvim/nvim-pack-lock.json
+nvim-max/.config/nvim/nvim-pack-lock.json

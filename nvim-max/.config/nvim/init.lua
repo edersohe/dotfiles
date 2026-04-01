@@ -3,55 +3,7 @@ vim.g.maplocalleader = " "
 
 vim.env.NVIM = vim.v.servername
 
-local path_package = vim.fn.stdpath("data") .. "/site/"
-local mini_path = path_package .. "pack/deps/start/mini.nvim"
-if not vim.loop.fs_stat(mini_path) then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
-  local clone_cmd = {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/echasnovski/mini.nvim",
-    mini_path,
-  }
-  vim.fn.system(clone_cmd)
-  vim.cmd("packadd mini.nvim | helptags ALL")
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
-
-local MiniDeps = require("mini.deps")
-MiniDeps.setup({ path = { package = path_package } })
-local add = MiniDeps.add
 local border = "rounded"
-
-add({ source = "catppuccin/nvim", name = "catppuccin" })
-
-require("catppuccin").setup({
-  auto_integrations = true,
-  flavour = "mocha",
-  transparent_background = true,
-  float = {
-    transparent = true,
-    solid = true,
-  },
-  integrations = {
-    blink_cmp = {
-      style = 'bordered',
-    },
-    gitsigns = true,
-    mini = { enabled = true, indentscope_color = "" },
-    which_key = true,
-    notify = true,
-    todo_comments = true,
-    snacks = {
-      enabled = true,
-      indent_scope_color = "",
-    },
-    render_markdown = true,
-  },
-})
-
-vim.cmd.colorscheme("catppuccin")
 
 vim.g.netrw_browsex_viewer = "xdg-open"
 vim.g.netrw_banner = 1
@@ -59,6 +11,12 @@ vim.g.netrw_liststyle = 1
 vim.g.netrw_preview = 1
 vim.g.netrw_keepdir = 0
 vim.g.netrw_localcopydircmd = 'cp -r'
+
+vim.opt.clipboard:append("unnamedplus")
+vim.g.clipboard = 'osc52'
+if vim.env.TMUX then
+  vim.g.clipboard = 'tmux'
+end
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -80,7 +38,7 @@ vim.opt.updatetime = 250
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300
 vim.opt.completeopt = "menuone,noinsert,noselect"
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
@@ -189,48 +147,13 @@ local languages = {
     },
     ts = { "lua", "luadoc" },
   },
-  markdown = {
-    lsp = {
-      markdown_oxide = {
-        config = {
-          capabilities = {
-            workspace = {
-              didChangeWatchedFiles = {
-                dynamicRegistration = true,
-              },
-            },
-          },
-        },
-        bin = "markdown-oxide",
-      },
-    },
-    ts = { "markdown", "markdown_inline" },
-  },
+  markdown = { lsp = { marksman = { config = {}, bin = "marksman" }, }, ts = { "markdown", "markdown_inline" } },
   nix = { ts = { "nix" } },
   perl = { lsp = { perlpls = { config = {}, bin = "pls" } }, ts = { "perl" } },
   php = { lsp = { phpactor = { config = {}, bin = "phpactor" } }, ts = { "php", "php_only" } },
   proto = { lsp = { buf_ls = { config = {}, bin = "buf" } }, ts = { "proto" } },
   python = {
-    lsp = {
-      ruff =
-      {
-        config = {
-        },
-        bin = "ruff"
-      },
-      basedpyright = {
-        config = {
-          settings = {
-            basedpyright = {
-              analysis = {
-                typeCheckingMode = "off",
-              },
-            },
-          },
-        },
-        bin = "basedpyright"
-      }
-    },
+    lsp = { ruff = { config = {}, bin = "ruff" }, ty = { config = {}, bin = "ty" } },
     ts = { "python" }
   },
   ruby = {
@@ -285,6 +208,33 @@ for _, lang_config in pairs(languages) do
   end
 end
 
+vim.pack.add({
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
+  { src = 'https://github.com/nvim-mini/mini.nvim' },
+  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
+  { src = 'https://github.com/christoomey/vim-tmux-navigator' },
+  { src = 'https://github.com/nvim-lua/plenary.nvim' },
+  { src = 'https://github.com/folke/tokyonight.nvim' },
+  { src = 'https://github.com/folke/todo-comments.nvim' },
+  { src = 'https://github.com/folke/snacks.nvim' },
+  { src = 'https://github.com/folke/which-key.nvim' },
+  { src = 'https://github.com/rafamadriz/friendly-snippets' },
+  { src = 'https://github.com/zbirenbaum/copilot.lua' },
+  { src = 'https://github.com/giuxtaposition/blink-cmp-copilot' },
+  { src = 'https://github.com/saghen/blink.cmp',                version = vim.version.range("^1") },
+  { src = 'https://github.com/obsidian-nvim/obsidian.nvim' }
+})
+
+local hooks = function(ev)
+  local name, kind = ev.data.spec.name, ev.data.kind
+  print(name)
+  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
+    vim.cmd('TSUpdate')
+  end
+end
+vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
+
 local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
   vim.keymap.set({ "n", "v" }, "<leader>lf", vim.lsp.buf.format, { buffer = bufnr, desc = "Format code" })
@@ -303,15 +253,64 @@ local on_attach = function(_, bufnr)
     { buffer = bufnr, desc = "References" })
 end
 
+require('tokyonight').setup({
+  transparent = true,
+})
+
 local MiniIcons = require("mini.icons")
 MiniIcons.setup()
 MiniIcons.tweak_lsp_kind()
 MiniIcons.mock_nvim_web_devicons()
 
-add({
-  source = 'folke/snacks.nvim',
-  depends = { 'folke/todo-comments.nvim', 'nvim-lua/plenary.nvim' },
+local MiniNotify = require("mini.notify")
+MiniNotify.setup({
+  window = {
+    config = { border = border },
+    winblend = 0,
+    max_width_share = 0.5,
+  },
 })
+vim.notify = MiniNotify.make_notify()
+
+require("mini.statusline").setup({
+  use_icons = true,
+})
+
+require("mini.tabline").setup({
+  show_icons = true,
+  tabpage_section = "right",
+})
+
+require("mini.files").setup({
+  mappings = {
+    close       = '<Esc>',
+    go_in       = 'l',
+    go_in_plus  = '<cr>',
+    go_out      = 'h',
+    go_out_plus = '-',
+    mark_goto   = "'",
+    mark_set    = 'm',
+    reset       = '<BS>',
+    reveal_cwd  = '@',
+    show_help   = 'g?',
+    synchronize = '=',
+    trim_left   = '<',
+    trim_right  = '>',
+  },
+})
+vim.keymap.set('n', '-', '<cmd>lua MiniFiles.open()<CR>')
+vim.api.nvim_create_autocmd("User", {
+  pattern = { "MiniFilesWindowOpen", "MiniFilesWindowUpdate" },
+  callback = function(args)
+    local win_id = args.data.win_id
+    vim.api.nvim_win_set_config(win_id, { border = border })
+  end,
+})
+
+require("mini.sessions").setup()
+vim.keymap.set("n", "<leader>sw", ':lua MiniSessions.write("")<Left><Left>', { desc = "Write" })
+vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.select("delete", {force = true})<CR>', { desc = "Delete" })
+vim.keymap.set("n", "<leader>sr", '<cmd>lua MiniSessions.select("read")<CR>', { desc = "Read" })
 
 require('todo-comments').setup()
 local Snacks = require('snacks')
@@ -338,17 +337,6 @@ Snacks.setup({
   statuscolumn = { enabled = true },
 })
 
-add({ source = 'nvim-lualine/lualine.nvim' })
-
-require('lualine').setup({
-  options = {
-    theme = 'catppuccin-nvim',
-    globalstatus = true,
-  },
-  tabline = {
-    lualine_a = { 'buffers' },
-  },
-})
 
 vim.keymap.set('n', '-', '<cmd>lua Snacks.explorer.open()<CR>', { desc = 'Explorer' })
 
@@ -369,7 +357,6 @@ vim.keymap.set("n", "<leader>j", function() Snacks.picker.jumps() end, { desc = 
 vim.keymap.set("n", "<leader>'", function() Snacks.picker.marks() end, { desc = "Marks" })
 vim.keymap.set("n", '<leader>"', function() Snacks.picker.registers() end, { desc = "Registers" })
 
-add('lewis6991/gitsigns.nvim')
 local gitsigns = require('gitsigns')
 gitsigns.setup({
   preview_config = {
@@ -387,25 +374,6 @@ vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "
 vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
 vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
 vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
-
-local function build_blink(params)
-  vim.notify('Building blink.cmp', vim.log.levels.INFO)
-  local obj = vim.system({ 'cargo', 'build', '--release' }, { cwd = params.path }):wait()
-  if obj.code == 0 then
-    vim.notify('Building blink.cmp done', vim.log.levels.INFO)
-  else
-    vim.notify('Building blink.cmp failed', vim.log.levels.ERROR)
-  end
-end
-
-add({
-  source = 'saghen/blink.cmp',
-  depends = { "rafamadriz/friendly-snippets", "zbirenbaum/copilot.lua", "giuxtaposition/blink-cmp-copilot" },
-  hooks = {
-    post_install = build_blink,
-    post_checkout = build_blink,
-  },
-})
 
 require("copilot").setup({
   suggestion = { enabled = false },
@@ -442,23 +410,10 @@ require('blink.cmp').setup({
   }
 })
 
-add({
-  source = "nvim-treesitter/nvim-treesitter",
-  checkout = "main",
-  monitor = "main",
-  hooks = {
-    post_checkout = function()
-      vim.cmd("TSUpdate")
-    end,
-  }
-})
-
 require 'nvim-treesitter'.setup {
   install_dir = vim.fn.stdpath('data') .. '/site'
 }
-
 require 'nvim-treesitter'.install(tree_sitters)
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = tree_sitters,
   callback = function()
@@ -466,10 +421,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 
-add({ source = "neovim/nvim-lspconfig", depends = { 'saghen/blink.cmp' } })
-
 local capabilities = require('blink.cmp').get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities())
-
 for server, config in pairs(language_servers) do
   config.on_attach = on_attach
   if config.capabilities then
@@ -501,8 +453,6 @@ require("mini.move").setup({
 
 vim.keymap.set("n", "<leader>t", function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
   { desc = "Todo comments" })
-
-add({ source = 'folke/which-key.nvim' })
 
 local wk = require('which-key')
 wk.setup({
@@ -536,9 +486,6 @@ wk.add({
   { 's',          group = 'Surround', mode = { 'n', 'x' } },
 })
 
-add('MeanderingProgrammer/render-markdown.nvim')
-require('render-markdown').setup()
-add({ source = 'obsidian-nvim/obsidian.nvim', version = '*' })
 require('obsidian').setup({
   legacy_commands = false,
   workspaces = {
@@ -547,28 +494,27 @@ require('obsidian').setup({
   completion = { blink = true },
 })
 
-
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 vim.keymap.set('n', "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set('n', "<C-c>", "<cmd>bdelete<CR>", { desc = "Close buffer" })
 vim.keymap.set('n', "<C-s>", "<cmd>write<CR>", { desc = "Save buffer" })
-vim.keymap.set('v', "p", "P", { desc = "Paste before" })
+vim.keymap.set({ 'n', 'x' }, "P", '"+P', { desc = "Paste before" })
+vim.keymap.set({ 'n', 'x' }, "p", '"+p', { desc = "Paste after" })
 vim.keymap.set('n', "<leader>r", ":%s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('v', "<leader>r", ":s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace" })
 vim.keymap.set('i', "<C-h>", "<Left>", { noremap = true })
 vim.keymap.set('i', "<C-j>", "<Down>", { noremap = true })
 vim.keymap.set('i', "<C-k>", "<Up>", { noremap = true })
 vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
-vim.keymap.set('n', '<M-z>', ':suspend<CR>', { noremap = true })
+vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
+vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
 
 -- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
   { desc = "Config" })
-vim.keymap.set('n', "<leader>nu", "<cmd>DepsUpdate!<CR>", { desc = "Update plugins" })
-vim.keymap.set('n', "<leader>np", "<cmd>DepsClean!<CR>", { desc = "Prune plugins" })
-vim.keymap.set('n', "<leader>ns", "<cmd>DepsShowLog<CR>", { desc = "Show plugins log" })
+vim.keymap.set('n', "<leader>nu", "<cmd>lua vim.pack.update()<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
   { desc = "Reload" })
 
@@ -652,15 +598,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Clipboard with OSC 52
-vim.g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-  },
-  paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-  },
-}
+vim.cmd [[
+   colorscheme tokyonight "default catppuccin lunaperche habamax miniautumn miniwinter retrobox sorbet unokai wildcharm zaibatsu
+   hi Normal guibg=NONE
+   hi NormalFloat guibg=NONE
+   hi FloatBorder guibg=NONE
+]]
