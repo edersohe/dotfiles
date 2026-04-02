@@ -1,31 +1,29 @@
 [user]
-	name = Eder Sosa
-	email = eder.sohe@gmail.com
+  name = Eder Sosa
+  email = eder.sohe@gmail.com
 [diff]
-	algorithm = histogram
-	tool = nvimdiff
+  algorithm = histogram
+  tool = nvimdiff
 [merge]
-	conflictstyle = zdiff3
-	tool = fugitive
+  conflictstyle = zdiff3
+  tool = fugitive
 [gpg]
-	program = gpg
+  program = gpg
 [init]
-	defaultBranch = main
-	templatedir = /home/eder/.config/git/template
+  defaultBranch = main
+  templatedir = /home/eder/.config/git/template
 [push]
-	default = simple
-	autoSetupRemote = true
-	followTags = true
+  default = simple
+  autoSetupRemote = true
+  followTags = true
 [tag]
-	sort = version:refname
+  sort = version:refname
 [alias]
-	l = log --oneline --graph --all
-	fugitive = "!f() { $EDITOR -c G -c only \"$@\"; }; f"
-[core]
-	editor = nvim
+  l = log --oneline --graph --all
+  fugitive = "!f() { $EDITOR -c G -c only \"$@\"; }; f"
 [mergetool "fugitive"]
-	cmd = $EDITOR -c "Gvdiffsplit!" "$MERGED"
+  cmd = $EDITOR -c "Gvdiffsplit!" "$MERGED"
 [mergetool]
-	prompt = false
+  prompt = false
 [difftool "nvimdiff"]
-	cmd = $EDITOR -d "$LOCAL" "$REMOTE"
+  cmd = $EDITOR -d "$LOCAL" "$REMOTE"

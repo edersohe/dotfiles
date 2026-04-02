@@ -44,7 +44,6 @@ vim.opt.expandtab = true
 vim.opt.listchars = { tab = "▸ ", extends = "…", precedes = "…", nbsp = "␣", trail = "·" }
 vim.opt.list = true
 vim.opt.laststatus = 3
-vim.opt.expandtab = true
 vim.opt.confirm = false
 vim.opt.showmode = false
 vim.opt.splitbelow = true
@@ -564,6 +563,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "gitcommit", "gitrebase" },
   callback = function()
     vim.opt_local.bufhidden = "wipe"
+    vim.api.nvim_win_set_cursor(0, { 1, 0 })
   end,
 })
 
