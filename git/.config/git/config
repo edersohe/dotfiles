@@ -20,12 +20,10 @@
 	sort = version:refname
 [alias]
 	l = log --oneline --graph --all
-	fugitive = "!f() { nvim -c G -c only \"$@\"; }; f"
-[core]
-	editor = nvim
+	f = "!f() { $EDITOR -c G -c only \"$@\"; }; f"
 [mergetool "fugitive"]
-	cmd = nvim -f -c \"Gvdiffsplit!\" \"$MERGED\"
+	cmd = $EDITOR -c "Gvdiffsplit!" "$MERGED"
 [mergetool]
 	prompt = false
 [difftool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+	cmd = $EDITOR -d "$LOCAL" "$REMOTE"

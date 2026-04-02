@@ -1,8 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.env.NVIM = vim.v.servername
-
 local border = "rounded"
 
 vim.g.netrw_browsex_viewer = "xdg-open"
