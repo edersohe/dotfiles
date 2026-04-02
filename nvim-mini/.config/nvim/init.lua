@@ -38,7 +38,7 @@ vim.opt.updatetime = 250
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300
 vim.opt.completeopt = "menuone,noinsert,noselect"
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
@@ -62,8 +62,6 @@ vim.opt.grepprg = 'rg --vimgrep -.'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
-vim.opt.conceallevel = 2
-vim.opt.concealcursor = 'nc'
 
 local languages = {
   bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
@@ -215,11 +213,7 @@ vim.pack.add({
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-mini/mini.nvim' },
-  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/tpope/vim-fugitive' },
-  { src = 'https://github.com/tpope/vim-rhubarb' },
-  { src = 'https://github.com/nvim-orgmode/orgmode' },
-  { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
   { src = 'https://github.com/christoomey/vim-tmux-navigator' },
   { src = 'https://github.com/github/copilot.vim' },
 })
@@ -228,9 +222,6 @@ local hooks = function(ev)
   local name, kind = ev.data.spec.name, ev.data.kind
   if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
     vim.cmd('TSUpdate')
-  end
-  if name == 'orgmode' and (kind == 'install' or kind == 'update') then
-    vim.cmd("Org install_treesitter_grammar")
   end
 end
 vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
@@ -325,12 +316,7 @@ vim.keymap.set("n", "<leader>j", '<cmd>Pick list scope="jump"<CR>', { desc = "Ju
 vim.keymap.set("n", "<leader>'", "<cmd>Pick marks<CR>", { desc = "Marks" })
 vim.keymap.set("n", '<leader>"', "<cmd>Pick registers<CR>", { desc = "Registers" })
 
-local gitsigns = require('gitsigns')
-gitsigns.setup({
-  preview_config = {
-    border = border,
-  },
-})
+require("mini.diff").setup()
 
 local git_log = "tab Git log --decorate --graph --all --pretty=short"
 vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
@@ -343,11 +329,7 @@ vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "L
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
 vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>", { desc = "Status" })
 vim.keymap.set("n", "<leader>gS", "<cmd>Git stash<CR>", { desc = "Stash" })
-vim.keymap.set("n", "<leader>gb", "<cmd>.GBrowse<CR>", { desc = "Browse" })
-vim.keymap.set("n", "<leader>gB", gitsigns.toggle_current_line_blame, { desc = "Blame" })
-vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk" })
-vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
-vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
+vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
 
 require 'nvim-treesitter'.setup {
   install_dir = vim.fn.stdpath('data') .. '/site'
@@ -468,53 +450,6 @@ miniclue.setup({
     delay = 0,
   },
 })
-
-require('render-markdown').setup()
-
-require('orgmode').setup({
-  org_agenda_files = { '~/org/life.org' },
-  org_default_notes_file = '~/org/life.org',
-  org_log_done = 'time',
-  org_hide_leading_stars = true,
-  org_capture_templates = {
-    t = {
-      description = 'Task / Meeting',
-      template =
-      '* TODO %^{Title/Subject} :%^{Tags}:\n  %^{WHEN|SCHEDULED|DEADLINE}: %^T\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]',
-      target = '~/org/life.org',
-      headline = 'Actionable',
-      properties = { empty_lines = 1 },
-    },
-    n = {
-      description = 'Timeless Note',
-      template = '* %^{Title} :%^{Tags}:\n  Captured: %U\n\n  %?',
-      target = '~/org/life.org',
-      headline = 'Reference',
-      properties = { empty_lines = 1 },
-    }
-  },
-  org_agenda_custom_commands = {
-    w = {
-      description = 'Work Dashboard',
-      types = {
-        {
-          type = 'tags',
-          match = 'work',
-        },
-      }
-    },
-    p = {
-      description = 'Personal Dashboard',
-      types = {
-        {
-          type = 'tags',
-          match = 'personal',
-        },
-      }
-    }
-  }
-})
-vim.keymap.set('n', '<Leader>oo', '<Cmd>edit ~/org/life.org<CR>', { desc = 'open' })
 
 -- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
