@@ -3,8 +3,10 @@
 	email = eder.sohe@gmail.com
 [diff]
 	algorithm = histogram
+	tool = nvimdiff
 [merge]
 	conflictstyle = zdiff3
+	tool = fugitive
 [gpg]
 	program = gpg
 [init]
@@ -18,3 +20,12 @@
 	sort = version:refname
 [alias]
 	l = log --oneline --graph --all
+	fugitive = "!f() { nvim -c G -c only \"$@\"; }; f"
+[core]
+	editor = nvim
+[mergetool "fugitive"]
+	cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+[mergetool]
+	prompt = false
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"

@@ -37,7 +37,7 @@ vim.opt.signcolumn = "auto:2"
 vim.opt.updatetime = 250
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300
-vim.opt.completeopt = "menuone,noinsert,noselect"
+vim.opt.completeopt = "menu,menuone,fuzzy,noinsert,noselect"
 vim.opt.cursorline = false
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -58,10 +58,11 @@ vim.opt.winblend = 0
 vim.opt.virtualedit = "block"
 vim.opt.fillchars = { eob = " " }
 vim.opt.splitkeep = "screen"
-vim.opt.grepprg = 'rg --vimgrep -.'
+vim.opt.grepprg = 'rg --vimgrep -. --no-messages --smart-case'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
+vim.opt.termguicolors = true
 
 local languages = {
   bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
@@ -552,6 +553,24 @@ vim.api.nvim_create_autocmd("FileType", {
       { desc = 'Replace', noremap = true, buffer = true })
     vim.keymap.set('n', 'q', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
     vim.keymap.set('n', '<Esc>', '<cmd>cclose<CR><cmd>lclose<CR>', { desc = 'close qf', noremap = true, buffer = true })
+  end,
+})
+
+-- start terminal in insert mode
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  command = "startinsert",
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+  pattern = "term://*",
+  command = "startinsert",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "gitcommit", "gitrebase" },
+  callback = function()
+    vim.opt_local.bufhidden = "wipe"
   end,
 })
 
