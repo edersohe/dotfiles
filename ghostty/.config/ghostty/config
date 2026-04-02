@@ -21,3 +21,5 @@ background-opacity = 0.97
 background-blur = false
 clipboard-paste-protection = false
 confirm-close-surface = false
+cursor-style = block
+shell-integration-features = no-cursor
