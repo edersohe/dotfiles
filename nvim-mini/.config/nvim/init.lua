@@ -358,6 +358,15 @@ require("mini.pairs").setup()
 require("mini.surround").setup()
 require("mini.extra").setup()
 
+local gen_loader = require("mini.snippets").gen_loader
+local MiniSnippets = require("mini.snippets")
+MiniSnippets.setup({
+  snippets = {
+    gen_loader.from_lang(),
+  }
+})
+MiniSnippets.start_lsp_server({ match = false })
+
 require("mini.move").setup({
   mappings = {
     left = "<M-,>",
