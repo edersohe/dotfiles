@@ -571,9 +571,10 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.cmd [[
-   colorscheme catppuccin "default catppuccin lunaperche habamax miniautumn miniwinter retrobox sorbet unokai wildcharm zaibatsu
+   colorscheme catppuccin
    hi Normal guibg=NONE
    hi NormalFloat guibg=NONE
    hi FloatBorder guibg=NONE
    hi PMenu guibg=NONE
+   autocmd! nvim.terminal TermClose
 ]]
