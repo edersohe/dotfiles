@@ -51,6 +51,7 @@ vim.opt.splitright = true
 vim.opt.shortmess = vim.opt.shortmess:append("WcC")
 vim.opt.pumheight = 10
 vim.opt.pumblend = 0
+vim.opt.pumborder = border
 vim.opt.winblend = 0
 vim.opt.virtualedit = "block"
 vim.opt.fillchars = { eob = " " }
@@ -61,159 +62,135 @@ vim.opt.winborder = border
 vim.opt.path:append("**")
 vim.opt.termguicolors = true
 
-local languages = {
-  bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
-  c = { lsp = { clangd = { config = {}, bin = "clangd" } }, ts = { "c" } },
-  c3 = { lsp = { c3_lsp = { config = {} } }, ts = { "c3" } },
-  c_sharp = { lsp = { omnisharp = { config = {}, bin = "omnisharp" } }, ts = { "c_sharp" } },
-  css = {
-    lsp = {
-      cssls = { config = {}, bin = "css-lsp" },
-      tailwindcss = { config = {}, bin = "tailwindcss-language-server" },
-    },
-    ts = { "css" },
-  },
-  dart = { ts = { "dart" } },
-  dockerfile = {
-    lsp = {
-      docker_compose_language_service = { config = {}, bin = "docker-compose-language-service" },
-      dockerls = { config = {}, bin = "dockerfile-language-server" },
-    },
-    ts = { "dockerfile" },
-  },
-  elixir = {
-    lsp = {
-      expert = {
-        config = {
-          settings = {
-            workspaceSymbols = {
-              minQueryLength = 0
-            }
-          }
-        },
-      },
-    },
-    ts = { "elixir", "eex", "heex" },
-  },
-  emmet = {
-    lsp = {
-      emmet_language_server = {
-        config = {
-          filetypes = { "css", "eruby", "gohtml", "heex", "html", "javascript", "javascriptreact", "less", "php", "pug", "sass", "scss", "templ", "typescriptreact" },
-        },
-        bin = "emmet-language-server",
-      },
-    },
-  },
-  go = {
-    lsp = {
-      gopls = { config = {}, bin = "gopls" },
-      goimports = { config = {}, bin = "goimports" },
-      golangci_lint = { config = {}, bin = "golangci-lint" },
-      golangci_lint_ls = { config = {}, bin = "golangci-lint-langserver" },
-    },
-    ts = { "go", "gomod", "gosum", "gotmpl", "gowork" },
-  },
-  graphql = { lsp = { graphql = { config = {}, bin = "graphql-language-service-cli" } }, ts = { "graphql" } },
-  html = {
-    lsp = { html = { config = {}, bin = "html-lsp" }, htmx = { config = {}, bin = "htmx-lsp" } },
-    ts = { "html", "htmldjango" },
-  },
-  java = { lsp = { jdtls = { config = {}, bin = "jdtls" } }, ts = { "java" } },
-  javascript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "javascript" } },
-  json = {
-    lsp = { jsonls = { config = {}, bin = "json-lsp" } },
-    ts = { "json", "json5", "jsonnet" },
-  },
-  lua = {
-    lsp = {
-      lua_ls = {
-        config = {
-          settings = {
-            Lua = {
-              runtime = { version = "LuaJIT" },
-              diagnostics = { globals = { "vim" } },
-              workspace = {
-                library = { vim.env.VIMRUNTIME },
-                checkThirdParty = false,
-              },
-            },
-          },
-        },
-        bin = "lua-language-server",
-      },
-    },
-    ts = { "lua", "luadoc" },
-  },
-  markdown = { lsp = { marksman = { config = {}, bin = "marksman" }, }, ts = { "markdown", "markdown_inline" } },
-  nix = { ts = { "nix" } },
-  perl = { lsp = { perlpls = { config = {}, bin = "pls" } }, ts = { "perl" } },
-  php = { lsp = { phpactor = { config = {}, bin = "phpactor" } }, ts = { "php", "php_only" } },
-  proto = { lsp = { buf_ls = { config = {}, bin = "buf" } }, ts = { "proto" } },
-  python = {
-    lsp = { ruff = { config = {}, bin = "ruff" }, ty = { config = {}, bin = "ty" } },
-    ts = { "python" }
-  },
-  ruby = {
-    lsp = { rubocop = { config = {}, bin = "rubocop" }, ruby_lsp = { config = {}, bin = "ruby-lsp" } },
-    ts = { "ruby" },
-  },
-  rust = { lsp = { rust_analyzer = { config = {}, bin = "rust-analyzer" } }, ts = { "rust" } },
-  scss = { ts = { "scss" } },
-  sql = { lsp = { sqls = { config = {}, bin = "sqls" } }, ts = { "sql" } },
-  svelte = { lsp = { svelte = { config = {}, bin = "svelte-language-server" } }, ts = { "svelte" } },
-  templ = { lsp = { templ = { config = {}, bin = "templ" } }, ts = { "templ" } },
-  terraform = { lsp = { terraformls = { config = {}, bin = "terraform-ls" } }, ts = { "terraform", "hcl" } },
-  toml = { lsp = { tombi = { config = {}, bin = "tombi" } }, ts = { "toml" } },
-  typescript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "typescript", "tsx" } },
-  twig = { ts = { "twig" } },
-  vim = { ts = { "vim", "vimdoc", "query" } },
-  yaml = {
-    lsp = { yamlls = { config = {}, bin = "yaml-language-server" }, ansiblels = { config = {}, bin = "ansible-language-server" } },
-    ts = { "yaml" },
-  },
-  zig = { lsp = { zls = { config = {}, bin = "zls" } }, ts = { "zig" } },
-  diff = { ts = { "diff" } },
-  embedded_template = { ts = { "embedded_template" } },
-  git = { ts = { "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore" } },
-  http = { ts = { "http" } },
-  org = { lsp = { org = { config = {} } } },
+local tree_sitters = {
+  "bash",
+  "c",
+  "c3",
+  "c_sharp",
+  "css",
+  "dart",
+  "diff",
+  "dockerfile",
+  "eex",
+  "elixir",
+  "embedded_template",
+  "git_config",
+  "git_rebase",
+  "gitattributes",
+  "gitcommit",
+  "gitignore",
+  "go",
+  "gomod",
+  "gosum",
+  "gotmpl",
+  "gowork",
+  "graphql",
+  "hcl",
+  "heex",
+  "html",
+  "htmldjango",
+  "http",
+  "java",
+  "javascript",
+  "json",
+  "json5",
+  "jsonnet",
+  "lua",
+  "luadoc",
+  "markdown",
+  "markdown_inline",
+  "nix",
+  "perl",
+  "php",
+  "php_only",
+  "proto",
+  "python",
+  "query",
+  "ruby",
+  "rust",
+  "scss",
+  "sql",
+  "svelte",
+  "templ",
+  "terraform",
+  "toml",
+  "tsx",
+  "twig",
+  "typescript",
+  "vim",
+  "vimdoc",
+  "yaml",
+  "zig",
 }
 
-local tree_sitters = {}
-local language_servers = {}
-local mason_binaries = {}
-
-for _, lang_config in pairs(languages) do
-  -- Extract tree-sitter parsers
-  if lang_config.ts then
-    for _, parser in ipairs(lang_config.ts) do
-      table.insert(tree_sitters, parser)
-    end
-  end
-
-  -- Extract LSP servers and their binaries
-  if lang_config.lsp then
-    for server_name, server_data in pairs(lang_config.lsp) do
-      -- Extract LSP configurations
-      if server_data.config then
-        language_servers[server_name] = server_data.config
-      end
-      -- Extract Mason binaries
-      if server_data.bin then
-        table.insert(mason_binaries, server_data.bin)
-      end
-    end
-  end
-end
+local language_servers = {
+  bashls = {},
+  clangd = {},
+  c3_lsp = {},
+  omnisharp = {},
+  cssls = {},
+  tailwindcss = {},
+  dartls = {},
+  docker_compose_language_service = {},
+  dockerls = {},
+  expert = {
+    settings = {
+      workspaceSymbols = {
+        minQueryLength = 0
+      }
+    }
+  },
+  emmet_language_server = {
+    filetypes = { "css", "eruby", "gohtml", "heex", "html", "javascript", "javascriptreact", "less", "php", "pug", "sass", "scss", "templ", "typescriptreact" },
+  },
+  gopls = {},
+  goimports = {},
+  golangci_lint = {},
+  golangci_lint_ls = {},
+  graphql = {},
+  html = {},
+  htmx = {},
+  jdtls = {},
+  jsonls = {},
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        diagnostics = { globals = { "vim" } },
+        workspace = {
+          library = { vim.env.VIMRUNTIME },
+          checkThirdParty = false,
+        },
+      },
+    },
+  },
+  marksman = {},
+  perlpls = {},
+  phpactor = {},
+  buf_ls = {},
+  ruff = {},
+  ty = {},
+  rubocop = {},
+  ruby_lsp = {},
+  rust_analyzer = {},
+  sqls = {},
+  svelte = {},
+  templ = {},
+  terraformls = {},
+  tombi = {},
+  ts_ls = {},
+  yamlls = {},
+  ansiblels = {},
+  zls = {},
+  org = {},
+  copilot = {},
+}
 
 vim.pack.add({
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-mini/mini.nvim' },
-  { src = 'https://github.com/tpope/vim-fugitive' },
   { src = 'https://github.com/christoomey/vim-tmux-navigator' },
-  { src = 'https://github.com/github/copilot.vim' },
 })
 
 local hooks = function(ev)
@@ -241,6 +218,20 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>lS", '<cmd>Pick lsp scope="workspace_symbol"<CR>',
     { buffer = bufnr, desc = "Workspace symbols" })
   vim.keymap.set("n", "<leader>lr", '<cmd>Pick lsp scope="references"<CR>', { buffer = bufnr, desc = "References" })
+
+  local client = vim.lsp.get_clients({ bufnr = bufnr, name = "copilot" })[1]
+  if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
+    vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
+    vim.keymap.set("i", "<S-CR>", function()
+      if not vim.lsp.inline_completion.get() then
+        return "<S-CR>"
+      end
+    end, {
+      expr = true,
+      replace_keycodes = true,
+      desc = "Get the current inline completion",
+    })
+  end
 end
 
 local MiniIcons = require("mini.icons")
@@ -314,20 +305,23 @@ vim.keymap.set("n", "<leader>j", '<cmd>Pick list scope="jump"<CR>', { desc = "Ju
 vim.keymap.set("n", "<leader>'", "<cmd>Pick marks<CR>", { desc = "Marks" })
 vim.keymap.set("n", '<leader>"', "<cmd>Pick registers<CR>", { desc = "Registers" })
 
-require("mini.diff").setup()
+require("mini.git").setup()
+require("mini.diff").setup({ view = { style = "sign" } })
 
-local git_log = "tab Git log --decorate --graph --all --pretty=short"
-vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Fugitive" })
+local git_log = "Git log --decorate --graph --all --pretty=short"
+vim.keymap.set("n", "<leader>gg", "<cmd>terminal git add -i<CR>", { desc = "Git" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
-vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
+vim.keymap.set("n", "<leader>gd", "<cmd>Git diff -- %<CR>", { desc = "Diff" })
+vim.keymap.set("n", "<leader>gD", "<cmd>Git diff<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
 vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>", { desc = "Status" })
 vim.keymap.set("n", "<leader>gS", "<cmd>Git stash<CR>", { desc = "Stash" })
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
+vim.keymap.set("n", "<leader>gi", "<cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Inspect" })
 
 require 'nvim-treesitter'.setup {
   install_dir = vim.fn.stdpath('data') .. '/site'
@@ -581,4 +575,5 @@ vim.cmd [[
    hi Normal guibg=NONE
    hi NormalFloat guibg=NONE
    hi FloatBorder guibg=NONE
+   hi PMenu guibg=NONE
 ]]
