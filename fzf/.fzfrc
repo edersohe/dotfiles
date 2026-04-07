@@ -6,7 +6,7 @@ export FZF_DEFAULT_OPTS=" \
 --color=border:#6C7086,label:#CDD6F4"
 
 
-if [[ "$SHELL" = "$(which zsh)" ]]; then
+if [[ "$SHELL" = "$(which zsh 2>/dev/null)" ]]; then
   eval "$(fzf --zsh)"
 else
   eval "$(fzf --bash)"

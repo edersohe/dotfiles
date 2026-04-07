@@ -1,4 +1,4 @@
-if [[ "$SHELL" = "$(which zsh)" ]]; then
+if [[ "$SHELL" = "$(which zsh 2>/dev/null)" ]]; then
   eval "$(starship init zsh)"
 else
   eval "$(starship init bash)"
