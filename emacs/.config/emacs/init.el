@@ -27,7 +27,7 @@
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
 (add-to-list 'default-frame-alist '(alpha-background . 97))
-(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-15"))
+(add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
@@ -182,22 +182,22 @@
   (defun my/org-open-life ()
     "Open the main org file for life management."
     (interactive)
-    (find-file "~/org/life.org"))
+    (find-file "~/notes/life.org"))
   :bind (("C-x c l" . org-store-link)
          ("C-x c a" . org-agenda)
          ("C-x c c" . org-capture)
          ("C-x c o" . my/org-open-life))
   :custom
-  (org-default-notes-file "~/org/life.org")
-  (org-agenda-files '("~/org/life.org"))
+  (org-default-notes-file "~/notes/life.org")
+  (org-agenda-files '("~/notes/life.org"))
   (org-log-done 'time)
   (org-hide-leading-stars t)
   :config
   (setq org-capture-templates
-        '(("t" "Task / Meeting" entry (file+headline "~/org/life.org" "Actionable")
+        '(("t" "Task / Meeting" entry (file+headline "~/notes/life.org" "Actionable")
            "* TODO %^{Title/Subject} %^g\n  %^{When|SCHEDULED|DEADLINE}: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
            :empty-lines 1)
-          ("n" "Timeless Note" entry (file+headline "~/org/life.org" "Reference")
+          ("n" "Timeless Note" entry (file+headline "~/notes/life.org" "Reference")
            "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
            :empty-lines 1)))
   (setq org-agenda-custom-commands

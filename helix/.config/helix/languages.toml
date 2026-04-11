@@ -1,7 +1,3 @@
-# Helix GPT
-[language-server.gpt]
-command = "helix-gpt"
-
 # Copilot language server
 [language-server.copilot]
 command = "copilot-language-server"
@@ -11,14 +7,34 @@ args = ["--stdio"]
 editorInfo = { name = "Helix", version = "25.07.1" }
 editorPluginInfo = { name = "helix-copilot", version = "0.1.0" }
 
-# Elixir
+# Snippets language server
+[language-server.scls]
+command = "simple-completion-language-server"
+
+[language-server.scls.config]
+feature_words = false                # enable completion by word
+feature_snippets = true              # enable snippets
+snippets_first = true                # completions will return before snippets by default
+snippets_inline_by_word_tail = false # suggest snippets by WORD tail, for example text `xsq|` become `x^2|` when snippet `sq` has body `^2`
+feature_unicode_input = false        # enable "unicode input"
+feature_paths = false                # enable path completion
+feature_citations = false            # enable citation completion (only on `citation` feature enabled)
+
+[language-server.scls.environment]
+RUST_LOG = "info,simple-completion-language-server=info"
+LOG_FILE = "/tmp/completion.log"
+
+#Elixir
+[language-server.expert]
+command = "expert"
+
 [[language]]
 name = "elixir"
-language-servers = ["elixir-ls", "gpt", "copilot"]
+language-servers = ["elixir-ls", "expert", "copilot"]
 
 [[language]]
 name = "heex"
-language-servers = ["elixir-ls", "tailwindcss-ls", "gpt", "copilot"]
+language-servers = ["elixir-ls", "tailwindcss-ls", "expert", "copilot"]
 
 # Rust
 [language-server.rust-analyzer.config.check]
@@ -29,14 +45,14 @@ features = "all"
 
 [[language]]
 name = "rust"
-language-servers = ["rust-analyzer", "gpt", "copilot"]
+language-servers = ["rust-analyzer", "copilot"]
 
 # Go
 [[language]]
 name = "go"
 auto-format = true
 formatter = { command = "goimports" }
-language-servers = ["gopls", "golangci-lint-lsp", "gpt", "copilot"]
+language-servers = ["gopls", "golangci-lint-lsp", "copilot"]
 
 # PHP
 [language-server.phpactor]
@@ -45,7 +61,7 @@ args = ["language-server"]
 
 [[language]]
 name = "php"
-language-servers = ["phpactor", "gpt", "copilot"]
+language-servers = ["phpactor", "copilot"]
 
 # SQL
 [language-server.sql-language-server]
@@ -54,11 +70,17 @@ args = ["up", "--method", "stdio"]
 
 [[language]]
 name = "sql"
-language-servers = ["sql-language-server", "gpt", "copilot"]
+language-servers = ["sql-language-server", "copilot"]
 
 # Python
-[language-server.basedpyright.config.python.analysis]
-typeCheckingMode = "basic"
+[language-server.ty]
+command = "ty"
+args = ["server"]
+
+[language-server.ty.config]
+inlayHints.callArgumentNames = false
+experimental.rename = true
+experimental.autoImport = true
 
 [language-server.ruff]
 command = "ruff"
@@ -66,7 +88,7 @@ args = ["server"]
 
 [[language]]
 name = "python"
-language-servers = ["pyright", "ruff", "gpt", "copilot"]
+language-servers = ["ty", "ruff", "copilot"]
 
 # Ruby
 [language-server.ruby-lsp]
@@ -75,7 +97,7 @@ config = { diagnostics = true, formatting = true }
 
 [[language]]
 name = "ruby"
-language-servers = ["ruby-lsp", "gpt", "copilot"]
+language-servers = ["ruby-lsp", "copilot"]
 
 # HTML, CCS, JavaScript, TypeScript, JSX, and TSX
 [language-server]
@@ -89,7 +111,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -101,7 +122,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -113,7 +133,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -125,7 +144,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -137,7 +155,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -149,7 +166,6 @@ language-servers = [
   ] },
   "biome",
   "tailwindcss-ls",
-  "gpt",
   "copilot",
 ]
 
@@ -161,14 +177,13 @@ language-servers = [
     "format",
   ] },
   "biome",
-  "gpt",
   "copilot",
 ]
 
 [[language]]
 name = "toml"
-formatter = { command = "taplo", args = ["fmt", "-"] }
-language-servers = ["taplo", "gpt", "copilot"]
+formatter = { command = "tombi", args = ["fmt", "-"] }
+language-servers = ["tombi", "copilot"]
 
 [language-server.yaml-language-server.config.yaml]
 format = { enable = true }
@@ -176,13 +191,9 @@ validation = true
 
 [[language]]
 name = "yaml"
-language-servers = ["yaml-language-server", "gpt", "copilot"]
-
-# Markdown
-[language-server.iwe]
-command = "iwes"
+language-servers = ["yaml-language-server", "copilot"]
 
 [[language]]
 name = "markdown"
-language-servers = ["iwe", "gpt", "copilot"]
+language-servers = ["copilot", "marksman"]
 auto-format = true

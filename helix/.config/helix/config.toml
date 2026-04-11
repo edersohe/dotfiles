@@ -95,9 +95,10 @@ C-l = "move_char_right"
 # C-space = "inline_completion_trigger"
 
 [keys.normal.-]
-d = ":cd %sh{echo $DOTFILES}"
-h = ":cd %sh{echo $HOME}"
-- = ":cd %sh{echo $OLDPWD}"
+d = ":o %sh{echo $HOME/projects/dotfiles}"
+c = ":o %sh{echo $HOME/.config}"
+h = ":o %sh{echo $HOME}"
+n = ":o %sh{echo $HOME/notes}"
 
 [editor.whitespace.render]
 space = "none"
