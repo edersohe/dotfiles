@@ -191,6 +191,7 @@ vim.pack.add({
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-mini/mini.nvim' },
   { src = 'https://github.com/christoomey/vim-tmux-navigator' },
+  { src = 'https://github.com/tpope/vim-fugitive' },
 })
 
 local hooks = function(ev)
@@ -305,23 +306,18 @@ vim.keymap.set("n", "<leader>j", '<cmd>Pick list scope="jump"<CR>', { desc = "Ju
 vim.keymap.set("n", "<leader>'", "<cmd>Pick marks<CR>", { desc = "Marks" })
 vim.keymap.set("n", '<leader>"', "<cmd>Pick registers<CR>", { desc = "Registers" })
 
-require("mini.git").setup()
 require("mini.diff").setup({ view = { style = "sign" } })
 
-local git_log = "Git log --decorate --graph --all --pretty=short"
-vim.keymap.set("n", "<leader>gg", "<cmd>terminal git add -i<CR>", { desc = "Git" })
+local git_log = "tab Git log --decorate --graph --all --pretty=short"
+vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Git" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
 vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
 vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
-vim.keymap.set("n", "<leader>gd", "<cmd>Git diff -- %<CR>", { desc = "Diff" })
-vim.keymap.set("n", "<leader>gD", "<cmd>Git diff<CR>", { desc = "Diff" })
+vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
-vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>", { desc = "Status" })
-vim.keymap.set("n", "<leader>gS", "<cmd>Git stash<CR>", { desc = "Stash" })
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
-vim.keymap.set("n", "<leader>gi", "<cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Inspect" })
 
 require 'nvim-treesitter'.setup {
   install_dir = vim.fn.stdpath('data') .. '/site'

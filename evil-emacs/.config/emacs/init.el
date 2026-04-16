@@ -83,7 +83,7 @@
 
 (use-package marginalia
   :ensure t
-  :config (marginalia-mode))
+  :hook (after-init . marginalia-mode))
 
 (use-package undo-fu
   :ensure t)
