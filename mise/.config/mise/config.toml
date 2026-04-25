@@ -32,6 +32,7 @@ tree-sitter = "latest"
 # "github:thomasschafer/scooter" = "latest"
 # "github:elixir-lang/expert" = "latest"
 
+"pipx:neovim-remote" = "latest"
 # "pipx:pyinfra" = "latest"
 # "pipx:honcho" = "latest"
 
@@ -51,10 +52,10 @@ ripgrep = "latest"
 fd = "latest"
 btop = "latest"
 lazygit = "latest"
-# fzf = "latest"
-# eza = "latest"
-# fastfetch = "latest"
-# starship = "latest"
+fzf = "latest"
+eza = "latest"
+fastfetch = "latest"
+starship = "latest"
 
 [settings.pipx]
 uvx = true

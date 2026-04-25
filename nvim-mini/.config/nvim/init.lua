@@ -63,13 +63,21 @@ vim.opt.path:append("**")
 vim.opt.termguicolors = true
 
 local tree_sitters = {
+  "asm",
+  "awk",
   "bash",
   "c",
   "c3",
   "c_sharp",
+  "caddy",
+  "cmake",
+  "comment",
+  "commonlisp",
   "css",
+  "csv",
   "dart",
   "diff",
+  "disassembly",
   "dockerfile",
   "eex",
   "elixir",
@@ -90,15 +98,29 @@ local tree_sitters = {
   "html",
   "htmldjango",
   "http",
+  "hurl",
+  "hjson",
   "java",
+  "javadoc",
   "javascript",
+  "jinja",
+  "jinja_inline",
+  "jjdescription",
+  "jq",
   "json",
   "json5",
   "jsonnet",
+  "kotlin",
+  "latex",
   "lua",
   "luadoc",
+  "make",
   "markdown",
   "markdown_inline",
+  "mermaid",
+  "nasm",
+  "nginx",
+  "ninja",
   "nix",
   "perl",
   "php",
@@ -108,17 +130,20 @@ local tree_sitters = {
   "query",
   "ruby",
   "rust",
+  "scheme",
   "scss",
   "sql",
   "svelte",
   "templ",
   "terraform",
   "toml",
+  "tsv",
   "tsx",
   "twig",
   "typescript",
   "vim",
   "vimdoc",
+  "xml",
   "yaml",
   "zig",
 }
@@ -187,20 +212,14 @@ local language_servers = {
 }
 
 vim.pack.add({
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/romus204/tree-sitter-manager.nvim' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/nvim-mini/mini.nvim' },
   { src = 'https://github.com/christoomey/vim-tmux-navigator' },
   { src = 'https://github.com/tpope/vim-fugitive' },
+  { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
+  { src = 'https://github.com/3rd/image.nvim' },
 })
-
-local hooks = function(ev)
-  local name, kind = ev.data.spec.name, ev.data.kind
-  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
-    vim.cmd('TSUpdate')
-  end
-end
-vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 local on_attach = function(_, bufnr)
   -- lsp actions
@@ -223,9 +242,9 @@ local on_attach = function(_, bufnr)
   local client = vim.lsp.get_clients({ bufnr = bufnr, name = "copilot" })[1]
   if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
     vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
-    vim.keymap.set("i", "<S-CR>", function()
+    vim.keymap.set("i", "<Tab>", function()
       if not vim.lsp.inline_completion.get() then
-        return "<S-CR>"
+        return "<Tab>"
       end
     end, {
       expr = true,
@@ -319,15 +338,12 @@ vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "L
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
 
-require 'nvim-treesitter'.setup {
-  install_dir = vim.fn.stdpath('data') .. '/site'
-}
-require 'nvim-treesitter'.install(tree_sitters)
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = tree_sitters,
-  callback = function()
-    vim.treesitter.start()
-  end
+require('render-markdown').setup({})
+require('image').setup({})
+
+require("tree-sitter-manager").setup({
+  ensure_installed = tree_sitters,
+  border = border,
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

@@ -32,6 +32,7 @@ export XKB_DEFAULT_LAYOUT=us
 export XKB_DEFAULT_VARIANT=altgr-intl
 export LC_ALL=en_US.UTF-8
 export ERL_AFLAGS="-kernel shell_history enabled"
+export EDITOR="nvim"
 
 [[ -f $HOME/.env ]] && . "$HOME"/.env
 [[ -f $HOME/.miserc ]] && . "$HOME"/.miserc

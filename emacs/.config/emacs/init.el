@@ -22,7 +22,11 @@
               native-comp-async-report-warnings-errors nil
               native-comp-speed 3
               project-mode-line t
-              scroll-conservatively 101)
+              scroll-conservatively 101
+              elisp-flymake-byte-compile nil
+              tramp-connection-timeout 10
+              tramp-use-ssh-controlmaster-options nil
+              native-comp-deferred-compilation t)
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
@@ -39,9 +43,9 @@
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
-(add-hook 'prog-mode-hook #'hl-line-mode)
+;; (add-hook 'prog-mode-hook #'hl-line-mode)
 
-(setq completion-styles '(basic flex)
+(setq completion-styles '(basic flex partial-completion)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
@@ -70,12 +74,13 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-(use-package doom-themes
+(use-package modus-themes
   :ensure t
-  :config (load-theme 'doom-tokyo-night :no-confirm))
+  :config
+  (load-theme 'modus-vivendi-tinted :no-confirm))
 
 (use-package which-key
-  :demand t
+  :ensure t
   :custom
   (which-key-idle-delay 0.3)
   (which-key-idle-secondary-delay 0.3)
@@ -109,6 +114,7 @@
 (global-set-key (kbd "C-x c v") #'my/vterm)
 
 (use-package eglot
+  :ensure t
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
@@ -131,6 +137,7 @@
               '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
+  :ensure t
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c d n" . flymake-goto-next-error)
@@ -173,11 +180,8 @@
               ("C-c h p" . diff-hl-previous-hunk)
               ("C-c h s" . diff-hl-show-hunk)))
 
-(use-package magit
-  :ensure t
-  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
-
 (use-package org
+  :ensure t
   :init
   (defun my/org-open-life ()
     "Open the main org file for life management."
@@ -216,18 +220,44 @@
          ("C-p" . copilot-previous-completion)
          ("TAB" . copilot-accept-completion)))
 
-(use-package eca
-  :ensure t
-  :custom
-  (eca-completion-idle-delay nil)
-  :bind (("C-x c e" . eca)))
+(use-package tramp
+  :ensure t)
 
-(use-package diminish
-  :ensure t
+(use-package project
+  :ensure t)
+
+(use-package epa
+  :custom
+  (epa-file-select-keys nil) ; Use symmetric if no key selected
+  (epa-pinentry-mode 'loopback) ; Password prompt in the minibuffer
   :config
-  (diminish 'which-key-mode)
-  (diminish 'eldoc-mode)
-  (diminish 'completion-preview-mode))
+  (setq auth-sources '("~/.authinfo.gpg"))) ; Encrypted password storage
+
+(use-package gnus
+  :bind (("C-x m" . gnus))
+  :custom
+  ;; IMAP Gmail Setup
+  (gnus-select-method
+   '(nnimap "gmail"
+            (nnimap-address "imap.gmail.com")
+            (nnimap-server-port "imaps")
+            (nnimap-stream ssl)))
+  
+  ;; RSS Feeds Setup
+  (gnus-secondary-select-methods '((nnrss "RSS")))
+  
+  ;; GPG Security in Gnus
+  (gnus-message-replysign t) ; Automatically sign replies
+  (gnus-message-replyencrypt t) ; Automatically encrypt if original was
+  (mm-verify-option 'known) ; Auto-verify signatures
+  (mm-decrypt-option 'known) ; Auto-decrypt known messages
+  
+  ;; Sending Mail via SMTP
+  (message-send-mail-function 'smtpmail-send-it)
+  (smtpmail-default-smtp-server "smtp.gmail.com")
+  (smtpmail-smtp-server "smtp.gmail.com")
+  (smtpmail-smtp-service 587)
+  (smtpmail-stream-type 'starttls))
 
 (provide 'init)
 ;;; init.el ends here
