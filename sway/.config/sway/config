@@ -16,7 +16,7 @@ set $right l
 # Your preferred terminal emulator
 set $term footclient
 # Your preferred application launcher
-set $menu foot-menu
+set $menu ~/.bin/foot-menu
 
 gaps outer 4
 gaps inner 2
@@ -106,7 +106,7 @@ exec swayidle -w \
     bindsym $mod+c kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu fzf-launcher 40 15
+    bindsym $mod+d exec $menu ~/.bin/fzf-launcher 40 15
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -251,9 +251,9 @@ bindsym $mod+r mode "resize"
     bindsym $mod+p exec qutebrowser --no-err-windows --target private-window search.brave.com -C ~/.config/qutebrowser/incognito.py
     bindsym $mod+Shift+w exec google-chrome-stable --ozone-platform-hint=auto google.com
     bindsym $mod+Shift+p exec google-chrome-stable --ozone-platform-hint=auto --incognito search.brave.com
-    bindsym $mod+s exec $menu fzf-session 20 8
+    bindsym $mod+s exec $menu ~/.bin/fzf-session 20 8
     bindsym $mod+x exec swaylock -f -c 000000
-    bindsym $mod+b exec $menu fzf-bookmarks
+    bindsym $mod+b exec $menu ~/.bin/fzf-bookmarks
     bindsym $mod+e exec emacsclient -c
 
 for_window [app_id=fzf-launcher] floating enable

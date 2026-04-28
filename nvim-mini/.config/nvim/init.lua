@@ -63,91 +63,21 @@ vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
 vim.opt.termguicolors = true
+vim.opt.cursorline = true
 
 local tree_sitters = {
-  "asm",
-  "awk",
-  "bash",
-  "c",
-  "c3",
-  "c_sharp",
-  "caddy",
-  "cmake",
-  "comment",
-  "commonlisp",
-  "css",
-  "csv",
-  "dart",
-  "diff",
-  "disassembly",
-  "dockerfile",
-  "eex",
-  "elixir",
-  "embedded_template",
-  "git_config",
-  "git_rebase",
-  "gitattributes",
-  "gitcommit",
-  "gitignore",
-  "go",
-  "gomod",
-  "gosum",
-  "gotmpl",
-  "gowork",
-  "graphql",
-  "hcl",
-  "heex",
-  "html",
-  "htmldjango",
-  "http",
-  "hurl",
-  "hjson",
-  "java",
-  "javadoc",
-  "javascript",
-  "jinja",
-  "jinja_inline",
-  "jjdescription",
-  "jq",
-  "json",
-  "json5",
-  "jsonnet",
-  "kotlin",
-  "latex",
-  "lua",
-  "luadoc",
-  "make",
-  "markdown",
-  "markdown_inline",
-  "mermaid",
-  "nasm",
-  "nginx",
-  "ninja",
-  "nix",
-  "perl",
-  "php",
-  "php_only",
-  "proto",
-  "python",
-  "query",
-  "ruby",
-  "rust",
-  "scheme",
-  "scss",
-  "sql",
-  "svelte",
-  "templ",
-  "terraform",
-  "toml",
-  "tsv",
-  "tsx",
-  "twig",
-  "typescript",
-  "vim",
-  "vimdoc",
-  "xml",
-  "yaml",
-  "zig",
+  "asm", "awk", "bash", "c", "c3", "c_sharp", "caddy", "cmake", "comment",
+  "commonlisp", "css", "csv", "dart", "diff", "disassembly", "dockerfile",
+  "eex", "elixir", "embedded_template", "git_config", "git_rebase",
+  "gitattributes", "gitcommit", "gitignore", "go", "gomod", "gosum",
+  "gotmpl", "gowork", "graphql", "hcl", "heex", "html", "htmldjango",
+  "http", "hurl", "hjson", "java", "javadoc", "javascript", "jinja",
+  "jinja_inline", "jjdescription", "jq", "json", "json5", "jsonnet",
+  "kotlin", "latex", "lua", "luadoc", "make", "markdown", "markdown_inline",
+  "mermaid", "nasm", "nginx", "ninja", "nix", "perl", "php", "php_only",
+  "proto", "python", "query", "ruby", "rust", "scheme", "scss", "sql",
+  "svelte", "templ", "terraform", "toml", "tsv", "tsx", "twig",
+  "typescript", "vim", "vimdoc", "xml", "yaml", "zig",
 }
 
 local language_servers = {
@@ -224,13 +154,11 @@ vim.pack.add({
 })
 
 local on_attach = function(_, bufnr)
-  -- lsp actions
   vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
   vim.keymap.set({ "n", "v" }, "<leader>lf", vim.lsp.buf.format, { buffer = bufnr, desc = "Format code" })
   vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code actions" })
   vim.keymap.set("n", "<leader>lh", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature help" })
 
-  -- lsp pickers
   vim.keymap.set("n", "<leader>ld", '<cmd>Pick diagnostic scope="current"<CR>',
     { buffer = bufnr, desc = "Document diagnostics" })
   vim.keymap.set("n", "<leader>lD", '<cmd>Pick diagnostic scope="all"<CR>',
@@ -257,14 +185,8 @@ MiniNotify.setup({
 })
 vim.notify = MiniNotify.make_notify()
 
-require("mini.statusline").setup({
-  use_icons = true,
-})
-
-require("mini.tabline").setup({
-  show_icons = true,
-  tabpage_section = "right",
-})
+require("mini.statusline").setup({ use_icons = true })
+require("mini.tabline").setup({ show_icons = true, tabpage_section = "right" })
 
 require("mini.files").setup({
   mappings = {
@@ -298,11 +220,7 @@ vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.select("delete", {force
 vim.keymap.set("n", "<leader>sr", '<cmd>lua MiniSessions.select("read")<CR>', { desc = "Read" })
 
 local MiniPick = require("mini.pick")
-MiniPick.setup({
-  window = {
-    config = { border = border },
-  },
-})
+MiniPick.setup({ window = { config = { border = border } } })
 vim.ui.select = MiniPick.ui_select
 vim.keymap.set("n", "<leader>f", "<cmd>Pick files<CR>", { desc = "Find files" })
 vim.keymap.set("n", "<leader>/", "<cmd>Pick grep_live<CR>", { desc = "Grep" })
@@ -327,7 +245,7 @@ vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" }
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
 
 require('render-markdown').setup({})
-require('image').setup({})
+require('image').setup({ backend = 'sixel' })
 
 require("tree-sitter-manager").setup({
   ensure_installed = tree_sitters,
@@ -391,18 +309,6 @@ require("mini.completion").setup({
   },
 })
 
-local MiniIndentScope = require("mini.indentscope")
-MiniIndentScope.setup({
-  symbol = '│',
-  options = {
-    indent_at_cursor = false,
-    draw = {
-      animation = MiniIndentScope.gen_animation.none,
-      delay = 100,
-    },
-  },
-})
-
 local miniclue = require('mini.clue')
 miniclue.setup({
   triggers = {
@@ -437,22 +343,12 @@ miniclue.setup({
     { mode = 'x', keys = '<leader>l',  desc = '+Lsp' },
     { mode = 'n', keys = '<leader>s',  desc = '+Session' },
     { mode = 'x', keys = '<leader>s',  desc = '+Session' },
-    { mode = 'n', keys = '<leader>o',  desc = '+Org' },
-    { mode = 'x', keys = '<leader>o',  desc = '+Org' },
-    { mode = 'n', keys = '<leader>gh', desc = '+Hunks' },
-    { mode = 'x', keys = '<leader>gh', desc = '+Hunks' },
     { mode = 'n', keys = '<leader>gd', desc = '+Diff' },
     { mode = 'x', keys = '<leader>gd', desc = '+Diff' },
   },
-  window = {
-    config = {
-      border = border,
-    },
-    delay = 0,
-  },
+  window = { config = { border = border }, delay = 0 },
 })
 
--- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 vim.keymap.set('n', "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
@@ -469,58 +365,42 @@ vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
 vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
 
--- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
   { desc = "Config" })
 vim.keymap.set('n', "<leader>nu", "<cmd>lua vim.pack.update()<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
   { desc = "Reload" })
 
--- nvim improvements
 vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = "YankHighlight",
-  callback = function()
-    vim.highlight.on_yank({ timeout = 500 })
-  end,
+  callback = function() vim.highlight.on_yank({ timeout = 500 }) end,
 })
 
 -- convert from vimscript to lua https://neovim.io/doc/user/autocmd.html#ModeChanged
 vim.api.nvim_create_autocmd("ModeChanged", {
   pattern = "[vV\x16]*:*",
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
 vim.api.nvim_create_autocmd("ModeChanged", {
   pattern = "*:[vV\x16]*",
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
 vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave" }, {
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
--- man and help split to the right
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "help", "man" },
-  callback = function()
-    vim.cmd("wincmd L")
-  end,
+  callback = function() vim.cmd("wincmd L") end,
 })
 
--- diagnostics
 vim.diagnostic.config({
   float = false,
   severity_sort = true,
-  virtual_text = {
-    current_line = true,
-  },
+  virtual_text = { current_line = true },
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "󰅙",
@@ -531,7 +411,6 @@ vim.diagnostic.config({
   },
 })
 
--- Auto close quickfix or location list
 vim.api.nvim_create_augroup("AutoQF", { clear = true })
 vim.api.nvim_create_autocmd("WinLeave", {
   group = "AutoQF",
@@ -544,7 +423,6 @@ vim.api.nvim_create_autocmd("WinLeave", {
   end,
 })
 
--- Keymap only for quickfix or location list
 vim.api.nvim_create_autocmd("FileType", {
   group = "AutoQF",
   pattern = "qf",
@@ -556,7 +434,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- start terminal in insert mode
 vim.api.nvim_create_autocmd("TermOpen", {
   pattern = "*",
   command = "startinsert",

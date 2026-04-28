@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq package-install-upgrade-built-in t)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
@@ -30,20 +31,22 @@
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
-(add-to-list 'default-frame-alist '(alpha-background . 97))
+(add-to-list 'default-frame-alist '(alpha-background . 95))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-;;(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
 (repeat-mode t)
 (global-auto-revert-mode t)
+(column-number-mode t)
+(fido-vertical-mode 1)
+(load-theme 'modus-vivendi-tritanopia :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
-;; (add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'prog-mode-hook #'hl-line-mode)
 
 (setq completion-styles '(basic flex partial-completion)
       completion-category-defaults nil
@@ -53,15 +56,12 @@
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
-      completion-cycle-threshold 5
+      completion-cycle-threshold 2
       completion-ignore-case t
       completions-detailed t
       completion-show-help nil
-      tab-always-indent 'complete)
-(fido-vertical-mode t)
-(global-completion-preview-mode 1)
-(define-key completion-preview-active-mode-map (kbd "C-n") #'completion-preview-next-candidate)
-(define-key completion-preview-active-mode-map (kbd "C-p") #'completion-preview-prev-candidate)
+      tab-always-indent 'complete
+      icomplete-show-matches-on-no-input nil)
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
@@ -74,24 +74,27 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
-(use-package modus-themes
-  :ensure t
-  :config
-  (load-theme 'misterioso :no-confirm))
-
 (use-package which-key
-  :ensure t
   :custom
   (which-key-idle-delay 0.3)
   (which-key-idle-secondary-delay 0.3)
   (which-key-sort-order 'which-key-key-order-alpha)
   (which-key-allow-imprecise-window-fit nil)
-  :config
-  (which-key-mode))
+  :config (which-key-mode 1))
 
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
+
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
+  (corfu-quit-no-match t)
+  :init (global-corfu-mode 1))
 
 (use-package undo-fu
   :ensure t)
@@ -114,7 +117,6 @@
 (global-set-key (kbd "C-x c v") #'my/vterm)
 
 (use-package eglot
-  :ensure t
   :hook (prog-mode . eglot-ensure)
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
@@ -137,7 +139,6 @@
               '(:expert (:workspaceSymbols (:minQueryLength 0))))
 
 (use-package flymake
-  :ensure t
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c d n" . flymake-goto-next-error)
@@ -159,12 +160,6 @@
   (markdown-mode . flyspell-mode)
   :init (setq markdown-command "multimarkdown"))
 
-(use-package rust-mode
-  :ensure t
-  :init
-  (setq rust-format-on-save t
-        rust-mode-treesitter-derive t))
-
 (use-package geiser-guile
   :ensure t)
 
@@ -181,7 +176,6 @@
               ("C-c h s" . diff-hl-show-hunk)))
 
 (use-package org
-  :ensure t
   :init
   (defun my/org-open-life ()
     "Open the main org file for life management."
@@ -220,39 +214,26 @@
          ("C-p" . copilot-previous-completion)
          ("TAB" . copilot-accept-completion)))
 
-(use-package tramp
-  :ensure t)
-
-(use-package project
-  :ensure t)
-
 (use-package epa
   :custom
-  (epa-file-select-keys nil) ; Use symmetric if no key selected
-  (epa-pinentry-mode 'loopback) ; Password prompt in the minibuffer
+  (epa-file-select-keys nil)
+  (epa-pinentry-mode 'loopback)
   :config
-  (setq auth-sources '("~/.authinfo.gpg"))) ; Encrypted password storage
+  (setq auth-sources '("~/.authinfo.gpg")))
 
 (use-package gnus
   :bind (("C-x m" . gnus))
   :custom
-  ;; IMAP Gmail Setup
   (gnus-select-method
    '(nnimap "gmail"
             (nnimap-address "imap.gmail.com")
             (nnimap-server-port "imaps")
             (nnimap-stream ssl)))
-  
-  ;; RSS Feeds Setup
   (gnus-secondary-select-methods '((nnrss "RSS")))
-  
-  ;; GPG Security in Gnus
-  (gnus-message-replysign t) ; Automatically sign replies
-  (gnus-message-replyencrypt t) ; Automatically encrypt if original was
-  (mm-verify-option 'known) ; Auto-verify signatures
-  (mm-decrypt-option 'known) ; Auto-decrypt known messages
-  
-  ;; Sending Mail via SMTP
+  (gnus-message-replysign t)
+  (gnus-message-replyencrypt t)
+  (mm-verify-option 'known)
+  (mm-decrypt-option 'known)
   (message-send-mail-function 'smtpmail-send-it)
   (smtpmail-default-smtp-server "smtp.gmail.com")
   (smtpmail-smtp-server "smtp.gmail.com")
