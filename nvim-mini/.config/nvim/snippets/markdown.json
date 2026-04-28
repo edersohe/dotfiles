@@ -1,0 +1,120 @@
+{
+  "Meeting": {
+    "prefix": "nmeet",
+    "body": [
+      "# Meeting: ${1:title}",
+      "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE",
+      "Attendees: ${2:name}",
+      "",
+      "## Agenda",
+      "- ${3:item}",
+      "",
+      "## Notes",
+      "$4",
+      "",
+      "## Actions",
+      "- BACKLOG: ${5:action}",
+      "$0"
+    ],
+    "description": "Meeting note"
+  },
+  "Task": {
+    "prefix": "ntask",
+    "body": [
+      "# Task: ${1:title}",
+      "Status: BACKLOG",
+      "Created: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "Due: ${2:$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE}",
+      "",
+      "## Notes",
+      "$3",
+      "",
+      "## Checklist",
+      "- [ ] ${4:first step}",
+      "$0"
+    ],
+    "description": "Task note"
+  },
+  "Project": {
+    "prefix": "nproj",
+    "body": [
+      "# Project: ${1:title}",
+      "Status: BACKLOG",
+      "Created: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "",
+      "## Goal",
+      "${2:goal}",
+      "",
+      "## Notes",
+      "$3",
+      "",
+      "## Next",
+      "- BACKLOG: ${4:next action}",
+      "$0"
+    ],
+    "description": "Project note"
+  },
+  "Daily meeting": {
+    "prefix": "nstand",
+    "body": [
+      "# Daily meeting: ${1:title}",
+      "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "",
+      "## Yesterday",
+      "- ${2:item}",
+      "",
+      "## Today",
+      "- BACKLOG: ${3:item}",
+      "",
+      "## Blockers",
+      "- ${4:none}",
+      "$0"
+    ],
+    "description": "Daily meeting note"
+  },
+  "Research": {
+    "prefix": "nresearch",
+    "body": [
+      "# Research: ${1:title}",
+      "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "",
+      "## Question",
+      "${2:question}",
+      "",
+      "## Notes",
+      "$3",
+      "",
+      "## Sources",
+      "- ${4:url}",
+      "$0"
+    ],
+    "description": "Research note"
+  },
+  "Code snippet": {
+    "prefix": "ncode",
+    "body": [
+      "# Snippet: ${1:title}",
+      "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "Language: ${2:lua}",
+      "",
+      "## Context",
+      "${3:why}",
+      "",
+      "```$2",
+      "$4",
+      "```",
+      "$0"
+    ],
+    "description": "Code snippet note"
+  },
+  "Fast note": {
+    "prefix": "nfast",
+    "body": [
+      "# ${1:title}",
+      "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE",
+      "",
+      "$0"
+    ],
+    "description": "Fast note"
+  }
+}

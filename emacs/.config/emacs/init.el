@@ -77,7 +77,7 @@
 (use-package modus-themes
   :ensure t
   :config
-  (load-theme 'modus-vivendi-tinted :no-confirm))
+  (load-theme 'misterioso :no-confirm))
 
 (use-package which-key
   :ensure t

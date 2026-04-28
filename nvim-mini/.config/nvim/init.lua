@@ -10,6 +10,8 @@ vim.g.netrw_preview = 1
 vim.g.netrw_keepdir = 0
 vim.g.netrw_localcopydircmd = 'cp -r'
 
+vim.g.copilot_filetypes = { ["*"] = false }
+
 vim.opt.clipboard:append("unnamedplus")
 vim.g.clipboard = 'osc52'
 if vim.env.TMUX then
@@ -208,7 +210,6 @@ local language_servers = {
   ansiblels = {},
   zls = {},
   org = {},
-  copilot = {},
 }
 
 vim.pack.add({
@@ -219,6 +220,7 @@ vim.pack.add({
   { src = 'https://github.com/tpope/vim-fugitive' },
   { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
   { src = 'https://github.com/3rd/image.nvim' },
+  { src = 'https://github.com/github/copilot.vim' },
 })
 
 local on_attach = function(_, bufnr)
@@ -238,20 +240,6 @@ local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>lS", '<cmd>Pick lsp scope="workspace_symbol"<CR>',
     { buffer = bufnr, desc = "Workspace symbols" })
   vim.keymap.set("n", "<leader>lr", '<cmd>Pick lsp scope="references"<CR>', { buffer = bufnr, desc = "References" })
-
-  local client = vim.lsp.get_clients({ bufnr = bufnr, name = "copilot" })[1]
-  if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
-    vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
-    vim.keymap.set("i", "<Tab>", function()
-      if not vim.lsp.inline_completion.get() then
-        return "<Tab>"
-      end
-    end, {
-      expr = true,
-      replace_keycodes = true,
-      desc = "Get the current inline completion",
-    })
-  end
 end
 
 local MiniIcons = require("mini.icons")
