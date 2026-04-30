@@ -36,7 +36,8 @@ shadows enable
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/.wallpaper fill
+output HDMI-A-1 bg ~/pictures/wallpapers/7873.jpg fill
+output DP-1 bg ~/pictures/wallpapers/2151699372.jpg fill
 #
 # Example configuration:
 #
