@@ -7,9 +7,9 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
-              make-backup-files nil
-              auto-save-default nil
-              create-lockfiles nil
+              backup-directory-alist '(("." . "~/.cache/emacs/backups/"))
+              auto-save-file-name-transforms '((".*" "~/.cache/emacs/autosave/" t))
+              lock-file-name-transforms '(("\\`/.\\*\\'" ".\\*") (".*" "~/.cache/emacs/lockfiles/" t))
               indent-tabs-mode nil
               tab-width 4
               blink-cursor-mode t
@@ -35,24 +35,25 @@
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(save-place-mode t)
-(savehist-mode t)
-(recentf-mode t)
-(repeat-mode t)
-(global-auto-revert-mode t)
-(column-number-mode t)
-(fido-vertical-mode 1)
+(save-place-mode 1)
+(savehist-mode 1)
+(recentf-mode 1)
+(repeat-mode 1)
+(global-auto-revert-mode 1)
+(column-number-mode 1)
+(electric-pair-mode 1)
 (load-theme 'modus-vivendi-tritanopia :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(add-hook 'prog-mode-hook #'electric-pair-mode)
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'text-mode-hook #'hl-line-mode)
 
 (setq completion-styles '(basic flex partial-completion)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
-      completion-auto-help nil
+      completion-auto-help 'always
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
@@ -61,13 +62,18 @@
       completions-detailed t
       completion-show-help nil
       tab-always-indent 'complete
-      icomplete-show-matches-on-no-input nil)
+      max-mini-window-height 12
+      resize-mini-frames t)
 
-(defun my/kill-current-buffer ()
-  "Kill the current buffer without prompting."
-  (interactive)
-  (kill-buffer (current-buffer)))
-(global-set-key (kbd "C-x k") #'my/kill-current-buffer)
+(add-to-list 'display-buffer-alist
+             '("\\*Completions\\*"
+               (display-buffer-in-side-window)
+               ;; (window-height . 12)
+               (side . bottom)
+               (slot . 0)
+               (window-parameters . ((no-other-window . t)
+                                     (mode-line-format . none)))))
+
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package exec-path-from-shell
@@ -85,16 +91,6 @@
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
-
-(use-package corfu
-  :ensure t
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)
-  (corfu-auto-delay 0.2)
-  (corfu-auto-prefix 2)
-  (corfu-quit-no-match t)
-  :init (global-corfu-mode 1))
 
 (use-package undo-fu
   :ensure t)
@@ -114,10 +110,68 @@
   (let ((name (read-string "Name for vterm buffer: ")))
     (vterm (concat "*vterm-" name "*"))))
 
-(global-set-key (kbd "C-x c v") #'my/vterm)
+(global-set-key (kbd "C-c v") #'my/vterm)
+
+(setq treesit-language-source-alist
+      '((python "https://github.com/tree-sitter/tree-sitter-python")
+        (go "https://github.com/tree-sitter/tree-sitter-go")
+        (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
+        (heex "https://github.com/phoenixframework/tree-sitter-heex")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (rust "https://github.com/tree-sitter/tree-sitter-rust")
+        (c "https://github.com/tree-sitter/tree-sitter-c")
+        (html "https://github.com/tree-sitter/tree-sitter-html")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
+        (php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
+        (java "https://github.com/tree-sitter/tree-sitter-java")
+        (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+        (toml "https://github.com/tree-sitter/tree-sitter-toml")
+        (json "https://github.com/tree-sitter/tree-sitter-json")))
+
+(dolist (lang treesit-language-source-alist)
+  (unless (treesit-language-available-p (car lang))
+    (treesit-install-language-grammar (car lang))))
+
+(setq major-mode-remap-alist
+      '((python-mode . python-ts-mode)
+        (go-mode . go-ts-mode)
+        (js-mode . js-ts-mode)
+        (c-mode . c-ts-mode)
+        (mhtml-mode . html-ts-mode)
+        (css-mode . css-ts-mode)
+        (ruby-mode . ruby-ts-mode)
+        (php-mode . php-ts-mode)
+        (java-mode . java-ts-mode)
+        (yaml-mode . yaml-ts-mode)
+        (toml-mode . toml-ts-mode)
+        (js-json-mode . json-ts-mode)))
+
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.exs?\\'" . elixir-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-ts-mode))
 
 (use-package eglot
-  :hook (prog-mode . eglot-ensure)
+  :hook ((python-ts-mode . eglot-ensure)
+         (go-ts-mode . eglot-ensure)
+         (elixir-ts-mode . eglot-ensure)
+         (heex-ts-mode . eglot-ensure)
+         (js-ts-mode . eglot-ensure)
+         (typescript-ts-mode . eglot-ensure)
+         (tsx-ts-mode . eglot-ensure)
+         (rust-ts-mode . eglot-ensure)
+         (c-ts-mode . eglot-ensure)
+         (html-ts-mode . eglot-ensure)
+         (css-ts-mode . eglot-ensure)
+         (ruby-ts-mode . eglot-ensure)
+         (php-ts-mode . eglot-ensure)
+         (java-ts-mode . eglot-ensure)
+         ;; Uncomment if you install these via MELPA:
+         ;; (kotlin-mode . eglot-ensure)
+         ;; (dart-mode . eglot-ensure)
+         )
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
               ("C-c l a" . eglot-code-actions)
@@ -129,11 +183,10 @@
   (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
   :config
-  (add-to-list 'auto-mode-alist '("\\.exs$" . elixir-ts-mode))
-  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("ruff" "server")))
-  (add-to-list 'eglot-server-programs '((rust-mode rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
-  (add-to-list 'eglot-server-programs '((elixir-mode elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) . ("ruby-lsp"))))
+  (add-to-list 'eglot-server-programs '((python-ts-mode) . ("ruff" "server")))
+  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs '((elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
+  (add-to-list 'eglot-server-programs '((ruby-ts-mode) . ("ruby-lsp"))))
 
 (setq-default eglot-workspace-configuration
               '(:expert (:workspaceSymbols (:minQueryLength 0))))
@@ -141,20 +194,12 @@
 (use-package flymake
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-              ("C-c d n" . flymake-goto-next-error)
-              ("C-c d p" . flymake-goto-prev-error)
-              ("C-c d b" . flymake-show-diagnostics-buffer)
-              ("C-c d a" . flymake-show-project-diagnostics)))
-
-(use-package treesit-auto
-  :ensure t
-  :custom (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+              ("C-c d" . flymake-show-buffer-diagnostics)
+              ("C-c D" . flymake-show-project-diagnostics)))
 
 (use-package markdown-mode
   :ensure t
+  :custom (markdown-fontify-code-blocks-natively t)
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . flyspell-mode)
@@ -181,10 +226,10 @@
     "Open the main org file for life management."
     (interactive)
     (find-file "~/notes/life.org"))
-  :bind (("C-x c l" . org-store-link)
-         ("C-x c a" . org-agenda)
-         ("C-x c c" . org-capture)
-         ("C-x c o" . my/org-open-life))
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+         ("C-c o" . my/org-open-life))
   :custom
   (org-default-notes-file "~/notes/life.org")
   (org-agenda-files '("~/notes/life.org"))
@@ -222,7 +267,7 @@
   (setq auth-sources '("~/.authinfo.gpg")))
 
 (use-package gnus
-  :bind (("C-x m" . gnus))
+  :bind (("C-c m" . gnus))
   :custom
   (gnus-select-method
    '(nnimap "gmail"
