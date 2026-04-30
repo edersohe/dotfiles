@@ -63,23 +63,6 @@
       completion-show-help nil
       tab-always-indent 'complete)
 
-(add-to-list 'display-buffer-alist
-             '("\\*Completions\\*"
-               (display-buffer-in-side-window)
-               (side . bottom)
-               (slot . 0)
-               (window-parameters . ((no-other-window . t)
-                                     (mode-line-format . none)))))
-(defun my/minibuffer-auto-tab ()
-  "Simulate a TAB key press immediately upon entering the minibuffer."
-  ;; run-at-time 0 ensures the minibuffer is fully initialized before the key is sent
-  (run-at-time 0 nil
-               (lambda ()
-                 (setq unread-command-events
-                       (append (listify-key-sequence (kbd "TAB"))
-                               unread-command-events)))))
-(add-hook 'minibuffer-setup-hook #'my/minibuffer-auto-tab)
-
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package exec-path-from-shell
