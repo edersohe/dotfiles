@@ -7,9 +7,9 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
-              backup-directory-alist '(("." . "~/.cache/emacs/backups/"))
-              auto-save-file-name-transforms '((".*" "~/.cache/emacs/autosave/" t))
-              lock-file-name-transforms '(("\\`/.\\*\\'" ".\\*") (".*" "~/.cache/emacs/lockfiles/" t))
+              make-backup-files nil
+              auto-save-default nil
+              create-lockfiles nil
               indent-tabs-mode nil
               tab-width 4
               blink-cursor-mode t
@@ -42,7 +42,7 @@
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (electric-pair-mode 1)
-(load-theme 'modus-vivendi-tritanopia :no-confirm)
+(load-theme 'modus-vivendi-tinted :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
@@ -273,6 +273,19 @@
   (smtpmail-smtp-server "smtp.gmail.com")
   (smtpmail-smtp-service 587)
   (smtpmail-stream-type 'starttls))
+
+(defun my/vc-next-action ()
+  "'vc-next-action with auto generated commit message."
+  (interactive)
+  (if (string-equal (buffer-name) "*vc-diff*")
+      (let ((output (shell-command-to-string
+                     (format "commit-message-generator %s"
+                             (shell-quote-argument (buffer-string))))))
+        (vc-next-action nil)
+        (if (string-equal (buffer-name) "*vc-log*")
+            (insert output)))
+    (vc-next-action nil)))
+(define-key vc-prefix-map (kbd "v") #'my/vc-next-action)
 
 (provide 'init)
 ;;; init.el ends here
