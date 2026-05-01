@@ -28,7 +28,7 @@ customCommands:
   - key: "C"
     context: "files"
     description: "Generate commit message into vim"
-    command: "git commit"
+    command: git commit -m "$(commit-message-generator)" -e
     output: terminal
   - key: "Y"
     context: "global"

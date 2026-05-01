@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-CHANGES=$(git diff --cached --name-status)
+CHANGES="$@"
+
+if [ -z "$CHANGES" ]; then
+  CHANGES=$(git diff --cached)
+fi
 
 if [ -z "$CHANGES" ]; then
   echo "No changes staged for commit."
   exit 1
 fi
 
-git diff --cached | pi --np --ne --ns --no-tools --model github-copilot/gpt-5-mini -p  --system-prompt "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations."
+pi -np -ne -ns -nt --model github-copilot/gpt-5-mini --system-prompt "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations." -p "$CHANGES"
