@@ -63,6 +63,14 @@
       completion-show-help nil
       tab-always-indent 'complete)
 
+(add-to-list 'display-buffer-alist
+             '("\\*Completions\\*"
+               (display-buffer-in-side-window)
+               (side . bottom)
+               (slot . 0)
+               (window-parameters . ((no-other-window . t)
+                                     (mode-line-format . none)))))
+
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (use-package exec-path-from-shell
