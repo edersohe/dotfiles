@@ -236,7 +236,7 @@ require("mini.diff").setup({ view = { style = "sign" } })
 local commit = function()
   local output = vim.fn.systemlist("commit-message-generator")
   if vim.v.shell_error ~= 0 or output == "" then
-    vim.notify("Error generating commit message: " .. output, vim.log.levels.ERROR)
+    vim.notify("Error generating commit message: ", vim.log.levels.ERROR)
     return
   end
   vim.cmd(":Git commit")
