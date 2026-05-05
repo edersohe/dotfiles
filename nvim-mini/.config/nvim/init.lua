@@ -233,11 +233,21 @@ vim.keymap.set("n", '<leader>"', "<cmd>Pick registers<CR>", { desc = "Registers"
 
 require("mini.diff").setup({ view = { style = "sign" } })
 
+local commit = function()
+  local output = vim.fn.systemlist("commit-message-generator")
+  if vim.v.shell_error ~= 0 or output == "" then
+    vim.notify("Error generating commit message: " .. output, vim.log.levels.ERROR)
+    return
+  end
+  vim.cmd(":Git commit")
+  vim.api.nvim_put(output, 'c', true, true)
+end
+
 local git_log = "tab Git log --decorate --graph --all --pretty=short"
 vim.keymap.set("n", "<leader>gg", "<cmd>tab Git<CR>", { desc = "Git" })
 vim.keymap.set("n", "<leader>gp", "<cmd>Git pull<CR>", { desc = "Pull" })
-vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>", { desc = "Push" })
-vim.keymap.set("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Commit" })
+vim.keymap.set("n", "<leader>gP", "<cmd>Git push<CR>0", { desc = "Push" })
+vim.keymap.set("n", "<leader>gc", commit, { desc = "Commit" })
 vim.keymap.set("n", "<leader>gC", "<cmd>Git commit --amend<CR>", { desc = "Commit amend" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Diff" })
 vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "Log buffer" })
