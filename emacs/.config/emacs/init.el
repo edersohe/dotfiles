@@ -31,7 +31,7 @@
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
 
-(add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist '(alpha-background . 93))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -42,6 +42,7 @@
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (electric-pair-mode 1)
+(fido-vertical-mode 1)
 (load-theme 'modus-vivendi-tinted :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
@@ -53,7 +54,7 @@
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
-      completion-auto-help 'always
+      completion-auto-help nil
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
@@ -62,14 +63,6 @@
       completions-detailed t
       completion-show-help nil
       tab-always-indent 'complete)
-
-(add-to-list 'display-buffer-alist
-             '("\\*Completions\\*"
-               (display-buffer-in-side-window)
-               (side . bottom)
-               (slot . 0)
-               (window-parameters . ((no-other-window . t)
-                                     (mode-line-format . none)))))
 
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
@@ -88,6 +81,10 @@
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
+
+(use-package corfu
+  :ensure t
+  :init (global-corfu-mode))
 
 (use-package undo-fu
   :ensure t)
