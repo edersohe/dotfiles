@@ -29,9 +29,9 @@
               tramp-use-ssh-controlmaster-options nil
               native-comp-deferred-compilation t)
 
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 32 1024 1024))))
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 100 1024 1024))))
 
-(add-to-list 'default-frame-alist '(alpha-background . 93))
+(add-to-list 'default-frame-alist '(alpha-background . 95))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -42,7 +42,6 @@
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (electric-pair-mode 1)
-(fido-vertical-mode 1)
 (load-theme 'modus-vivendi-tinted :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
@@ -54,7 +53,7 @@
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completion-auto-select 'second-tab
-      completion-auto-help nil
+      completion-auto-help 'always
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
@@ -81,10 +80,6 @@
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
-
-(use-package corfu
-  :ensure t
-  :init (global-corfu-mode))
 
 (use-package undo-fu
   :ensure t)
@@ -178,7 +173,7 @@
   (eglot-autoshutdown t)
   :config
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("ruff" "server")))
-  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs '((elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
   (add-to-list 'eglot-server-programs '((ruby-ts-mode) . ("ruby-lsp"))))
 
@@ -229,25 +224,64 @@
   (org-agenda-files '("~/notes/life.org"))
   (org-log-done 'time)
   (org-hide-leading-stars t)
+  (org-confirm-babel-evaluate nil)
+  (org-startup-with-inline-images t)
+  (org-image-actual-width nil)
+  (org-src-tab-acts-natively t)
+  (org-src-preserve-indentation t)
+  (org-capture-templates
+   '(("t" "Task / Meeting" entry (file+headline "~/notes/life.org" "Actionable")
+      "* TODO %^{Title/Subject} %^g\n  %^{When|SCHEDULED|DEADLINE}: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
+      :empty-lines 1)
+     ("n" "Timeless Note" entry (file+headline "~/notes/life.org" "Reference")
+      "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
+      :empty-lines 1)))
+  (org-agenda-custom-commands
+   '(("w" "Work Dashboard" tags "+work")
+     ("p" "Personal Dashboard" tags "+personal")))
+  :hook
+  (org-babel-after-execute . org-display-inline-images)
+  (org-mode . (lambda ()
+                (setq-local electric-pair-inhibit-predicate
+                            (lambda (c)
+                              (if (char-equal c ?<)
+                                  t
+                                (electric-pair-default-inhibit c))))))
   :config
-  (setq org-capture-templates
-        '(("t" "Task / Meeting" entry (file+headline "~/notes/life.org" "Actionable")
-           "* TODO %^{Title/Subject} %^g\n  %^{When|SCHEDULED|DEADLINE}: %^t\n\n  *Notes / Details:*\n  %?\n\n  *Action Items / Subtasks:*\n  - [ ]\n"
-           :empty-lines 1)
-          ("n" "Timeless Note" entry (file+headline "~/notes/life.org" "Reference")
-           "* %^{Title} %^g\n  Captured: %U\n\n  %?\n"
-           :empty-lines 1)))
-  (setq org-agenda-custom-commands
-        '(("w" "Work Dashboard" tags "+work")
-          ("p" "Personal Dashboard" tags "+personal"))))
+  (add-to-list 'org-src-lang-modes '("python" . python-ts))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (shell . t))))
+
+(use-package org-tempo
+  :config
+  (define-skeleton my/insert-ds-header
+    "Insert the standard Data Science Org-mode header."
+    nil
+    "#+TITLE: " _ "\n"
+    (concat "#+PROPERTY: header-args:python :session *" (file-name-nondirectory (directory-file-name (project-root (project-current t)))) "_session* :async :results output drawer\n\n")
+    "* Environment Setup\n"
+    "#+begin_src elisp :results silent\n"
+    "(setq-local org-babel-python-command (expand-file-name \".venv/bin/python\" (project-root (project-current t))))\n"
+    "#+end_src\n")
+  (global-set-key (kbd "C-c i h") 'my/insert-ds-header)
+  (add-to-list 'org-structure-template-alist
+               '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist
+               '("pyt" . "src python :results value table :colnames yes"))
+  (add-to-list 'org-structure-template-alist
+               '("pyi" . "src python :results file :file plot.png")))
 
 (use-package copilot
   :ensure t
-  :hook (prog-mode . copilot-mode)
+  :hook
+  (prog-mode . copilot-mode)
+  (text-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
   (copilot-idle-delay nil)
-  :bind (("C-<return>" . copilot-complete)
+  :bind (("C-c <return>" . copilot-complete)
          :map copilot-completion-map
          ("C-n" . copilot-next-completion)
          ("C-p" . copilot-previous-completion)
