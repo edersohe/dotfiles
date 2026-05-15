@@ -197,13 +197,14 @@
     "#+begin_src elisp :results silent\n"
     "(setq-local org-babel-python-command (expand-file-name \".venv/bin/python\" (project-root (project-current t))))\n"
     "#+end_src\n")
-  (global-set-key (kbd "C-c i h") 'my/insert-ds-header)
   (add-to-list 'org-structure-template-alist
                '("py" . "src python"))
   (add-to-list 'org-structure-template-alist
                '("pyt" . "src python :results value table :colnames yes"))
   (add-to-list 'org-structure-template-alist
-               '("pyi" . "src python :results file :file plot.png")))
+               '("pyi" . "src python :results file :file plot.png"))
+  :bind (:map org-mode-map
+              ("C-c i h" . 'my/insert-ds-header)))
 
 (use-package copilot
   :ensure t
