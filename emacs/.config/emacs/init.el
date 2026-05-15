@@ -31,7 +31,7 @@
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 100 1024 1024))))
 
-(add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist '(alpha-background . 93))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -42,7 +42,7 @@
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (electric-pair-mode 1)
-(load-theme 'modus-vivendi-tinted :no-confirm)
+(load-theme 'modus-vivendi :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
@@ -52,16 +52,18 @@
 (setq completion-styles '(basic flex partial-completion)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
-      completion-auto-select 'second-tab
-      completion-auto-help 'always
       completions-format 'one-column
       completions-sort 'historical
       completions-max-height 12
-      completion-cycle-threshold 2
       completion-ignore-case t
       completions-detailed t
       completion-show-help nil
-      tab-always-indent 'complete)
+      completion-eager-display t
+      completion-eager-update t
+      minibuffer-visible-completions 'up-down
+      tab-always-indent 'complete
+      treesit-enabled-modes t
+      treesit-auto-install-grammar 'always)
 
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
@@ -101,66 +103,8 @@
 
 (global-set-key (kbd "C-c v") #'my/vterm)
 
-(setq treesit-language-source-alist
-      '((python "https://github.com/tree-sitter/tree-sitter-python")
-        (go "https://github.com/tree-sitter/tree-sitter-go")
-        (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
-        (heex "https://github.com/phoenixframework/tree-sitter-heex")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (rust "https://github.com/tree-sitter/tree-sitter-rust")
-        (c "https://github.com/tree-sitter/tree-sitter-c")
-        (html "https://github.com/tree-sitter/tree-sitter-html")
-        (css "https://github.com/tree-sitter/tree-sitter-css")
-        (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
-        (php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
-        (java "https://github.com/tree-sitter/tree-sitter-java")
-        (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-        (toml "https://github.com/tree-sitter/tree-sitter-toml")
-        (json "https://github.com/tree-sitter/tree-sitter-json")))
-
-(dolist (lang treesit-language-source-alist)
-  (unless (treesit-language-available-p (car lang))
-    (treesit-install-language-grammar (car lang))))
-
-(setq major-mode-remap-alist
-      '((python-mode . python-ts-mode)
-        (go-mode . go-ts-mode)
-        (js-mode . js-ts-mode)
-        (c-mode . c-ts-mode)
-        (mhtml-mode . html-ts-mode)
-        (css-mode . css-ts-mode)
-        (ruby-mode . ruby-ts-mode)
-        (php-mode . php-ts-mode)
-        (java-mode . java-ts-mode)
-        (yaml-mode . yaml-ts-mode)
-        (toml-mode . toml-ts-mode)
-        (js-json-mode . json-ts-mode)))
-
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.exs?\\'" . elixir-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-ts-mode))
-
 (use-package eglot
-  :hook ((python-ts-mode . eglot-ensure)
-         (go-ts-mode . eglot-ensure)
-         (elixir-ts-mode . eglot-ensure)
-         (heex-ts-mode . eglot-ensure)
-         (js-ts-mode . eglot-ensure)
-         (typescript-ts-mode . eglot-ensure)
-         (tsx-ts-mode . eglot-ensure)
-         (rust-ts-mode . eglot-ensure)
-         (c-ts-mode . eglot-ensure)
-         (html-ts-mode . eglot-ensure)
-         (css-ts-mode . eglot-ensure)
-         (ruby-ts-mode . eglot-ensure)
-         (php-ts-mode . eglot-ensure)
-         (java-ts-mode . eglot-ensure)
-         ;; Uncomment if you install these via MELPA:
-         ;; (kotlin-mode . eglot-ensure)
-         ;; (dart-mode . eglot-ensure)
-         )
+  :hook ((prog-mode . eglot-ensure))
   :bind (:map eglot-mode-map
               ("C-c l f" . eglot-format)
               ("C-c l a" . eglot-code-actions)
@@ -186,14 +130,6 @@
               ("C-c d" . flymake-show-buffer-diagnostics)
               ("C-c D" . flymake-show-project-diagnostics)))
 
-(use-package markdown-mode
-  :ensure t
-  :custom (markdown-fontify-code-blocks-natively t)
-  :hook
-  (markdown-mode . visual-line-mode)
-  (markdown-mode . flyspell-mode)
-  :init (setq markdown-command "multimarkdown"))
-
 (use-package geiser-guile
   :ensure t)
 
@@ -203,11 +139,7 @@
   :hook
   (after-init . global-diff-hl-mode)
   (after-init . diff-hl-flydiff-mode)
-  (after-init . diff-hl-margin-mode)
-  :bind (:map diff-hl-mode-map
-              ("C-c h n" . diff-hl-next-hunk)
-              ("C-c h p" . diff-hl-previous-hunk)
-              ("C-c h s" . diff-hl-show-hunk)))
+  (after-init . diff-hl-margin-mode))
 
 (use-package org
   :init
