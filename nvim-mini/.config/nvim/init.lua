@@ -254,7 +254,9 @@ vim.keymap.set("n", "<leader>gl", "<cmd>" .. git_log .. " -- %<CR>", { desc = "L
 vim.keymap.set("n", "<leader>gL", "<cmd>" .. git_log .. "<CR>", { desc = "Log" })
 vim.keymap.set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Overlay" })
 
-require('render-markdown').setup({})
+local render_markdown = require('render-markdown')
+render_markdown.setup({})
+render_markdown.disable()
 require('image').setup({ backend = 'sixel' })
 
 require("tree-sitter-manager").setup({

@@ -4,7 +4,7 @@
 
 (setq package-install-upgrade-built-in t)
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory)
               make-backup-files nil
@@ -31,7 +31,7 @@
 
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 100 1024 1024))))
 
-(add-to-list 'default-frame-alist '(alpha-background . 93))
+(add-to-list 'default-frame-alist '(alpha-background . 90))
 (add-to-list 'default-frame-alist '(font . "ZedMono Nerd Font-14"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -42,7 +42,7 @@
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (electric-pair-mode 1)
-(load-theme 'modus-vivendi :no-confirm)
+(load-theme 'modus-vivendi-tinted :no-confirm)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
@@ -116,8 +116,8 @@
   (eglot-events-buffer-config '(:size 0 :format full))
   (eglot-autoshutdown t)
   :config
-  (add-to-list 'eglot-server-programs '((python-ts-mode) . ("ruff" "server")))
-  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyrefly" "lsp")))
+  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs '((elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
   (add-to-list 'eglot-server-programs '((ruby-ts-mode) . ("ruby-lsp"))))
 
@@ -127,8 +127,8 @@
 (use-package flymake
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
-              ("C-c d" . flymake-show-buffer-diagnostics)
-              ("C-c D" . flymake-show-project-diagnostics)))
+              ("C-c l b" . flymake-show-buffer-diagnostics)
+              ("C-c l p" . flymake-show-project-diagnostics)))
 
 (use-package geiser-guile
   :ensure t)
@@ -147,10 +147,10 @@
     "Open the main org file for life management."
     (interactive)
     (find-file "~/notes/life.org"))
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c c" . org-capture)
-         ("C-c o" . my/org-open-life))
+  :bind (("C-c o l" . org-store-link)
+         ("C-c o a" . org-agenda)
+         ("C-c o c" . org-capture)
+         ("C-c o o" . my/org-open-life))
   :custom
   (org-default-notes-file "~/notes/life.org")
   (org-agenda-files '("~/notes/life.org"))
