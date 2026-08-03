@@ -64,6 +64,7 @@ vim.opt.winborder = border
 vim.opt.path:append("**")
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
+vim.opt.wrap = false
 
 local tree_sitters = {
   "asm", "awk", "bash", "c", "c3", "c_sharp", "caddy", "cmake", "comment",

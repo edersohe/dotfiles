@@ -117,12 +117,20 @@
   (eglot-autoshutdown t)
   :config
   (add-to-list 'eglot-server-programs '((python-ts-mode) . ("pyrefly" "lsp")))
-  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs '((rust-ts-mode) . ("rustup" "run" "nightly" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   (add-to-list 'eglot-server-programs '((elixir-ts-mode heex-ts-mode) . ("expert" "--stdio")))
   (add-to-list 'eglot-server-programs '((ruby-ts-mode) . ("ruby-lsp"))))
 
 (setq-default eglot-workspace-configuration
               '(:expert (:workspaceSymbols (:minQueryLength 0))))
+
+(with-eval-after-load 'eglot
+  (advice-add 'eglot--guess-contact :around
+              (lambda (orig-fun &rest args)
+                (if (and buffer-file-name
+                         (string-match-p "/\\.rustup/" buffer-file-name))
+                    (ignore (message "Bypassing Eglot for Rust standard library file."))
+                  (apply orig-fun args)))))
 
 (use-package flymake
   :hook (prog-mode . flymake-mode)
@@ -213,6 +221,7 @@
   (text-mode . copilot-mode)
   :custom
   (copilot-indent-offset-warning-disable t)
+  (copilot-max-char-warning-disable t)
   (copilot-idle-delay nil)
   :bind (("C-c <return>" . copilot-complete)
          :map copilot-completion-map

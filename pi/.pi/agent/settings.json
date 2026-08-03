@@ -1,17 +1,62 @@
 {
-  "lastChangelogVersion": "0.76.0",
-  "defaultProvider": "minimax",
-  "defaultModel": "MiniMax-M2.7",
+  "lastChangelogVersion": "0.83.0",
+  "defaultProvider": "zai",
+  "defaultModel": "glm-5.2",
   "defaultThinkingLevel": "low",
   "enabledModels": [
-    "github-copilot/gemini-3-flash-preview",
-    "minimax/MiniMax-M2.7",
-    "zai/glm-5.1",
-    "github-copilot/gpt-5-mini",
-    "github-copilot/gpt-5.4"
+    "minimax/MiniMax-M3",
+    "zai/glm-5.2",
+    "github-copilot/gpt-5-mini"
   ],
   "theme": "dark",
-  "packages": [],
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-lens",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@gotgenes/pi-permission-system",
+    "npm:@juicesharp/rpiv-todo"
+  ],
   "skills": [],
-  "hideThinkingBlock": false
+  "hideThinkingBlock": false,
+  "subagents": {
+    "agentOverrides": {
+      "scout": {
+        "model": "github-copilot/gpt-5-mini",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      },
+      "researcher": {
+        "model": "github-copilot/gpt-5-mini",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      },
+      "delegate": {
+        "model": "github-copilot/gpt-5-mini",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      },
+      "worker": {
+        "model": "minimax/MiniMax-M3",
+        "fallbackModels": ["zai/glm-5.2"]
+      },
+      "reviewer": {
+        "model": "minimax/MiniMax-M3",
+        "fallbackModels": ["zai/glm-5.2"]
+      },
+      "context-builder": {
+        "model": "minimax/MiniMax-M3",
+        "fallbackModels": ["zai/glm-5.2"]
+      },
+      "planner": {
+        "model": "zai/glm-5.2",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      },
+      "oracle": {
+        "model": "zai/glm-5.2",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      },
+      "advisor": {
+        "model": "zai/glm-5.2",
+        "fallbackModels": ["minimax/MiniMax-M3"]
+      }
+    }
+  }
 }

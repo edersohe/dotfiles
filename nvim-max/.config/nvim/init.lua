@@ -37,7 +37,7 @@ vim.opt.signcolumn = "auto:2"
 vim.opt.updatetime = 250
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300
-vim.opt.completeopt = "menuone,noinsert,noselect"
+vim.opt.completeopt = "menu,menuone,fuzzy,noinsert,noselect"
 vim.opt.cursorline = false
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -46,7 +46,6 @@ vim.opt.expandtab = true
 vim.opt.listchars = { tab = "▸ ", extends = "…", precedes = "…", nbsp = "␣", trail = "·" }
 vim.opt.list = true
 vim.opt.laststatus = 3
-vim.opt.expandtab = true
 vim.opt.confirm = false
 vim.opt.showmode = false
 vim.opt.splitbelow = true
@@ -54,186 +53,110 @@ vim.opt.splitright = true
 vim.opt.shortmess = vim.opt.shortmess:append("WcC")
 vim.opt.pumheight = 10
 vim.opt.pumblend = 0
+vim.opt.pumborder = border
 vim.opt.winblend = 0
 vim.opt.virtualedit = "block"
 vim.opt.fillchars = { eob = " " }
 vim.opt.splitkeep = "screen"
-vim.opt.grepprg = 'rg --vimgrep -.'
+vim.opt.grepprg = 'rg --vimgrep -. --no-messages --smart-case'
 vim.opt.background = 'dark'
 vim.opt.winborder = border
 vim.opt.path:append("**")
+vim.opt.termguicolors = true
+vim.opt.cursorline = true
+vim.opt.wrap = false
 
-local languages = {
-  bash = { lsp = { bashls = { config = {}, bin = "bash-language-server" } }, ts = { "bash" } },
-  c = { lsp = { clangd = { config = {}, bin = "clangd" } }, ts = { "c" } },
-  c3 = { lsp = { c3_lsp = { config = {} } }, ts = { "c3" } },
-  c_sharp = { lsp = { omnisharp = { config = {}, bin = "omnisharp" } }, ts = { "c_sharp" } },
-  css = {
-    lsp = {
-      cssls = { config = {}, bin = "css-lsp" },
-      tailwindcss = { config = {}, bin = "tailwindcss-language-server" },
-    },
-    ts = { "css" },
-  },
-  dart = { ts = { "dart" } },
-  dockerfile = {
-    lsp = {
-      docker_compose_language_service = { config = {}, bin = "docker-compose-language-service" },
-      dockerls = { config = {}, bin = "dockerfile-language-server" },
-    },
-    ts = { "dockerfile" },
-  },
-  elixir = {
-    lsp = {
-      expert = {
-        config = {
-          settings = {
-            workspaceSymbols = {
-              minQueryLength = 0
-            }
-          }
-        },
-      },
-    },
-    ts = { "elixir", "eex", "heex" },
-  },
-  emmet = {
-    lsp = {
-      emmet_language_server = {
-        config = {
-          filetypes = { "css", "eruby", "gohtml", "heex", "html", "javascript", "javascriptreact", "less", "php", "pug", "sass", "scss", "templ", "typescriptreact" },
-        },
-        bin = "emmet-language-server",
-      },
-    },
-  },
-  go = {
-    lsp = {
-      gopls = { config = {}, bin = "gopls" },
-      goimports = { config = {}, bin = "goimports" },
-      golangci_lint = { config = {}, bin = "golangci-lint" },
-      golangci_lint_ls = { config = {}, bin = "golangci-lint-langserver" },
-    },
-    ts = { "go", "gomod", "gosum", "gotmpl", "gowork" },
-  },
-  graphql = { lsp = { graphql = { config = {}, bin = "graphql-language-service-cli" } }, ts = { "graphql" } },
-  html = {
-    lsp = { html = { config = {}, bin = "html-lsp" }, htmx = { config = {}, bin = "htmx-lsp" } },
-    ts = { "html", "htmldjango" },
-  },
-  java = { lsp = { jdtls = { config = {}, bin = "jdtls" } }, ts = { "java" } },
-  javascript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "javascript" } },
-  json = {
-    lsp = { jsonls = { config = {}, bin = "json-lsp" } },
-    ts = { "json", "json5", "jsonnet" },
-  },
-  lua = {
-    lsp = {
-      lua_ls = {
-        config = {
-          settings = {
-            Lua = {
-              runtime = { version = "LuaJIT" },
-              diagnostics = { globals = { "vim" } },
-              workspace = {
-                library = { vim.env.VIMRUNTIME },
-                checkThirdParty = false,
-              },
-            },
-          },
-        },
-        bin = "lua-language-server",
-      },
-    },
-    ts = { "lua", "luadoc" },
-  },
-  markdown = { lsp = { marksman = { config = {}, bin = "marksman" }, }, ts = { "markdown", "markdown_inline" } },
-  nix = { ts = { "nix" } },
-  perl = { lsp = { perlpls = { config = {}, bin = "pls" } }, ts = { "perl" } },
-  php = { lsp = { phpactor = { config = {}, bin = "phpactor" } }, ts = { "php", "php_only" } },
-  proto = { lsp = { buf_ls = { config = {}, bin = "buf" } }, ts = { "proto" } },
-  python = {
-    lsp = { ruff = { config = {}, bin = "ruff" }, ty = { config = {}, bin = "ty" } },
-    ts = { "python" }
-  },
-  ruby = {
-    lsp = { rubocop = { config = {}, bin = "rubocop" }, ruby_lsp = { config = {}, bin = "ruby-lsp" } },
-    ts = { "ruby" },
-  },
-  rust = { lsp = { rust_analyzer = { config = {}, bin = "rust-analyzer" } }, ts = { "rust" } },
-  scss = { ts = { "scss" } },
-  sql = { lsp = { sqls = { config = {}, bin = "sqls" } }, ts = { "sql" } },
-  svelte = { lsp = { svelte = { config = {}, bin = "svelte-language-server" } }, ts = { "svelte" } },
-  templ = { lsp = { templ = { config = {}, bin = "templ" } }, ts = { "templ" } },
-  terraform = { lsp = { terraformls = { config = {}, bin = "terraform-ls" } }, ts = { "terraform", "hcl" } },
-  toml = { lsp = { tombi = { config = {}, bin = "tombi" } }, ts = { "toml" } },
-  typescript = { lsp = { ts_ls = { config = {}, bin = "typescript-language-server" } }, ts = { "typescript", "tsx" } },
-  twig = { ts = { "twig" } },
-  vim = { ts = { "vim", "vimdoc", "query" } },
-  yaml = {
-    lsp = { yamlls = { config = {}, bin = "yaml-language-server" }, ansiblels = { config = {}, bin = "ansible-language-server" } },
-    ts = { "yaml" },
-  },
-  zig = { lsp = { zls = { config = {}, bin = "zls" } }, ts = { "zig" } },
-  diff = { ts = { "diff" } },
-  embedded_template = { ts = { "embedded_template" } },
-  git = { ts = { "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore" } },
-  http = { ts = { "http" } },
+local tree_sitters = {
+  "asm", "awk", "bash", "c", "c3", "c_sharp", "caddy", "cmake", "comment",
+  "commonlisp", "css", "csv", "dart", "diff", "disassembly", "dockerfile",
+  "eex", "elixir", "embedded_template", "git_config", "git_rebase",
+  "gitattributes", "gitcommit", "gitignore", "go", "gomod", "gosum",
+  "gotmpl", "gowork", "graphql", "hcl", "heex", "html", "htmldjango",
+  "http", "hurl", "hjson", "java", "javadoc", "javascript", "jinja",
+  "jinja_inline", "jjdescription", "jq", "json", "json5", "jsonnet",
+  "kotlin", "latex", "lua", "luadoc", "make", "markdown", "markdown_inline",
+  "mermaid", "nasm", "nginx", "ninja", "nix", "perl", "php", "php_only",
+  "proto", "python", "query", "ruby", "rust", "scheme", "scss", "sql",
+  "svelte", "templ", "terraform", "toml", "tsv", "tsx", "twig",
+  "typescript", "vim", "vimdoc", "xml", "yaml", "zig",
 }
 
-local tree_sitters = {}
-local language_servers = {}
-local mason_binaries = {}
-
-for _, lang_config in pairs(languages) do
-  -- Extract tree-sitter parsers
-  if lang_config.ts then
-    for _, parser in ipairs(lang_config.ts) do
-      table.insert(tree_sitters, parser)
-    end
-  end
-
-  -- Extract LSP servers and their binaries
-  if lang_config.lsp then
-    for server_name, server_data in pairs(lang_config.lsp) do
-      -- Extract LSP configurations
-      if server_data.config then
-        language_servers[server_name] = server_data.config
-      end
-      -- Extract Mason binaries
-      if server_data.bin then
-        table.insert(mason_binaries, server_data.bin)
-      end
-    end
-  end
-end
+local language_servers = {
+  bashls = {},
+  clangd = {},
+  c3_lsp = {},
+  omnisharp = {},
+  cssls = {},
+  tailwindcss = {},
+  dartls = {},
+  docker_compose_language_service = {},
+  dockerls = {},
+  expert = {
+    settings = {
+      workspaceSymbols = {
+        minQueryLength = 0
+      }
+    }
+  },
+  emmet_language_server = {
+    filetypes = { "css", "eruby", "gohtml", "heex", "html", "javascript", "javascriptreact", "less", "php", "pug", "sass", "scss", "templ", "typescriptreact" },
+  },
+  gopls = {},
+  goimports = {},
+  golangci_lint = {},
+  golangci_lint_ls = {},
+  graphql = {},
+  html = {},
+  htmx = {},
+  jdtls = {},
+  jsonls = {},
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = "LuaJIT" },
+        diagnostics = { globals = { "vim" } },
+        workspace = {
+          library = { vim.env.VIMRUNTIME },
+          checkThirdParty = false,
+        },
+      },
+    },
+  },
+  marksman = {},
+  perlpls = {},
+  phpactor = {},
+  buf_ls = {},
+  ruff = {},
+  ty = {},
+  rubocop = {},
+  ruby_lsp = {},
+  rust_analyzer = {},
+  sqls = {},
+  svelte = {},
+  templ = {},
+  terraformls = {},
+  tombi = {},
+  ts_ls = {},
+  yamlls = {},
+  ansiblels = {},
+  zls = {},
+  org = {},
+}
 
 vim.pack.add({
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
-  { src = 'https://github.com/neovim/nvim-lspconfig' },
-  { src = 'https://github.com/nvim-mini/mini.nvim' },
-  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
-  { src = 'https://github.com/christoomey/vim-tmux-navigator' },
-  { src = 'https://github.com/nvim-lua/plenary.nvim' },
-  { src = 'https://github.com/folke/tokyonight.nvim' },
-  { src = 'https://github.com/folke/todo-comments.nvim' },
-  { src = 'https://github.com/folke/snacks.nvim' },
-  { src = 'https://github.com/folke/which-key.nvim' },
-  { src = 'https://github.com/rafamadriz/friendly-snippets' },
-  { src = 'https://github.com/zbirenbaum/copilot.lua' },
-  { src = 'https://github.com/giuxtaposition/blink-cmp-copilot' },
-  { src = 'https://github.com/saghen/blink.cmp',                version = vim.version.range("^1") },
-  { src = 'https://github.com/obsidian-nvim/obsidian.nvim' }
+  'https://github.com/romus204/tree-sitter-manager.nvim',
+  'https://github.com/neovim/nvim-lspconfig',
+  'https://github.com/nvim-mini/mini.nvim',
+  'https://github.com/lewis6991/gitsigns.nvim',
+  'https://github.com/christoomey/vim-tmux-navigator',
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/folke/todo-comments.nvim',
+  'https://github.com/folke/snacks.nvim',
+  'https://github.com/folke/which-key.nvim',
+  'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/3rd/image.nvim',
+  'https://github.com/github/copilot.vim',
 })
-
-local hooks = function(ev)
-  local name, kind = ev.data.spec.name, ev.data.kind
-  print(name)
-  if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
-    vim.cmd('TSUpdate')
-  end
-end
-vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 local on_attach = function(_, bufnr)
   vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
@@ -253,10 +176,6 @@ local on_attach = function(_, bufnr)
     { buffer = bufnr, desc = "References" })
 end
 
-require('tokyonight').setup({
-  transparent = true,
-})
-
 local MiniIcons = require("mini.icons")
 MiniIcons.setup()
 MiniIcons.tweak_lsp_kind()
@@ -272,14 +191,8 @@ MiniNotify.setup({
 })
 vim.notify = MiniNotify.make_notify()
 
-require("mini.statusline").setup({
-  use_icons = true,
-})
-
-require("mini.tabline").setup({
-  show_icons = true,
-  tabpage_section = "right",
-})
+require("mini.statusline").setup({ use_icons = true })
+require("mini.tabline").setup({ show_icons = true, tabpage_section = "right" })
 
 require("mini.files").setup({
   mappings = {
@@ -312,7 +225,6 @@ vim.keymap.set("n", "<leader>sw", ':lua MiniSessions.write("")<Left><Left>', { d
 vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.select("delete", {force = true})<CR>', { desc = "Delete" })
 vim.keymap.set("n", "<leader>sr", '<cmd>lua MiniSessions.select("read")<CR>', { desc = "Read" })
 
-require('todo-comments').setup()
 local Snacks = require('snacks')
 
 Snacks.setup({
@@ -323,9 +235,18 @@ Snacks.setup({
       return vim.g.snacks_dim ~= false and vim.b[buf].snacks_dim ~= false and vim.bo[buf].buftype == ""
     end,
   },
-  picker = { enabled = true, ui_select = true },
+  picker = {
+    enabled = true,
+    ui_select = true,
+    win = {
+      input = {
+        keys = {
+          ["<esc>"] = { "close", mode = { "i", "n" } },
+        },
+      },
+    },
+  },
   explorer = { enabled = true, replace_netrw = true },
-  notifier = { enabled = true },
   indent = { enabled = true },
   scope = { enabled = true },
   gitbrowse = { enabled = true },
@@ -337,17 +258,7 @@ Snacks.setup({
   statuscolumn = { enabled = true },
 })
 
-
 vim.keymap.set('n', '-', '<cmd>lua Snacks.explorer.open()<CR>', { desc = 'Explorer' })
-
-require("mini.sessions").setup({
-  directory = "",
-  file = ".session.vim",
-})
-vim.keymap.set("n", "<leader>ss", '<cmd>lua MiniSessions.write(".session.vim")<CR>', { desc = "Save" })
-vim.keymap.set("n", "<leader>sl", '<cmd>lua MiniSessions.read(".session.vim")<CR>', { desc = "Load" })
-vim.keymap.set("n", "<leader>sd", '<cmd>lua MiniSessions.delete(".session.vim")<CR>', { desc = "Delete" })
-
 vim.keymap.set("n", "<leader>f", function() Snacks.picker.files() end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>/", function() Snacks.picker.grep() end, { desc = "Grep" })
 vim.keymap.set("n", "<leader>*", function() Snacks.picker.grep_word() end, { desc = "Grep cword" })
@@ -375,53 +286,18 @@ vim.keymap.set("n", "<leader>gh", gitsigns.preview_hunk, { desc = "Preview Hunk"
 vim.keymap.set("n", "]h", function() gitsigns.nav_hunk('next') end, { desc = "Next Hunk" })
 vim.keymap.set("n", "[h", function() gitsigns.nav_hunk('prev') end, { desc = "Previous Hunk" })
 
-require("copilot").setup({
-  suggestion = { enabled = false },
-  panel = { enabled = false },
+
+local render_markdown = require('render-markdown')
+render_markdown.setup({})
+render_markdown.disable()
+require('image').setup({ backend = 'sixel' })
+
+require("tree-sitter-manager").setup({
+  ensure_installed = tree_sitters,
+  border = border,
 })
 
-require('blink.cmp').setup({
-  keymap = { preset = 'super-tab' },
-  completion = {
-    documentation = {
-      auto_show = true,
-      auto_show_delay_ms = 500,
-      window = { border = border }
-    },
-    menu = { border = border }
-  },
-  signature = {
-    enabled = true,
-    window = { border = border }
-  },
-  sources = {
-    default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
-    providers = {
-      copilot = {
-        name = "copilot",
-        module = "blink-cmp-copilot",
-        score_offset = 100,
-        async = true,
-      },
-    },
-  },
-  fuzzy = {
-    implementation = "prefer_rust_with_warning"
-  }
-})
-
-require 'nvim-treesitter'.setup {
-  install_dir = vim.fn.stdpath('data') .. '/site'
-}
-require 'nvim-treesitter'.install(tree_sitters)
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = tree_sitters,
-  callback = function()
-    vim.treesitter.start()
-  end
-})
-
-local capabilities = require('blink.cmp').get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 for server, config in pairs(language_servers) do
   config.on_attach = on_attach
   if config.capabilities then
@@ -438,6 +314,15 @@ require("mini.bracketed").setup()
 require("mini.pairs").setup()
 require("mini.surround").setup()
 
+local gen_loader = require("mini.snippets").gen_loader
+local MiniSnippets = require("mini.snippets")
+MiniSnippets.setup({
+  snippets = {
+    gen_loader.from_lang(),
+  }
+})
+MiniSnippets.start_lsp_server({ match = false })
+
 require("mini.move").setup({
   mappings = {
     left = "<M-,>",
@@ -451,9 +336,16 @@ require("mini.move").setup({
   },
 })
 
+require('todo-comments').setup()
 vim.keymap.set("n", "<leader>t", function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
   { desc = "Todo comments" })
 
+require("mini.completion").setup({
+  window = {
+    info = { border = border },
+    signature = { border = border },
+  },
+})
 local wk = require('which-key')
 wk.setup({
   delay = 0,
@@ -486,15 +378,6 @@ wk.add({
   { 's',          group = 'Surround', mode = { 'n', 'x' } },
 })
 
-require('obsidian').setup({
-  legacy_commands = false,
-  workspaces = {
-    { name = 'notes', path = '~/notes' },
-  },
-  completion = { blink = true },
-})
-
--- nvim
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>", { silent = true })
 vim.keymap.set('n', "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set('n', "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
@@ -511,58 +394,42 @@ vim.keymap.set('i', "<C-l>", "<Right>", { noremap = true })
 vim.keymap.set('n', '<M-z>', '<cmd>suspend<CR>', { noremap = true })
 vim.keymap.set('t', '<S-Esc>', '<C-\\><C-n>', { noremap = true })
 
--- nvim config
 vim.keymap.set('n', "<leader>nc", "<cmd>e " .. vim.fn.resolve(vim.fn.expand("~/.config/nvim/init.lua")) .. "<CR>",
   { desc = "Config" })
 vim.keymap.set('n', "<leader>nu", "<cmd>lua vim.pack.update()<CR>", { desc = "Update plugins" })
 vim.keymap.set('n', "<leader>nr", "<cmd>source " .. vim.fn.resolve(vim.fn.expand('~/.config/nvim/init.lua')) .. "<CR>",
   { desc = "Reload" })
 
--- nvim improvements
 vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = "YankHighlight",
-  callback = function()
-    vim.highlight.on_yank({ timeout = 500 })
-  end,
+  callback = function() vim.highlight.on_yank({ timeout = 500 }) end,
 })
 
 -- convert from vimscript to lua https://neovim.io/doc/user/autocmd.html#ModeChanged
 vim.api.nvim_create_autocmd("ModeChanged", {
   pattern = "[vV\x16]*:*",
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
 vim.api.nvim_create_autocmd("ModeChanged", {
   pattern = "*:[vV\x16]*",
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
 vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave" }, {
-  callback = function()
-    vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil
-  end,
+  callback = function() vim.opt_local.relativenumber = vim.fn.mode():match("^[vV\x16]") ~= nil end,
 })
 
--- man and help split to the right
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "help", "man" },
-  callback = function()
-    vim.cmd("wincmd L")
-  end,
+  callback = function() vim.cmd("wincmd L") end,
 })
 
--- diagnostics
 vim.diagnostic.config({
   float = false,
   severity_sort = true,
-  virtual_text = {
-    current_line = true,
-  },
+  virtual_text = { current_line = true },
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "󰅙",
@@ -573,7 +440,6 @@ vim.diagnostic.config({
   },
 })
 
--- Auto close quickfix or location list
 vim.api.nvim_create_augroup("AutoQF", { clear = true })
 vim.api.nvim_create_autocmd("WinLeave", {
   group = "AutoQF",
@@ -586,7 +452,6 @@ vim.api.nvim_create_autocmd("WinLeave", {
   end,
 })
 
--- Keymap only for quickfix or location list
 vim.api.nvim_create_autocmd("FileType", {
   group = "AutoQF",
   pattern = "qf",
@@ -598,9 +463,31 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  command = "startinsert",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "gitcommit", "gitrebase" },
+  callback = function()
+    vim.opt_local.bufhidden = "wipe"
+    vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "snacks_picker_input",
+  callback = function()
+    vim.b.minicompletion_disable = true
+  end,
+})
+
 vim.cmd [[
-   colorscheme tokyonight "default catppuccin lunaperche habamax miniautumn miniwinter retrobox sorbet unokai wildcharm zaibatsu
+   colorscheme catppuccin "default catppuccin lunaperche habamax miniautumn miniwinter retrobox sorbet unokai wildcharm zaibatsu
    hi Normal guibg=NONE
    hi NormalFloat guibg=NONE
    hi FloatBorder guibg=NONE
+   hi PMenu guibg=NONE
+   autocmd! nvim.terminal TermClose
 ]]
