@@ -65,7 +65,8 @@
       "sort *": "allow",
       "find *": "allow",
       "touch *": "allow",
-      "mkdir *": "allow"
+      "mkdir *": "allow",
+      "echo *": "allow"
     },
     "task": "ask",
     "webfetch": "ask",

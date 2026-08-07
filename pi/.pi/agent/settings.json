@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.84.0",
   "defaultProvider": "zai",
   "defaultModel": "glm-5.2",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "default",
   "enabledModels": [
     "minimax/MiniMax-M3",
     "zai/glm-5.2",
@@ -13,50 +13,11 @@
     "npm:pi-web-access",
     "npm:pi-lens",
     "npm:pi-subagents",
-    "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@gotgenes/pi-permission-system",
-    "npm:@juicesharp/rpiv-todo"
+    "npm:@gotgenes/pi-permission-system"
   ],
   "skills": [],
   "hideThinkingBlock": false,
   "subagents": {
-    "agentOverrides": {
-      "scout": {
-        "model": "github-copilot/gpt-5-mini",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      },
-      "researcher": {
-        "model": "github-copilot/gpt-5-mini",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      },
-      "delegate": {
-        "model": "github-copilot/gpt-5-mini",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      },
-      "worker": {
-        "model": "minimax/MiniMax-M3",
-        "fallbackModels": ["zai/glm-5.2"]
-      },
-      "reviewer": {
-        "model": "minimax/MiniMax-M3",
-        "fallbackModels": ["zai/glm-5.2"]
-      },
-      "context-builder": {
-        "model": "minimax/MiniMax-M3",
-        "fallbackModels": ["zai/glm-5.2"]
-      },
-      "planner": {
-        "model": "zai/glm-5.2",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      },
-      "oracle": {
-        "model": "zai/glm-5.2",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      },
-      "advisor": {
-        "model": "zai/glm-5.2",
-        "fallbackModels": ["minimax/MiniMax-M3"]
-      }
-    }
+    "disableBuiltins": true
   }
 }
