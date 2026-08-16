@@ -83,3 +83,9 @@ home/
 /pi/.pi/agent/npm
 /pi/.pi/agent/git
 /pi/.pi/agent/models-store.json
+/pi/.pi/agent/.pi-hermes-locks.sqlite
+/pi/.pi/agent/.pi-hermes-locks.sqlite-shm
+/pi/.pi/agent/.pi-hermes-locks.sqlite-wal
+/pi/.pi/agent/extensions
+/pi/.pi/agent/pi-blackhole
+/pi/.pi/agent/pi-hermes-memory
