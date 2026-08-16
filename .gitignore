@@ -80,3 +80,6 @@ home/
 /herdr/.config/herdr/release-notes.json
 /herdr/.config/herdr/session.json
 /pi/.pi/agent/trust.json
+/pi/.pi/agent/npm
+/pi/.pi/agent/git
+/pi/.pi/agent/models-store.json
