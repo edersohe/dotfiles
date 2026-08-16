@@ -73,3 +73,10 @@ nvim-max/.config/nvim/nvim-pack-lock.json
 
 home/
 /opencode/.config/opencode/package-lock.json
+/agents/.agents/skills
+/herdr/.config/herdr/.plugins.lock
+/herdr/.config/herdr/herdr-client.log
+/herdr/.config/herdr/herdr-server.log
+/herdr/.config/herdr/release-notes.json
+/herdr/.config/herdr/session.json
+/pi/.pi/agent/trust.json

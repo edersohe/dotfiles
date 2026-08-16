@@ -65,6 +65,7 @@ vim.opt.path:append("**")
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.wrap = false
+vim.opt.cmdheight = 0
 
 local tree_sitters = {
   "asm", "awk", "bash", "c", "c3", "c_sharp", "caddy", "cmake", "comment",
@@ -185,9 +186,6 @@ MiniNotify.setup({
   },
 })
 vim.notify = MiniNotify.make_notify()
-
-require("mini.statusline").setup({ use_icons = true })
-require("mini.tabline").setup({ show_icons = true, tabpage_section = "right" })
 
 require("mini.files").setup({
   mappings = {

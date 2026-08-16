@@ -1,23 +1,21 @@
 {
-  "lastChangelogVersion": "0.84.0",
-  "defaultProvider": "zai",
-  "defaultModel": "glm-5.2",
-  "defaultThinkingLevel": "default",
-  "enabledModels": [
-    "minimax/MiniMax-M3",
-    "zai/glm-5.2",
-    "github-copilot/gpt-5-mini"
-  ],
+  "lastChangelogVersion": "0.84.2",
   "theme": "dark",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-lens",
-    "npm:pi-subagents",
-    "npm:@gotgenes/pi-permission-system"
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-agent-browser-native",
+    "npm:pi-hermes-memory",
+    "npm:pi-blackhole",
+    "git:github.com/DietrichGebert/ponytail"
   ],
-  "skills": [],
-  "hideThinkingBlock": false,
-  "subagents": {
-    "disableBuiltins": true
-  }
+  "defaultProvider": "github-copilot",
+  "defaultModel": "mai-code-1.1-flash",
+  "tuiMode": "regular",
+  "enabledModels": [
+    "zai/glm-5.3",
+    "minimax/MiniMax-M3",
+    "github-copilot/mai-code-1.1-flash"
+  ]
 }

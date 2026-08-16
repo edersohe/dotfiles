@@ -11,4 +11,4 @@ if [ -z "$CHANGES" ]; then
   exit 1
 fi
 
-pi -np -ne -ns -nt --model github-copilot/gpt-5-mini --system-prompt "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations." -p "$CHANGES"
+pi -np -ne -ns -nt --model github-copilot/mai-code-1.1-flash --system-prompt "You are a specialized commit message generator. Input: Git Diff. Output: Conventional Commit formatted message only. No explanations." -p "$CHANGES"

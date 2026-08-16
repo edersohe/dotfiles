@@ -1,0 +1,9 @@
+onboarding = false
+[update]
+channel = "stable"
+version_check = true
+manifest_check = true
+
+
+[ui]
+pane_gaps = false

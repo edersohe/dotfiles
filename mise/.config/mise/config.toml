@@ -30,7 +30,10 @@ tree-sitter = "latest"
 # "github:iwe-org/iwe" = "latest"
 # "github:git-town/git-town" = "latest"
 # "github:thomasschafer/scooter" = "latest"
-"github:elixir-lang/expert" = "latest"
+"github:expert-lsp/expert" = "latest"
+"llama.cpp" = { version = "latest", version_prefix = "b" }
+herdr = "latest"
+rtk = "latest"
 
 "pipx:neovim-remote" = "latest"
 # "pipx:pyinfra" = "latest"
