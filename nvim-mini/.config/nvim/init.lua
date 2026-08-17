@@ -187,6 +187,8 @@ MiniNotify.setup({
 })
 vim.notify = MiniNotify.make_notify()
 
+require("mini.statusline").setup({ use_icons = true })
+
 require("mini.files").setup({
   mappings = {
     close       = '<Esc>',
