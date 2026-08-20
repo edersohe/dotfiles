@@ -6,8 +6,8 @@ uv = "latest"
 java = "lts"
 go = "latest"
 rust = "latest"
-elixir = "1.20-otp-28"
 dotnet = "latest"
+elixir = "1.20.3-otp-28"
 
 lua-language-server = "latest"
 tombi = "latest"
@@ -59,6 +59,9 @@ rtk = "latest"
 # eza = "latest"
 # fastfetch = "latest"
 # starship = "latest"
+
+[settings]
+minimum_release_age = "0d"
 
 [settings.pipx]
 uvx = true
