@@ -11,8 +11,12 @@ if [[ -z $DISPLAY ]] && [[ "$(tty)" == "/dev/tty1" ]]; then
     export MOZ_ENABLE_WAYLAND=1
     export SDL_VIDEODRIVER=wayland
     export XAUTHORITY=$HOME/.Xauthority
+    eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+    export SSH_AUTH_SOCK
+    #export DISPLAY=:0.0
 
     dbus-run-session sway
+    #dbus-run-session niri --session
 
     exit
 fi

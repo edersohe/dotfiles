@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "webSearch": {
+    "enabled": true,
+    "preferredProvider": "exa",
+    "exaApiKey": "$EXA_API_KEY",
+  }
+}

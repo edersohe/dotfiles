@@ -13,7 +13,6 @@ vim.g.netrw_localcopydircmd = 'cp -r'
 vim.g.copilot_filetypes = { ["*"] = false }
 
 vim.opt.clipboard:append("unnamedplus")
-vim.g.clipboard = 'osc52'
 if vim.env.TMUX then
   vim.g.clipboard = 'tmux'
 end
@@ -460,8 +459,29 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+require('mini.base16').setup({
+  palette = {
+    base00 = '#070722',
+    base01 = '#11112d',
+    base02 = '#17173c',
+    base03 = '#51589b',
+    base04 = '#7c80b4',
+    base05 = '#f3edf7',
+    base06 = '#f3edf7',
+    base07 = '#f3edf7',
+    base08 = '#fd4663',
+    base09 = '#9bfece',
+    base0A = '#a9aefe',
+    base0B = '#fff59b',
+    base0C = '#81fec1',
+    base0D = '#fff280',
+    base0E = '#8188fe',
+    base0F = '#b3b8fe',
+  },
+  use_cterm = true
+})
+
 vim.cmd [[
-   colorscheme catppuccin
    hi Normal guibg=NONE
    hi NormalFloat guibg=NONE
    hi FloatBorder guibg=NONE

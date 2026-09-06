@@ -1,8 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.env.NVIM = vim.v.servername
-
 local border = "rounded"
 
 vim.g.netrw_browsex_viewer = "xdg-open"
@@ -12,8 +10,9 @@ vim.g.netrw_preview = 1
 vim.g.netrw_keepdir = 0
 vim.g.netrw_localcopydircmd = 'cp -r'
 
+vim.g.copilot_filetypes = { ["*"] = false }
+
 vim.opt.clipboard:append("unnamedplus")
-vim.g.clipboard = 'osc52'
 if vim.env.TMUX then
   vim.g.clipboard = 'tmux'
 end
@@ -65,6 +64,7 @@ vim.opt.path:append("**")
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.wrap = false
+vim.opt.cmdheight = 0
 
 local tree_sitters = {
   "asm", "awk", "bash", "c", "c3", "c_sharp", "caddy", "cmake", "comment",
@@ -193,32 +193,6 @@ vim.notify = MiniNotify.make_notify()
 
 require("mini.statusline").setup({ use_icons = true })
 require("mini.tabline").setup({ show_icons = true, tabpage_section = "right" })
-
-require("mini.files").setup({
-  mappings = {
-    close       = '<Esc>',
-    go_in       = 'l',
-    go_in_plus  = '<cr>',
-    go_out      = 'h',
-    go_out_plus = '-',
-    mark_goto   = "'",
-    mark_set    = 'm',
-    reset       = '<BS>',
-    reveal_cwd  = '@',
-    show_help   = 'g?',
-    synchronize = '=',
-    trim_left   = '<',
-    trim_right  = '>',
-  },
-})
-vim.keymap.set('n', '-', '<cmd>lua MiniFiles.open()<CR>')
-vim.api.nvim_create_autocmd("User", {
-  pattern = { "MiniFilesWindowOpen", "MiniFilesWindowUpdate" },
-  callback = function(args)
-    local win_id = args.data.win_id
-    vim.api.nvim_win_set_config(win_id, { border = border })
-  end,
-})
 
 require("mini.sessions").setup()
 vim.keymap.set("n", "<leader>sw", ':lua MiniSessions.write("")<Left><Left>', { desc = "Write" })

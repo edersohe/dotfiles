@@ -1,21 +1,27 @@
 {
-  "lastChangelogVersion": "0.84.2",
-  "theme": "dark",
+  "lastChangelogVersion": "0.85.1",
+  "theme": "noctalia",
   "packages": [
-    "npm:pi-web-access",
-    "npm:pi-lens",
-    "npm:pi-hashline-edit-pro",
-    "npm:pi-agent-browser-native",
-    "npm:pi-hermes-memory",
-    "npm:pi-blackhole",
-    "git:github.com/DietrichGebert/ponytail"
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:pi-agent-browser-native"
   ],
-  "defaultProvider": "github-copilot",
-  "defaultModel": "mai-code-1.1-flash",
-  "tuiMode": "regular",
+  "defaultProvider": "minimax",
+  "defaultModel": "MiniMax-M3",
+  "tuiMode": "fullscreen",
   "enabledModels": [
     "zai/glm-5.3",
     "minimax/MiniMax-M3",
-    "github-copilot/mai-code-1.1-flash"
-  ]
+    "github-copilot/mai-code-1.1-flash",
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/glm-5.3-flash",
+    "zai/glm-5.3-flash",
+    "opencode-go/muse-spark-1.3-contributor"
+  ],
+  "treeFilterMode": "default",
+  "fullscreenExitOutput": "transcript",
+  "warnings": {
+    "anthropicExtraUsage": true
+  },
+  "hideThinkingBlock": false
 }

@@ -34,6 +34,8 @@ tree-sitter = "latest"
 "llama.cpp" = { version = "latest", version_prefix = "b" }
 herdr = "latest"
 rtk = "latest"
+"github:raine/workmux" = "latest"
+pocketbase = "latest"
 
 "pipx:neovim-remote" = "latest"
 # "pipx:pyinfra" = "latest"

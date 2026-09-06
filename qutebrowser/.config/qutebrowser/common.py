@@ -8,5 +8,5 @@ font = 'ZedMono Nerd Font'
 c.fonts.default_family = font
 c.fonts.default_size = "15pt"
 
-import catppuccin
-catppuccin.setup(c, 'mocha', True)
+config.source('noctalia/colors.py')
+
