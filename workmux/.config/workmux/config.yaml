@@ -1,0 +1,5 @@
+nerdfont: true
+status_icons:
+  working: "󱙺 "
+  waiting: " "
+  done: " "
