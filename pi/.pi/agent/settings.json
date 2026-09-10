@@ -6,7 +6,6 @@
     "npm:@juicesharp/rpiv-todo",
     "npm:pi-agent-browser-native",
     "npm:pi-blackhole",
-    "npm:pi-lens",
     "npm:pi-context-view"
   ],
   "defaultProvider": "minimax",
