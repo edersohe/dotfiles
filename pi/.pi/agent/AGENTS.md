@@ -5,15 +5,16 @@
 * MUST report facts, decisions, touched files, and verification outcomes immediately; NEVER duplicate full diffs in markdown text when tool outputs already show them.
 * WHEN instructions are ambiguous or conflicting, MUST halt and ask for clarification using `ask_user_question`.
 * MUST use Pi native tools (`ls`, `find`, `grep`, `read`, `write`, `edit`) — NEVER use bash (`ls`, `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, `echo`, `rg`, `fd`, `bat`) or scripts for workspace exploration, reads, or edits.
-* `bash` MUST be reserved strictly for builds, targeted test execution, compilation, package management, and local git commands.
+* `bash` MUST be reserved strictly for project `make` targets (`make test`, `make verify`, etc.), compilation, and local git commands (`git status`, `git diff`, `git add`, `git commit`).
 * WHEN tasks involve Web UI AND browser tools are available, MUST use `agent-browser` tools to inspect and verify behavior.
 
 ## Context Discovery & Skills
-* MUST check for and read project-specific `AGENTS.md` instructions before taking action.
+* MUST check for and read project-specific `AGENTS.md` and root `Makefile` before taking action.
 * BEFORE generating any plan, task decomposition, spec, proposal, or code review, MUST inspect relevant project documentation, `llms.txt`, or installed package source code to verify real interfaces and signatures; NEVER base plans or reviews on unverified assumptions or model memory.
 * MUST prioritize local project documentation, vendor guidelines, and `llms.txt` endpoints over internal model training; NEVER guess framework APIs when documentation is accessible.
 * MUST use Pi native `read` to inspect third-party library source code within workspace dependency directories whenever types, signatures, or runtime behaviors require verification.
 * WHEN a specialized domain or framework skill exists in the environment, MUST invoke that skill before planning or modifying code.
+* WHEN a task introduces a new feature, fixes a non-trivial bug, touches multiple files, or requires architectural planning, MUST copy `~/.pi/agent/templates/SPEC.md` to `docs/specs/<kebab-name>.md` and fill out all sections before writing code; NEVER execute implementation tasks directly in chat or ad-hoc markdown files.
 
 ## Scope & Edits
 * MUST inspect existing project patterns, shared utilities, and conventions before creating new files or functions.
@@ -22,12 +23,16 @@
 * MUST NOT install new dependencies without explicit permission; ALWAYS rely on existing workspace dependencies or standard libraries instead.
 
 ## Verification & Testing
-* MUST run relevant workspace checks (linters, formatters, type checkers, tests) before reporting completion; NEVER introduce new test failures, lint errors, or regressions.
+* MUST run relevant workspace checks (`make format_check`, `make lint`, `make static_analysis`) before reporting completion; NEVER introduce new test failures, lint errors, or regressions.
 * WHEN an existing test suite is present, MUST execute the strict TDD cycle for all logic changes:
-  1. RED: MUST write a targeted test first and MUST run it via bash to confirm it fails on an assertion or an expected missing-interface compilation error.
-  2. GREEN: MUST write the minimal code required to pass and MUST run the targeted test via bash to confirm success.
+  1. RED: MUST write a targeted test first and MUST run it via bash (`make test TARGET=<path>`) to confirm it fails on an assertion or an expected missing-interface compilation error.
+  2. GREEN: MUST write the minimal code required to pass and MUST run the targeted test via bash (`make test TARGET=<path>`) to confirm success.
   3. REFACTOR: MUST clean up newly written code (applying DRY/KISS) without modifying public interfaces or untouched files, and MUST re-run the targeted test to verify it remains green.
-* MUST run full project verification gates prior to final task completion.
+* MUST run `make verify` prior to final task completion.
+* WHEN a test runner, compiler, linter, or verification gate fails unexpectedly:
+  1. MUST NOT edit source code or re-run bash commands until `docs/specs/<kebab-name>.md` is updated.
+  2. MUST use native `edit` to increment `Try Counter` (e.g., from `1 / 3` to `2 / 3`) and populate the matching `### Try N` log with failure point, raw terminal error, root cause, and correction strategy.
+  3. WHEN `Try Counter` reaches its maximum limit (3 / 3) without passing all checks, MUST update `Status` to `blocked`, halt all edits, and invoke `ask_user_question`.
 
 ## Engineering Standards & Localization
 * All source code, internal identifiers, comments, documentation, and commits MUST be authored in English.
@@ -53,7 +58,7 @@
 * MUST treat all external input as untrusted; MUST use parameterized queries and safe interfaces; NEVER interpolate input into shell commands, SQL, or regexes.
 * The backend MUST NOT fetch arbitrary user-supplied URLs; outbound network calls MUST match an explicit destination allowlist and MUST NOT resolve to private, loopback, or cloud metadata IP addresses (SSRF mitigation).
 * Session cookies MUST ALWAYS include `HttpOnly`, `Secure`, and `SameSite` flags.
-* NEVER run destructive commands: `git push` (any variant), `git reset --hard`, `git clean -fd`, `git restore .`, database drops, or file deletions outside temporary build directories (`dist/`, `build/`, `_build/`, `target/`, `.cache/`, `.elixir_ls/`).
+* NEVER run destructive commands: `git push` (any variant), `git reset --hard`, `git clean -fd`, `git restore .`, production database drops, or file deletions outside temporary build directories (`dist/`, `build/`, `_build/`, `target/`, `.cache/`, `.elixir_ls/`).
 * NEVER read, print, stage, or commit `.env` files, credentials, or private keys; reading `.env.example` or documentation templates is permitted.
 * NEVER expose stack traces, internal absolute paths, or database internals to client outputs.
 * MUST use audited standard cryptographic libraries; NEVER write custom crypto routines.
