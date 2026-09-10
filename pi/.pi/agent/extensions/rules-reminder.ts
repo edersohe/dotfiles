@@ -31,7 +31,7 @@ import {
 } from "@earendil-works/pi-coding-agent";
 
 const EXTENSION_ID = "rules-reminder";
-const DEFAULT_INTERVAL = 6;
+const DEFAULT_INTERVAL = 10;
 
 type PendingReason = "interval" | `compact:${SessionCompactEvent["reason"]}`;
 
