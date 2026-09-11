@@ -35,10 +35,15 @@
   3. WHEN `Try Counter` reaches its maximum limit (3 / 3) without passing all checks, MUST update `Status` to `blocked`, halt all edits, and invoke `ask_user_question`.
 
 ## Engineering Standards & Localization
-* All source code, internal identifiers, comments, documentation, and commits MUST be authored in English.
-* All user-facing UI copy and display formatting MUST follow `es-MX` conventions and the `America/Mexico_City` timezone; display dates MUST use `DD-MM-YYYY` and display times MUST use 24-hour `HH:mm:ss`.
+* All source code, internal identifiers, schema definitions, comments, documentation, specs, and commits MUST be authored in English following `en-US` locale conventions.
+* All dates in technical documentation, specifications, architectural decision records (ADRs), and commit messages MUST use strict ISO 8601 (`YYYY-MM-DD`); NEVER use localized date formats (`DD-MM-YYYY` or `MM/DD/YYYY`) in documentation, code, or specs.
+* All user-facing UI copy and display formatting MUST follow `es-MX` conventions and the `America/Mexico_City` timezone; UI display dates MUST use `DD-MM-YYYY` and UI display times MUST use 24-hour `HH:mm:ss`.
 * Internal and non-user-facing operations (databases, API contracts, serialization, telemetry, logs) MUST ALWAYS use UTC and strict ISO 8601 formatting (`YYYY-MM-DDTHH:mm:ss.sssZ`); NEVER persist or transmit non-ISO localized date/time strings across boundaries.
 * MUST apply DRY, YAGNI, and KISS within the task scope; MUST prefer modular composition and pure functions over inheritance.
+* BEFORE creating any commit:
+  1. MUST inspect `git diff` and the active `docs/specs/<spec_id>.md` or governing ADR to verify all touched behavior.
+  2. MUST update `CHANGELOG.md` under the `[Unreleased]` section following Keep a Changelog conventions (`Added`, `Changed`, `Fixed`, `Removed`).
+  3. MUST synchronize `README.md` IF interfaces, setup instructions, architecture, workflows, modules, or user roles were added or modified.
 * Commits MUST follow Conventional Commits: `feat|fix|refactor|test|docs|chore(<scope>): <description>`.
 * ALWAYS apply all directives in this document across all work stages: planning, task splitting, proposals, specs, implementation, and code review.
 

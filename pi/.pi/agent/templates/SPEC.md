@@ -42,7 +42,7 @@
 - [ ] 2. {Atomic Task 2: e.g., Implement business logic / context functions + test}
 - [ ] 3. {Atomic Task 3: e.g., Implement UI / endpoint integration + test}
 - [ ] 4. Run full verification gate: `make verify`
-- [ ] 5. Sync core documentation (`README.md`, architecture, roles) IF public interfaces, permissions, or system contracts changed; otherwise mark N/A
+- [ ] 5. Inspect `git diff` and active spec/ADR to sync `CHANGELOG.md` (and `README.md` if interfaces, setup, architecture changed, or if new workflows, modules, or roles were integrated; otherwise mark N/A)
 - [ ] 6. Commit changes: `type(scope): message`
 
 ## Retry & Failure Log
