@@ -11,13 +11,13 @@
   4. Terminal Summary: Upon task completion or halting, print the final list showing outcomes (`[DONE]`, `[ERROR]`, `[SKIPPED]`).
 * MUST use Pi native tools (`ls`, `find`, `grep`, `read`, `write`, `edit`) — NEVER use bash (`ls`, `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, `echo`, `rg`, `fd`, `bat`) or scripts for workspace exploration, reads, or edits.
 * `bash` MUST be reserved strictly for project `make` targets (`make test`, `make verify`, etc.), compilation, and local git commands (`git status`, `git diff`, `git add`, `git commit`).
-* WHEN tasks involve Web UI, MUST invoke the `agent-browser` skill to inspect and verify behavior.
+* WHEN tasks involve Web UI, MUST invoke the `agent-browser` skill to inspect and verify behavior, unless explicitly exempted by project-level `AGENTS.md`.
 
 ## Context Discovery & Skills
 * MUST check for and read project-specific `AGENTS.md` and root `Makefile` before taking action.
 * BEFORE generating any plan, spec, or code, MUST inspect relevant project documentation, `llms.txt`, or installed package source code (using Pi native `read` under dependency folders) to verify real interfaces; NEVER guess framework APIs or rely on model memory.
 * WHEN a specialized domain or framework skill exists in the environment, MUST invoke that skill before planning or modifying code.
-* WHEN a task introduces a new feature, fixes a non-trivial bug, touches multiple files, or requires architectural planning, MUST copy `~/.pi/agent/templates/SPEC.md` to `docs/specs/<kebab-name>.md` and fill out all sections before writing code; NEVER execute implementation tasks directly in chat or ad-hoc markdown files.
+* WHEN a task introduces a new feature, fixes a non-trivial bug, touches multiple files, or requires architectural planning, MUST copy `~/.pi/agent/templates/SPEC.md` to `docs/specs/<kebab-name>.md`, fill out all sections with `Status: draft`, and halt; MUST present enumerated approval options directly in chat and obtain explicit user confirmation BEFORE setting `Status: in-progress` or executing any implementation code; NEVER begin implementation without user sign-off.
 
 ## Scope & Edits
 * MUST inspect existing project patterns, shared utilities, and conventions before creating new files or functions.
@@ -30,6 +30,7 @@
   1. RED: MUST write a targeted test first and MUST run it via bash (`make test TARGET=<path>`) to confirm it fails on an assertion or an expected missing-interface compilation error.
   2. GREEN: MUST write the minimal code required to pass and MUST run the targeted test via bash (`make test TARGET=<path>`) to confirm success.
   3. REFACTOR: MUST clean up newly written code (applying DRY/KISS) without modifying public interfaces or untouched files, and MUST re-run the targeted test to verify it remains green.
+* Cosmetic UI changes that alter only styling, markup, or layout without behavioral or functional changes DO NOT require writing new tests; existing tests broken by markup or selector adjustments MUST be updated, and `make verify` MUST pass cleanly.
 * WHEN a test runner, compiler, linter, or verification gate fails unexpectedly:
   1. MUST NOT edit source code or re-run bash commands until `docs/specs/<kebab-name>.md` is updated.
   2. MUST use native `edit` to increment `Try Counter` (e.g., from `1 / 3` to `2 / 3`) and populate the matching `### Try N` log with failure point, raw terminal error, root cause, and correction strategy.

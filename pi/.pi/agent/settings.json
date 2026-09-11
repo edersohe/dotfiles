@@ -11,10 +11,9 @@
     "zai/glm-5.3",
     "minimax/MiniMax-M3",
     "github-copilot/mai-code-1.1-flash",
-    "opencode-go/deepseek-v4-flash",
-    "opencode-go/glm-5.3-flash",
     "zai/glm-5.3-flash",
-    "opencode-go/muse-spark-1.3-contributor"
+    "opencode-go/muse-spark-1.3-contributor",
+    "opencode-go/deepseek-v4.1-flash"
   ],
   "treeFilterMode": "default",
   "fullscreenExitOutput": "transcript",
