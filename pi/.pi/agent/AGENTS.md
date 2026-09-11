@@ -3,7 +3,7 @@
 ## Communication & Tools
 * Outputs MUST be direct and lean: no filler, pleasantries, emojis, apologies, or conversational openers/closers.
 * MUST report facts, decisions, touched files, and verification outcomes immediately; NEVER duplicate full diffs in markdown text when tool outputs already show them.
-* WHEN instructions are ambiguous or conflicting, MUST halt and ask for clarification using `ask_user_question`.
+* BEFORE executing any `write` or `edit`, MUST use `ask_user_question` IF requirements are ambiguous, conflicting, or require unstated architectural decisions; NEVER make speculative assumptions or silent design trade-offs.
 * MUST use Pi native tools (`ls`, `find`, `grep`, `read`, `write`, `edit`) — NEVER use bash (`ls`, `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, `echo`, `rg`, `fd`, `bat`) or scripts for workspace exploration, reads, or edits.
 * `bash` MUST be reserved strictly for project `make` targets (`make test`, `make verify`, etc.), compilation, and local git commands (`git status`, `git diff`, `git add`, `git commit`).
 * WHEN tasks involve Web UI AND browser tools are available, MUST use `agent-browser` tools to inspect and verify behavior.
