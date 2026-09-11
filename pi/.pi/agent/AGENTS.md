@@ -3,10 +3,15 @@
 ## Communication & Tools
 * Outputs MUST be direct and lean: no filler, pleasantries, emojis, apologies, or conversational openers/closers.
 * MUST report facts, decisions, touched files, and verification outcomes immediately; NEVER duplicate full diffs in markdown text when tool outputs already show them.
-* BEFORE executing any `write` or `edit`, MUST use `ask_user_question` IF requirements are ambiguous, conflicting, or require unstated architectural decisions; NEVER make speculative assumptions or silent design trade-offs.
+* BEFORE executing any `write` or `edit`, MUST halt and query the user directly in chat IF requirements are ambiguous, conflicting, or require unstated architectural decisions; MUST present concise, enumerated choices (e.g., `1`, `2`, `3`) with explicit trade-offs so the user can answer with a single number; NEVER make speculative assumptions or silent design trade-offs.
+* Task Lifecycle & State Tracking: For all multi-step tasks, manage execution state directly within chat output:
+  1. Initial Planning: Print a numbered list of all planned atomic tasks marked `[TODO]` before taking action.
+  2. Step Transitions: Immediately before starting each task, print the full list showing current states: `[DONE]`, `[IN_PROGRESS]`, `[ERROR]`, or `[TODO]`. Only one item may be `[IN_PROGRESS]` at a time.
+  3. Failure Halts: If a step fails, immediately print the list marking the failed task as `[ERROR]`, include the terminal error output and root cause, and present numbered recovery options directly in chat.
+  4. Terminal Summary: Upon task completion or halting, print the final list showing outcomes (`[DONE]`, `[ERROR]`, `[SKIPPED]`).
 * MUST use Pi native tools (`ls`, `find`, `grep`, `read`, `write`, `edit`) — NEVER use bash (`ls`, `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, `echo`, `rg`, `fd`, `bat`) or scripts for workspace exploration, reads, or edits.
 * `bash` MUST be reserved strictly for project `make` targets (`make test`, `make verify`, etc.), compilation, and local git commands (`git status`, `git diff`, `git add`, `git commit`).
-* WHEN tasks involve Web UI AND browser tools are available, MUST use `agent_browser` tool to inspect and verify behavior.
+* WHEN tasks involve Web UI, MUST invoke the `agent-browser` skill to inspect and verify behavior.
 
 ## Context Discovery & Skills
 * MUST check for and read project-specific `AGENTS.md` and root `Makefile` before taking action.
@@ -28,7 +33,7 @@
 * WHEN a test runner, compiler, linter, or verification gate fails unexpectedly:
   1. MUST NOT edit source code or re-run bash commands until `docs/specs/<kebab-name>.md` is updated.
   2. MUST use native `edit` to increment `Try Counter` (e.g., from `1 / 3` to `2 / 3`) and populate the matching `### Try N` log with failure point, raw terminal error, root cause, and correction strategy.
-  3. WHEN `Try Counter` reaches its maximum limit (3 / 3) without passing all checks, MUST update `Status` to `blocked`, halt all edits, and invoke `ask_user_question`.
+  3. WHEN `Try Counter` reaches its maximum limit (3 / 3) without passing all checks, MUST update `Status` to `blocked`, mark the current task as `[ERROR]`, halt all edits, and query the user directly in chat with enumerated recovery options.
 * The end-of-task sequence is fixed and mandatory:
   1. MUST run full verification: `make verify`.
   2. MUST inspect `git diff` and active spec/ADR to update `CHANGELOG.md` under `[Unreleased]` following Keep a Changelog conventions (and `README.md` IF interfaces, setup, architecture, workflows, modules, or roles changed).

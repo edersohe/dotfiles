@@ -1,8 +1,9 @@
 {
   "version": 1,
   "webSearch": {
-    "enabled": true,
+    "enabled": false,
     "preferredProvider": "exa",
-    "exaApiKey": "$EXA_API_KEY",
+    "defaultSearchType": "deep-lite",
+    "exaApiKey": "$EXA_API_KEY"
   }
 }
