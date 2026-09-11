@@ -6,7 +6,7 @@
 * BEFORE executing any `write` or `edit`, MUST use `ask_user_question` IF requirements are ambiguous, conflicting, or require unstated architectural decisions; NEVER make speculative assumptions or silent design trade-offs.
 * MUST use Pi native tools (`ls`, `find`, `grep`, `read`, `write`, `edit`) — NEVER use bash (`ls`, `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, `echo`, `rg`, `fd`, `bat`) or scripts for workspace exploration, reads, or edits.
 * `bash` MUST be reserved strictly for project `make` targets (`make test`, `make verify`, etc.), compilation, and local git commands (`git status`, `git diff`, `git add`, `git commit`).
-* WHEN tasks involve Web UI AND browser tools are available, MUST use `agent-browser` tools to inspect and verify behavior.
+* WHEN tasks involve Web UI AND browser tools are available, MUST use `agent_browser` tool to inspect and verify behavior.
 
 ## Context Discovery & Skills
 * MUST check for and read project-specific `AGENTS.md` and root `Makefile` before taking action.
