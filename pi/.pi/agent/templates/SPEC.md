@@ -2,7 +2,7 @@
 
 **Date**: {YYYY-MM-DD}  
 **Status**: draft | in-progress | blocked | complete  
-**Complexity**: small (1-2 files) | medium (3-5 files)  
+**Complexity**: small (1-2 files) | medium (3-5 files) | large (>5 files - consider splitting)  
 **Try Counter**: 1 / 3  
 
 ## What & Why
@@ -42,8 +42,10 @@
 - [ ] 2. {Atomic Task 2: e.g., Implement business logic / context functions + test}
 - [ ] 3. {Atomic Task 3: e.g., Implement UI / endpoint integration + test}
 - [ ] 4. Run full verification gate: `make verify`
-- [ ] 5. Inspect `git diff` and active spec/ADR to sync `CHANGELOG.md` (and `README.md` if interfaces, setup, architecture changed, or if new workflows, modules, or roles were integrated; otherwise mark N/A)
-- [ ] 6. Commit changes: `type(scope): message`
+- [ ] 5. Inspect `git diff` and sync `CHANGELOG.md` (and `README.md` if interfaces, setup, architecture, or roles changed; otherwise mark N/A)
+- [ ] 6. Update this spec's `Status` to `complete`
+- [ ] 7. Stage all changes including docs: `git add docs/specs/ CHANGELOG.md <touched paths>` and commit: `git commit -m "type(scope): message"`
+- [ ] 8. Confirm clean tree: verify `git status` outputs "nothing to commit, working tree clean"
 
 ## Retry & Failure Log
 > **Scope:** Populate ONLY when an attempt fails. Append `### Try N` blocks dynamically.
@@ -51,9 +53,9 @@
 ### Try 1
 * **Failure Point**: {Failing target or test name}
 * **Terminal / Error Output**:
-  ```text
-  {Paste exact error message or stack trace here}
-  ```
+```text
+{Paste exact error message or stack trace here}
+```
 * **Root Cause**: {Technical explanation of why it failed}
 * **Correction Strategy (Try 2)**: {Concrete code or architectural fix for the next attempt}
 * **Spec Deviation / Micro-ADR**: {Document only if design changed from original requirements}
@@ -62,5 +64,7 @@
 > **Scope:** Completion criteria. All conditions below MUST be true before closing this spec.
 
 - [ ] All implementation tasks are checked off.
+- [ ] Spec `Status` is marked `complete`.
 - [ ] `make verify` passes with zero regressions, lint warnings, or security alerts.
+- [ ] `git status` reports "nothing to commit, working tree clean" (commit landed; push is intentionally not in scope).
 - [ ] Try Counter did not exceed maximum limit.

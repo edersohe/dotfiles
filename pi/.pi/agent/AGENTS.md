@@ -10,9 +10,7 @@
 
 ## Context Discovery & Skills
 * MUST check for and read project-specific `AGENTS.md` and root `Makefile` before taking action.
-* BEFORE generating any plan, task decomposition, spec, proposal, or code review, MUST inspect relevant project documentation, `llms.txt`, or installed package source code to verify real interfaces and signatures; NEVER base plans or reviews on unverified assumptions or model memory.
-* MUST prioritize local project documentation, vendor guidelines, and `llms.txt` endpoints over internal model training; NEVER guess framework APIs when documentation is accessible.
-* MUST use Pi native `read` to inspect third-party library source code within workspace dependency directories whenever types, signatures, or runtime behaviors require verification.
+* BEFORE generating any plan, spec, or code, MUST inspect relevant project documentation, `llms.txt`, or installed package source code (using Pi native `read` under dependency folders) to verify real interfaces; NEVER guess framework APIs or rely on model memory.
 * WHEN a specialized domain or framework skill exists in the environment, MUST invoke that skill before planning or modifying code.
 * WHEN a task introduces a new feature, fixes a non-trivial bug, touches multiple files, or requires architectural planning, MUST copy `~/.pi/agent/templates/SPEC.md` to `docs/specs/<kebab-name>.md` and fill out all sections before writing code; NEVER execute implementation tasks directly in chat or ad-hoc markdown files.
 
@@ -23,16 +21,21 @@
 * MUST NOT install new dependencies without explicit permission; ALWAYS rely on existing workspace dependencies or standard libraries instead.
 
 ## Verification & Testing
-* MUST run relevant workspace checks (`make format_check`, `make lint`, `make static_analysis`) before reporting completion; NEVER introduce new test failures, lint errors, or regressions.
 * WHEN an existing test suite is present, MUST execute the strict TDD cycle for all logic changes:
   1. RED: MUST write a targeted test first and MUST run it via bash (`make test TARGET=<path>`) to confirm it fails on an assertion or an expected missing-interface compilation error.
   2. GREEN: MUST write the minimal code required to pass and MUST run the targeted test via bash (`make test TARGET=<path>`) to confirm success.
   3. REFACTOR: MUST clean up newly written code (applying DRY/KISS) without modifying public interfaces or untouched files, and MUST re-run the targeted test to verify it remains green.
-* MUST run `make verify` prior to final task completion.
 * WHEN a test runner, compiler, linter, or verification gate fails unexpectedly:
   1. MUST NOT edit source code or re-run bash commands until `docs/specs/<kebab-name>.md` is updated.
   2. MUST use native `edit` to increment `Try Counter` (e.g., from `1 / 3` to `2 / 3`) and populate the matching `### Try N` log with failure point, raw terminal error, root cause, and correction strategy.
   3. WHEN `Try Counter` reaches its maximum limit (3 / 3) without passing all checks, MUST update `Status` to `blocked`, halt all edits, and invoke `ask_user_question`.
+* The end-of-task sequence is fixed and mandatory:
+  1. MUST run full verification: `make verify`.
+  2. MUST inspect `git diff` and active spec/ADR to update `CHANGELOG.md` under `[Unreleased]` following Keep a Changelog conventions (and `README.md` IF interfaces, setup, architecture, workflows, modules, or roles changed).
+  3. MUST stage all modified files (source, tests, specs, docs): `git add <touched paths>`.
+  4. MUST commit: `git commit -m "type(scope): message"` following Conventional Commits (`feat|fix|refactor|test|docs|chore`).
+  5. MUST confirm completion with `git status` reporting `nothing to commit, working tree clean`.
+* A task is NOT complete until the commit hash is in `git log` and the working tree is clean; phrases like "ready to commit", "staged", or "commit pending" MUST NOT appear in final reports.
 
 ## Engineering Standards & Localization
 * All source code, internal identifiers, schema definitions, comments, documentation, specs, and commits MUST be authored in English following `en-US` locale conventions.
@@ -40,12 +43,6 @@
 * All user-facing UI copy and display formatting MUST follow `es-MX` conventions and the `America/Mexico_City` timezone; UI display dates MUST use `DD-MM-YYYY` and UI display times MUST use 24-hour `HH:mm:ss`.
 * Internal and non-user-facing operations (databases, API contracts, serialization, telemetry, logs) MUST ALWAYS use UTC and strict ISO 8601 formatting (`YYYY-MM-DDTHH:mm:ss.sssZ`); NEVER persist or transmit non-ISO localized date/time strings across boundaries.
 * MUST apply DRY, YAGNI, and KISS within the task scope; MUST prefer modular composition and pure functions over inheritance.
-* BEFORE creating any commit:
-  1. MUST inspect `git diff` and the active `docs/specs/<spec_id>.md` or governing ADR to verify all touched behavior.
-  2. MUST update `CHANGELOG.md` under the `[Unreleased]` section following Keep a Changelog conventions (`Added`, `Changed`, `Fixed`, `Removed`).
-  3. MUST synchronize `README.md` IF interfaces, setup instructions, architecture, workflows, modules, or user roles were added or modified.
-* Commits MUST follow Conventional Commits: `feat|fix|refactor|test|docs|chore(<scope>): <description>`.
-* ALWAYS apply all directives in this document across all work stages: planning, task splitting, proposals, specs, implementation, and code review.
 
 ## UI/UX & Design Systems
 * MUST ALWAYS use the project's centralized design system across all views, layouts, and components to enforce visual consistency, layout coherence, and streamlined UX.
