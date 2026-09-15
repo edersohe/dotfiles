@@ -23,9 +23,12 @@ emacs/.config/emacs/projects
 emacs/.config/emacs/recentf
 emacs/.config/emacs/tramp
 emacs/.config/emacs/auto-save-list
-/emacs/.config/emacs/eca
+emacs/.config/emacs/eca
 emacs/.config/emacs/eshell/history
 emacs/.config/emacs/bookmarks
+emacs/.config/emacs/places.eld
+emacs/.config/emacs/projects.eld
+emacs/.config/emacs/recentf.eld
 
 evil-emacs/.config/emacs/copilot-chat
 evil-emacs/.config/emacs/.cache/
@@ -67,25 +70,25 @@ qutebrowser/.config/qutebrowser/quickmarks
 
 pi/.pi/agent/auth.json
 pi/.pi/agent/sessions
+pi/.pi/agent/trust.json
+pi/.pi/agent/npm
+pi/.pi/agent/git
+pi/.pi/agent/models-store.json
+pi/.pi/agent/.pi-hermes-locks.sqlite
+pi/.pi/agent/.pi-hermes-locks.sqlite-shm
+pi/.pi/agent/.pi-hermes-locks.sqlite-wal
+pi/.pi/agent/pi-blackhole
+pi/.pi/agent/pi-hermes-memory
 
 nvim-mini/.config/nvim/nvim-pack-lock.json
 nvim-max/.config/nvim/nvim-pack-lock.json
 
+herdr/.config/herdr/.plugins.lock
+herdr/.config/herdr/herdr-client.log
+herdr/.config/herdr/herdr-server.log
+herdr/.config/herdr/release-notes.json
+herdr/.config/herdr/session.json
+
+opencode/.config/opencode/package-lock.json
+
 home/
-/opencode/.config/opencode/package-lock.json
-/agents/.agents/skills
-/herdr/.config/herdr/.plugins.lock
-/herdr/.config/herdr/herdr-client.log
-/herdr/.config/herdr/herdr-server.log
-/herdr/.config/herdr/release-notes.json
-/herdr/.config/herdr/session.json
-/pi/.pi/agent/trust.json
-/pi/.pi/agent/npm
-/pi/.pi/agent/git
-/pi/.pi/agent/models-store.json
-/pi/.pi/agent/.pi-hermes-locks.sqlite
-/pi/.pi/agent/.pi-hermes-locks.sqlite-shm
-/pi/.pi/agent/.pi-hermes-locks.sqlite-wal
-/pi/.pi/agent/extensions
-/pi/.pi/agent/pi-blackhole
-/pi/.pi/agent/pi-hermes-memory
