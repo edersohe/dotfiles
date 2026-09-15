@@ -50,7 +50,6 @@
 (add-hook 'text-mode-hook #'hl-line-mode)
 
 (setq completion-styles '(basic flex partial-completion)
-      completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion)))
       completions-format 'one-column
       completions-sort 'historical
@@ -91,17 +90,8 @@
   :after undo-fu
   :config (undo-fu-session-global-mode))
 
-(use-package vterm
-  :ensure t
-  :custom (vterm-max-scrollback 10000))
-
-(defun my/vterm ()
-  "Open a new vterm buffer with a custom name."
-  (interactive)
-  (let ((name (read-string "Name for vterm buffer: ")))
-    (vterm (concat "*vterm-" name "*"))))
-
-(global-set-key (kbd "C-c v") #'my/vterm)
+(use-package ghostel
+  :ensure t)
 
 (use-package eglot
   :hook ((prog-mode . eglot-ensure))
@@ -267,6 +257,12 @@
             (insert output)))
     (vc-next-action nil)))
 (define-key vc-prefix-map (kbd "v") #'my/vc-next-action)
+
+(use-package helix
+  :hook ((helix-normal-mode . (lambda () (setq display-line-numbers 'relative)))
+         (helix-insert-mode . (lambda () (setq display-line-numbers t))))
+  :config
+  (helix-mode))
 
 (provide 'init)
 ;;; init.el ends here
